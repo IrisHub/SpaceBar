@@ -11,6 +11,7 @@ Use the following lint protocol before pushing to any branch. There are no autom
 1. Download the ESLint extension in VSCode.
 2. Within your project, run `npm i eslint --save-dev` to download the `eslint` module.
 3. Run `./node_modules/.bin/eslint --init` to configure your linter
+
     **How would you like to use ESLint?** `To check syntax, find problems, and enforce code style`
     
     **What type of modules does your project use?** `Javascript modules (import/export)`
