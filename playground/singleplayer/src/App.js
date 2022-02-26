@@ -13,37 +13,74 @@ function App() {
   let t = performance.now();
 
   // Instantiate all important THREE objects
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+  const camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1, 1000);
   const scene = new THREE.Scene();
   const renderer = new THREE.WebGLRenderer();
   const controls = new PointerLockControls(camera, document.body);
-  const light = new THREE.HemisphereLight(0xffffff, 0x778888, 1);
+  const ambientLight = new THREE.AmbientLight(0x6688cc);
+  const directionalLight = new THREE.DirectionalLight(0xffffaa, 1.2);
 
   // Set props for THREE objects
   camera.position.z = 0;
   camera.position.y = 10;
-  scene.background = new THREE.Color(0xffffff);
+  scene.background = new THREE.Color(0x88ccff);
   scene.fog = new THREE.Fog(0xffffff, 0, 500);
-  light.position.set(0, 12, -2);
+  directionalLight.position.set(-5, 10, -1);
+  directionalLight.castShadow = true;
+  directionalLight.shadow.camera.near = 0.01;
+  directionalLight.shadow.camera.right = 30;
+  directionalLight.shadow.camera.far = 500;
+  directionalLight.shadow.camera.left = -30;
+  directionalLight.shadow.camera.top = 30;
+  directionalLight.shadow.camera.bottom = -30;
+  directionalLight.shadow.mapSize.width = 1024;
+  directionalLight.shadow.mapSize.height = 1024;
+  directionalLight.shadow.radius = 4;
+  directionalLight.shadow.bias = -0.00006;
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.VSMShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.0;
+
+  // Add a sphere so there's a reference point for walking around
+  // const geometry = new THREE.BoxGeometry(2, 2, 2);
+  // const material = new THREE.MeshStandardMaterial({
+  //   color: 0xFFFFFF, wireframe: false, metalness: 0.1,
+  // });
+  // const cube = new THREE.Mesh(geometry, material);
+  // cube.position.z = -4;
+  // cube.position.y = 10;
+  // cube.position.x = 1;
+  const knotgeometry = new THREE.TorusKnotGeometry(10, 3, 64, 8, 2, 3);
+  const knotmaterial = new THREE.MeshLambertMaterial({
+    color: 0xffffff, metalness: 0.0,
+  });
+  const knot = new THREE.Mesh(knotgeometry, knotmaterial);
+  knot.castShadow = true;
+  knot.position.z = -45;
+  knot.position.y = 10;
+  knot.position.x = -6;
 
   // Define THREE objects for the scene
   // Add a floor
   const planegeometry = new THREE.PlaneBufferGeometry(800, 800, 10, 10);
   planegeometry.rotateX(-Math.PI / 2);
-  const planematerial = new THREE.MeshBasicMaterial({ wireframe: true, wireframeLinewidth: 5 });
+  const planematerial = new THREE.MeshStandardMaterial();
   const planemesh = new THREE.Mesh(planegeometry, planematerial);
-  planemesh.material.color.setHex(0xAAEEFF);
+  planemesh.material.color.setHex(0xFFEEAA);
+  planemesh.receiveShadow = true;
+  planemesh.castShadow = true;
 
-  // Add a sphere so there's a reference point for walking around
-  const geometry = new THREE.BoxGeometry(2, 2, 2);
-  const material = new THREE.MeshStandardMaterial({ color: 0xFFFFFF, wireframe: false });
-  const cube = new THREE.Mesh(geometry, material);
-  cube.position.z = -4;
-  cube.position.y = 10;
-  cube.position.x = 1;
-
+  const playerballgeometry = new THREE.SphereGeometry(3);
+  const playerballmaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+  const playerballmesh = new THREE.Mesh(playerballgeometry, playerballmaterial);
+  // playerballmesh.material.color.setHex(0x000000);
+  playerballmesh.receiveShadow = true;
+  playerballmesh.castShadow = true;
+  camera.add(playerballmesh);
+  playerballmesh.position.set(0, 0, 0);
   // Add hooks for cursor lock
   useEffect(() => {
     instructionsRef.current.addEventListener('click', () => { controls.lock(); });
@@ -124,14 +161,21 @@ function App() {
       }
       controls.moveRight(vX * delta);
       controls.moveForward(vZ * delta);
+      // playerballmesh.position.set(camera.position.x + 10, camera.position.y, camera.position.z + 10);
+      console.log(playerballmesh.position);
     }
   };
+
+  // const httpServer = createServer();
+  // const io = new Server(httpServer);
+  // io.on('connection', () => {});
+  // httpServer.listen(3001);
 
   // Animation: Set the rotation of the cube, and call the movement and renderer functions
   const render = () => {
     requestAnimationFrame(render);
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
+    // knot.rotation.x += 0.01;
+    // knot.rotation.y += 0.01;
     const t1 = performance.now();
     moveT(t1);
     t = t1;
@@ -140,9 +184,11 @@ function App() {
 
   // Add all THREE elements to the scene
   scene.add(controls.getObject());
-  scene.add(light);
+  scene.add(ambientLight);
+  scene.add(directionalLight);
   scene.add(planemesh);
-  scene.add(cube);
+  // scene.add(cube);
+  scene.add(knot);
 
   // Add listeners
   window.addEventListener('resize', onWindowResize);
