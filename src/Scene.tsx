@@ -1,13 +1,9 @@
 import * as THREE from 'three';
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls';
-import React, { useEffect, useRef } from 'react';
 import Instructions from './Instructions'
 import { Controller } from './controls';
 
 export default function Scene(props: any) {
-    let fwd = false; let rev = false; let left = false; let right = false;
-    let zDir; let xDir; let vX; let vZ;
-    let time;
   
     // Instantiate all important THREE objects
     const camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1, 1000);
@@ -91,18 +87,10 @@ export default function Scene(props: any) {
     // determined by a velocity variable dependent on the direction,
     // which is based on the keys pressed by the user
 
-    // const httpServer = createServer();
-    // const io = new Server(httpServer);
-    // io.on('connection', () => {});
-    // httpServer.listen(3001);
-
-    // Animation: Set the rotation of the cube, and call the movement and renderer functions
     const render = () => {
-    requestAnimationFrame(render);
-        // knot.rotation.x += 0.01;
-        // knot.rotation.y += 0.01;
-        controller.move(performance.now(), 400);
-        renderer.render(scene, camera);
+        window.requestAnimationFrame(render);
+            controller.move(performance.now(), 400);
+            renderer.render(scene, camera);
     };
 
     // Add all THREE elements to the scene
