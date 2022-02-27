@@ -7,15 +7,19 @@ export class Controller {
 
   right: boolean;
 
-  zVector: { direction: number; magnitude: number; };
+  zVector: { direction: number; magnitude: number };
 
-  xVector: { direction: number; magnitude: number; };
+  xVector: { direction: number; magnitude: number };
 
   time: number;
 
-  controls: { isLocked: boolean; moveRight: any; moveForward: any; };
+  controls: { isLocked: boolean; moveRight: any; moveForward: any };
 
-  constructor(controls: { isLocked: boolean, moveRight: any, moveForward: any, }) {
+  constructor(controls: {
+    isLocked: boolean;
+    moveRight: any;
+    moveForward: any;
+  }) {
     this.forward = false;
     this.backward = false;
     this.left = false;
@@ -26,7 +30,7 @@ export class Controller {
     this.controls = controls;
   }
 
-  onKeyDown = ( event: { key: string }) => {
+  onKeyDown = (event: { key: string }) => {
     switch (event.key) {
       case 'w':
         this.forward = true;
@@ -45,7 +49,7 @@ export class Controller {
     }
   };
 
-  onKeyUp = ( event: { key: string }) => {
+  onKeyUp = (event: { key: string }) => {
     switch (event.key) {
       case 'w':
         this.forward = false;
@@ -64,12 +68,13 @@ export class Controller {
     }
   };
 
-  move = ( newTime: number, speed: number ) => {
+  move = (newTime: number, speed: number) => {
     if (this.controls.isLocked === true) {
       const timeDelta = (newTime - this.time) / 1000;
       this.zVector.direction = Number(this.forward) - Number(this.backward);
       this.xVector.direction = Number(this.right) - Number(this.left);
-      this.xVector.magnitude = 0; this.zVector.magnitude = 0;
+      this.xVector.magnitude = 0;
+      this.zVector.magnitude = 0;
       if (this.forward || this.backward) {
         this.zVector.magnitude = this.zVector.direction * speed * timeDelta;
       }
