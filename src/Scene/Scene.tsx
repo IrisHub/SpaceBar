@@ -1,11 +1,11 @@
 
 import React from 'react';
-import Player from './Player/Player';
+import Player from '../Player/Player';
 import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/cannon';
-import Floor from './Scene/Floor';
-import PlayerCameraControls from './Player/playerCameraControls';
-import SceneObject from './Scene/SceneObject';
+import Floor from './Floor';
+import PlayerCameraControls from '../Player/playerCameraControls';
+import SceneObject from './SceneObject';
 
 export default function Scene() {
   return (
