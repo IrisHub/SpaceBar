@@ -6,7 +6,18 @@ import { playerMovementControls } from './playerMovementControls';
 
 const SPEED = 10;
 
+type PlayerVelocity = {
+  x: number,
+  y: number,
+  z: number
+};
+
 export default function Player(props: SphereProps) {
+  /**
+   * Defines a custom player object (a default Cannon.js sphere and handles player movement)
+   * Movement works by examining keypresses and updating the player's velocity (handled by Cannon.js)
+   * according to keypress logic defined in ./playerMovementControls.ts.
+   */
   const { forward, backward, left, right } = playerMovementControls();
   const { camera } = useThree();
   const [playerRef, playerApi] = useSphere(() => ({
@@ -17,11 +28,15 @@ export default function Player(props: SphereProps) {
   }));
   const xVector = new Vector3();
   const zVector = new Vector3();
-  const playerVector = new Vector3();
+  const newVelocityVector = new Vector3();
 
-  const velocity = useRef([0, 0, 0]);
+  const currentVelocityVector = useRef<PlayerVelocity>({ x: 0, y: 0, z: 0 });
   useEffect(()=>{
-    playerApi.velocity.subscribe(v => (velocity.current = v));
+    playerApi.velocity.subscribe(playerVelocity => {
+      currentVelocityVector.current.x = playerVelocity[0];
+      currentVelocityVector.current.y = playerVelocity[1];
+      currentVelocityVector.current.z = playerVelocity[2];
+    });
   }, [playerApi.velocity]);
 
   useFrame(()=> {
@@ -29,8 +44,8 @@ export default function Player(props: SphereProps) {
     zVector.set(0, 0, Number(forward) - Number(backward));
     xVector.set(Number(right) - Number(left), 0, 0);
     console.log(zVector, xVector);
-    playerVector.subVectors(xVector, zVector).normalize().multiplyScalar(SPEED).applyEuler(camera.rotation);
-    playerApi.velocity.set(playerVector.x, velocity.current[1], playerVector.z);
+    newVelocityVector.subVectors(xVector, zVector).normalize().multiplyScalar(SPEED).applyEuler(camera.rotation);
+    playerApi.velocity.set(newVelocityVector.x, currentVelocityVector.current.y, newVelocityVector.z);
   });
 
   return (

@@ -1,7 +1,3 @@
-// This file serves several purposes. It renders a high-polygon, highly animated
-// object into the scene to a) calibrate walking speed/jumping height
-// b) Benchmark performance issues
-// Base taken from https://codesandbox.io/s/4rubo?file=/src/App.js
 import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Object3D } from 'three';
@@ -9,6 +5,12 @@ import { Object3D } from 'three';
 const dummy = new Object3D();
 
 export default function SceneObject() {
+  /**
+   * This file serves several purposes. It renders a high-polygon, highly animated
+   * object into the scene to a) calibrate walking speed/jumping height
+   * b) Benchmark performance issues
+   * Base taken from https://codesandbox.io/s/4rubo?file=/src/App.js
+   */
   const meshRef = useRef<{ rotation: { x: number, y: number }, instanceMatrix: any, setMatrixAt: any }>();
 
   useFrame(({ clock }) => {
