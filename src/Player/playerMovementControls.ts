@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-
 export const playerMovementControls = () => {
   const [direction, setDirection] = useState({
     forward: false,
@@ -8,7 +7,7 @@ export const playerMovementControls = () => {
     left: false,
     right: false,
   });
-  
+
   const keyMap: { [key: string]: string } = {
     w: 'forward',
     ArrowUp: 'forward',
@@ -22,13 +21,15 @@ export const playerMovementControls = () => {
 
   useEffect(() => {
     const onKeyDown = (event: { key: string }) => {
-      setDirection(pressedKey => ({
+      setDirection((pressedKey) => ({
         ...pressedKey,
         [keyMap[event.key]]: true,
       }));
+
+      //TODO: explore emitting player coordinates here by accessing the camera position
     };
     const onKeyUp = (event: { key: string }) => {
-      setDirection(pressedKey => ({
+      setDirection((pressedKey) => ({
         ...pressedKey,
         [keyMap[event.key]]: false,
       }));
@@ -43,5 +44,4 @@ export const playerMovementControls = () => {
   }, []);
 
   return direction;
-  
 };
