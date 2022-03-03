@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Player from '../Player/Player';
 import { Canvas } from '@react-three/fiber';
@@ -15,13 +14,13 @@ export default function Scene() {
   return (
     <div style={{ height: window.innerHeight }}>
       <Canvas>
-        <PlayerCameraControls/>
-          <ambientLight/>
-          <pointLight position={[10, 10, 10]}/>
-            <Physics>
-              <Player/>
-              <SceneObject/>
-            <Floor/>
+        <PlayerCameraControls />
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
+        <Physics>
+          <Player />
+          <SceneObject />
+          <Floor />
         </Physics>
       </Canvas>
     </div>
