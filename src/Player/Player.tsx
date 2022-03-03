@@ -36,6 +36,7 @@ export default function Player(props: SphereProps) {
   const xVector = new Vector3();
   const zVector = new Vector3();
   const newVelocityVector = new Vector3();
+  var pastPosition = new Vector3();
 
   const currentVelocityVector = useRef<PlayerVelocity>({ x: 0, y: 0, z: 0 });
   useEffect(() => {
@@ -47,14 +48,16 @@ export default function Player(props: SphereProps) {
   }, [setPlayerRef.velocity]);
 
   useFrame(() => {
+  
     playerRef.current.getWorldPosition(camera.position); //Position of player copied to camera position
-    //TODO: emit these coordinates
-    ee.emit('send_coords',  camera.position);
+    if (pastPosition !== camera.position){
+      ee.emit('send_coords',  camera.position);
+      pastPosition = camera.position;
+    }
 
 
     zVector.set(0, 0, Number(forward) - Number(backward));
     xVector.set(Number(right) - Number(left), 0, 0);
-    // console.log(zVector, xVector);
     newVelocityVector
       .subVectors(xVector, zVector)
       .normalize()
