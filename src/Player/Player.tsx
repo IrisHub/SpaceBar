@@ -43,7 +43,6 @@ export default function Player(props: SphereProps) {
     playerRef.current.getWorldPosition(camera.position);
     zVector.set(0, 0, Number(forward) - Number(backward));
     xVector.set(Number(right) - Number(left), 0, 0);
-    console.log(zVector, xVector);
     newVelocityVector.subVectors(xVector, zVector).normalize().multiplyScalar(SPEED).applyEuler(camera.rotation);
     playerApi.velocity.set(newVelocityVector.x, currentVelocityVector.current.y, newVelocityVector.z);
   });
