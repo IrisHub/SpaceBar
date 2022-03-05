@@ -1,10 +1,14 @@
 import { EventEmitter } from 'events';
+
+type PlayerPosition = {
+  x: number;
+  y: number;
+  z: number;
+};
+
 let ee = new EventEmitter();
-
-ee.on('send_coords', (data) => {
-  
-  console.log(data);
-});
-
 export default ee;
 
+ee.on('send_coords', async (data: PlayerPosition) => {
+  console.log(data);
+});

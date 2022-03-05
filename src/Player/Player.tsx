@@ -13,12 +13,6 @@ type PlayerVelocity = {
   z: number;
 };
 
-// type PlayerPosition= {
-//   x: number;
-//   y: number;
-//   z: number;
-// };
-
 export default function Player(props: SphereProps) {
   /**
    * Defines a custom player object (a default Cannon.js sphere and handles player movement)
@@ -50,9 +44,10 @@ export default function Player(props: SphereProps) {
   useFrame(() => {
   
     playerRef.current.getWorldPosition(camera.position); //Position of player copied to camera position
-    if (pastPosition !== camera.position){
-      ee.emit('send_coords',  camera.position);
-      pastPosition = camera.position;
+    const playerCurrentPosition = camera.position;
+    if (pastPosition !== playerCurrentPosition){
+      ee.emit('send_coords',  playerCurrentPosition);
+      pastPosition = playerCurrentPosition;
     }
 
 
