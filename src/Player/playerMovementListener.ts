@@ -1,14 +1,12 @@
 import { EventEmitter } from 'events';
-
-type PlayerPosition = {
-  x: number;
-  y: number;
-  z: number;
-};
+import { serialize } from './playerMovementHelpers';
+import { PlayerPosition } from '../allTypes';
+import movementLog from './playerMovementLog';
 
 let ee = new EventEmitter();
-export default ee;
-
 ee.on('send_coords', async (data: PlayerPosition) => {
-  console.log(data);
+  const packagedData = serialize(data);
+  movementLog.push(packagedData);
 });
+
+export default ee;

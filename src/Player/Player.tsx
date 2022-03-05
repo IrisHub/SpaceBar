@@ -4,6 +4,8 @@ import React, { useEffect, useRef } from 'react';
 import { Vector3 } from 'three';
 import { playerMovementControls } from './playerMovementControls';
 import ee from './playerMovementListener';
+import movementLog from './playerMovementLog';
+
 
 const SPEED = 10;
 
@@ -42,14 +44,15 @@ export default function Player(props: SphereProps) {
   }, [setPlayerRef.velocity]);
 
   useFrame(() => {
-  
-    playerRef.current.getWorldPosition(camera.position); //Position of player copied to camera position
     const playerCurrentPosition = camera.position;
-    if (pastPosition !== playerCurrentPosition){
-      ee.emit('send_coords',  playerCurrentPosition);
-      pastPosition = playerCurrentPosition;
+    if (playerRef.current != null) {
+      playerRef.current.getWorldPosition(playerCurrentPosition); //Position of player copied to camera position
+      if (pastPosition !== playerCurrentPosition) {
+        ee.emit('send_coords', playerCurrentPosition);
+        pastPosition = playerCurrentPosition;
+        console.log(movementLog);
+      }
     }
-
 
     zVector.set(0, 0, Number(forward) - Number(backward));
     xVector.set(Number(right) - Number(left), 0, 0);
