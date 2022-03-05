@@ -13,30 +13,41 @@ export const playerMovementControls = () => {
     backward: false,
     left: false,
     right: false,
+    jump: false,
   });
   
   const keyMap: { [key: string]: string } = {
     w: 'forward',
     ArrowUp: 'forward',
-    s: 'backward',
-    ArrowDown: 'backward',
     a: 'left',
+    ArrowDown: 'backward',
+    s: 'backward',
     ArrowLeft: 'left',
     d: 'right',
     ArrowRight: 'right',
+    Space: 'jump',
   };
 
   useEffect(() => {
-    const onKeyDown = (event: { key: string }) => {
+    const onKeyDown = (event: { key: string, code: string }) => {
+      console.log(event);
+      let key = event.key;
+      if (event.code == 'Space'){
+        key = 'Space';
+      }
       setDirection(pressedKey => ({
         ...pressedKey,
-        [keyMap[event.key]]: true,
+        [keyMap[key]]: true,
       }));
     };
-    const onKeyUp = (event: { key: string }) => {
+    const onKeyUp = (event: { key: string, code:string }) => {
+      let key = event.key;
+      if (event.code == 'Space'){
+        key = 'Space';
+      }
       setDirection(pressedKey => ({
         ...pressedKey,
-        [keyMap[event.key]]: false,
+        [keyMap[key]]: false,
       }));
     };
     document.addEventListener('keydown', onKeyDown);

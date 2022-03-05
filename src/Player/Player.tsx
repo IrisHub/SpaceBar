@@ -5,6 +5,8 @@ import { Vector3 } from 'three';
 import { playerMovementControls } from './playerMovementControls';
 
 const SPEED = 10;
+const HEIGHT = 15;
+const PLAYER_MASS = 10;
 
 type PlayerVelocity = {
   x: number,
@@ -18,10 +20,10 @@ export default function Player(props: SphereProps) {
    * Movement works by examining keypresses and updating the player's velocity (handled by Cannon.js)
    * according to keypress logic defined in ./playerMovementControls.ts.
    */
-  const { forward, backward, left, right } = playerMovementControls();
+  const { forward, backward, left, right, jump } = playerMovementControls();
   const { camera } = useThree();
   const [playerRef, playerApi] = useSphere(() => ({
-    mass: 10,
+    mass: PLAYER_MASS,
     position: [0, 2, 0],
     type: 'Dynamic',
     ...props,
@@ -43,9 +45,12 @@ export default function Player(props: SphereProps) {
     playerRef.current.getWorldPosition(camera.position);
     zVector.set(0, 0, Number(forward) - Number(backward));
     xVector.set(Number(right) - Number(left), 0, 0);
-    console.log(zVector, xVector);
     newVelocityVector.subVectors(xVector, zVector).normalize().multiplyScalar(SPEED).applyEuler(camera.rotation);
-    playerApi.velocity.set(newVelocityVector.x, currentVelocityVector.current.y, newVelocityVector.z);
+    newVelocityVector.y = currentVelocityVector.current.y;
+    if (jump && Math.abs( newVelocityVector.y ) < 0.05){
+      newVelocityVector.y = HEIGHT;
+    }
+    playerApi.velocity.set(newVelocityVector.x,  newVelocityVector.y, newVelocityVector.z);
   });
 
   return (
