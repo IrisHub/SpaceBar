@@ -17,10 +17,9 @@ export default function PlayerCameraControls() {
     }
   }, [controls]);
 
-
   return (
     <PointerLockControls
-      ref = {controls}
+      ref={controls}
       key={undefined}
       attach={undefined}
       attachArray={undefined}
@@ -44,7 +43,6 @@ export default function PlayerCameraControls() {
       hasEventListener={undefined}
       removeEventListener={undefined}
       dispatchEvent={undefined}
-  />
+    />
   );
 }
-
