@@ -1,4 +1,4 @@
-import { PlayerPosition } from '../allTypes';
+import { PlayerPosition, PlayerVelocity } from '../allTypes';
 /**
  * serialize is a helper function that is a light wrapper around stringifying a JSON object.
  * @param data 
@@ -23,16 +23,26 @@ export function deserialize(data:PlayerPosition) {
 }
 
 /**
+ * round is a simple helper funciton that rounds a float 
+ * to a number of places.
+ * @param float 
+ * @param numToRound 
+ * @returns rounded number
+ */
+export function round(float:Number, numToRound:number):number{
+  return parseFloat(float.toFixed(numToRound));
+}
+/**
  * roundEntriesInVector is a helper function that rounds a vector
  * to a number of places.
  * @param vector 
  * @param numToRound 
  * @returns vector
  */
-export function roundEntriesInVector(vector:PlayerPosition, numToRound:number){
+export function roundEntriesInVector(vector:PlayerPosition | PlayerVelocity, numToRound:number){
 
   for (let [key, value] of Object.entries(vector)) {
-    vector[key as keyof PlayerPosition] = parseFloat(value.toFixed(numToRound));
+    vector[key as keyof PlayerPosition] = round(value, numToRound);
   }
   return vector;
 }

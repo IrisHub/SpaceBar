@@ -3,14 +3,16 @@ import { useFrame, useThree } from '@react-three/fiber';
 import React, { useEffect, useRef } from 'react';
 import { playerMovementControls } from './playerMovementControls';
 import playerMovementEmitter from './playerMovementEmitter';
-import movementLog from './playerMovementLog';
 import { PlayerPosition, PlayerVelocity } from '../allTypes';
-import { roundEntriesInVector } from './playerMovementHelpers';
+import { roundEntriesInVector, round } from './playerMovementHelpers';
 import { Vector3 } from 'three';
+// import movementLog from './playerMovementLog'; For debugging sending coordinates
+
 
 const SPEED = 10;
 const JUMP_VELOCITY = 15;
 const PLAYER_MASS = 15;
+const NUM_PLACES_TO_ROUND = 3;
 
 export default function Player(props: SphereProps) {
   /**
@@ -30,13 +32,15 @@ export default function Player(props: SphereProps) {
   const zVector = new Vector3();
   const newVelocityVector = new Vector3();
   let pastPosition = new Vector3();
+  let pastVelocity = new Vector3();
+
 
   const currentVelocityVector = useRef<PlayerVelocity>({ x: 0, y: 0, z: 0 });
   useEffect(() => {
     setPlayerRef.velocity.subscribe((playerVelocity) => {
-      currentVelocityVector.current.x = playerVelocity[0];
-      currentVelocityVector.current.y = playerVelocity[1];
-      currentVelocityVector.current.z = playerVelocity[2];
+      currentVelocityVector.current.x = round(playerVelocity[0], NUM_PLACES_TO_ROUND);
+      currentVelocityVector.current.y = round(playerVelocity[1], NUM_PLACES_TO_ROUND);
+      currentVelocityVector.current.z = round(playerVelocity[2], NUM_PLACES_TO_ROUND);
     });
   }, [setPlayerRef.velocity]);
 
@@ -49,7 +53,7 @@ export default function Player(props: SphereProps) {
       if (pastPosition !== playerCurrentPosition) {
         playerMovementEmitter.emit('sendCoords', playerCurrentPosition);
         pastPosition = playerCurrentPosition;
-        console.log(movementLog);
+        // console.log(movementLog); For debugging sending coords
       }
     }
 
@@ -57,10 +61,14 @@ export default function Player(props: SphereProps) {
     xVector.set(Number(right) - Number(left), 0, 0);
     newVelocityVector.subVectors(xVector, zVector).normalize().multiplyScalar(SPEED).applyEuler(camera.rotation);
     setPlayerRef.velocity.set(newVelocityVector.x, currentVelocityVector.current.y, newVelocityVector.z);
-
-    if (jump && Math.abs(currentVelocityVector.current.y ) < 0.05){
+    playerCurrentPosition = roundEntriesInVector(playerCurrentPosition, NUM_PLACES_TO_ROUND);
+    
+    const canJump:boolean = jump && Math.abs(currentVelocityVector.current.y ) < 0.05 
+    && pastVelocity.y === currentVelocityVector.current.y; //Prevent infinite jumping
+    if (canJump){
       setPlayerRef.velocity.set(currentVelocityVector.current.x, JUMP_VELOCITY,  currentVelocityVector.current.z);
     }
+    pastVelocity.y = currentVelocityVector.current.y;
   });
 
   return (
