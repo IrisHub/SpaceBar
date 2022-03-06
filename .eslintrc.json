@@ -12,7 +12,9 @@
         "ecmaFeatures": {
             "tsx": true
         },
-        "project": ["tsconfig.json"],
+        "project": [
+            "tsconfig.json"
+        ],
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
@@ -22,19 +24,35 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".js",
+                    ".jsx",
+                    ".ts",
+                    ".tsx"
+                ]
+            }
+        ],
         "import/extensions": [
             "error",
             "ignorePackages",
             {
-              "js": "never",
-              "jsx": "never",
-              "ts": "never",
-              "tsx": "never"
+                "js": "never",
+                "jsx": "never",
+                "ts": "never",
+                "tsx": "never"
             }
-         ]
+        ]
     },
     "settings": {
-        "import/extensions": [".js", ".mjs", ".jsx", ".ts", ".tsx"]
+        "import/extensions": [
+            ".js",
+            ".mjs",
+            ".jsx",
+            ".ts",
+            ".tsx"
+        ]
     }
 }

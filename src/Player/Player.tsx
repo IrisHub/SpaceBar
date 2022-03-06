@@ -1,16 +1,16 @@
 import { SphereProps, useSphere } from '@react-three/cannon';
 import { useFrame, useThree } from '@react-three/fiber';
 import React, { useEffect, useRef } from 'react';
-import { Vector3 } from 'three';
 import { playerMovementControls } from './playerMovementControls';
+import playerMovementEmitter from './playerMovementEmitter';
+import movementLog from './playerMovementLog';
+import { PlayerPosition, PlayerVelocity } from '../allTypes';
+import { roundEntriesInVector } from './playerMovementHelpers';
+import { Vector3 } from 'three';
+
+
 
 const SPEED = 10;
-
-type PlayerVelocity = {
-  x: number,
-  y: number,
-  z: number
-};
 
 export default function Player(props: SphereProps) {
   /**
@@ -20,7 +20,7 @@ export default function Player(props: SphereProps) {
    */
   const { forward, backward, left, right } = playerMovementControls();
   const { camera } = useThree();
-  const [playerRef, playerApi] = useSphere(() => ({
+  const [playerRef, setPlayerRef] = useSphere(() => ({
     mass: 10,
     position: [0, 2, 0],
     type: 'Dynamic',
@@ -29,27 +29,39 @@ export default function Player(props: SphereProps) {
   const xVector = new Vector3();
   const zVector = new Vector3();
   const newVelocityVector = new Vector3();
+  let pastPosition = new Vector3();
 
   const currentVelocityVector = useRef<PlayerVelocity>({ x: 0, y: 0, z: 0 });
-  useEffect(()=>{
-    playerApi.velocity.subscribe(playerVelocity => {
+  useEffect(() => {
+    setPlayerRef.velocity.subscribe((playerVelocity) => {
       currentVelocityVector.current.x = playerVelocity[0];
       currentVelocityVector.current.y = playerVelocity[1];
       currentVelocityVector.current.z = playerVelocity[2];
     });
-  }, [playerApi.velocity]);
+  }, [setPlayerRef.velocity]);
 
-  useFrame(()=> {
-    playerRef.current.getWorldPosition(camera.position);
+  useFrame(() => {
+    let playerCurrentPosition:PlayerPosition = camera.position;    
+    if (playerRef.current != null) {
+      playerRef.current.getWorldPosition(playerCurrentPosition); //Position of player copied to camera position
+      playerCurrentPosition = roundEntriesInVector(playerCurrentPosition, 3);
+
+      if (pastPosition !== playerCurrentPosition) {
+        playerMovementEmitter.emit('sendCoords', playerCurrentPosition);
+        pastPosition = playerCurrentPosition;
+        console.log(movementLog);
+      }
+    }
+
     zVector.set(0, 0, Number(forward) - Number(backward));
     xVector.set(Number(right) - Number(left), 0, 0);
     newVelocityVector.subVectors(xVector, zVector).normalize().multiplyScalar(SPEED).applyEuler(camera.rotation);
-    playerApi.velocity.set(newVelocityVector.x, currentVelocityVector.current.y, newVelocityVector.z);
+    setPlayerRef.velocity.set(newVelocityVector.x, currentVelocityVector.current.y, newVelocityVector.z);
   });
 
   return (
     <React.Fragment>
-      <mesh ref={playerRef}/> 
+      <mesh ref={playerRef} />
     </React.Fragment>
   );
 }
