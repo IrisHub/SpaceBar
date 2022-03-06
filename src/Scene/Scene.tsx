@@ -19,7 +19,7 @@ export default function Scene() {
         <Skybox/>
         <ambientLight/>
         <pointLight position={[10, 10, 10]}/>
-          <Physics>
+          <Physics gravity={[0, -30, 0]}>
             <Player/>
             <SceneObject/>
             <Floor/>
