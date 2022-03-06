@@ -6,13 +6,11 @@ import playerMovementEmitter from './playerMovementEmitter';
 import { PlayerPosition, PlayerVelocity } from '../allTypes';
 import { roundEntriesInVector, round } from './playerMovementHelpers';
 import { Vector3 } from 'three';
-// import movementLog from './playerMovementLog'; For debugging sending coordinates
-
 
 const SPEED = 10;
 const JUMP_VELOCITY = 15;
 const PLAYER_MASS = 15;
-const NUM_PLACES_TO_ROUND = 3;
+const ROUNDING_PRECISION = 3;
 
 export default function Player(props: SphereProps) {
   /**
@@ -38,9 +36,9 @@ export default function Player(props: SphereProps) {
   const currentVelocityVector = useRef<PlayerVelocity>({ x: 0, y: 0, z: 0 });
   useEffect(() => {
     setPlayerRef.velocity.subscribe((playerVelocity) => {
-      currentVelocityVector.current.x = round(playerVelocity[0], NUM_PLACES_TO_ROUND);
-      currentVelocityVector.current.y = round(playerVelocity[1], NUM_PLACES_TO_ROUND);
-      currentVelocityVector.current.z = round(playerVelocity[2], NUM_PLACES_TO_ROUND);
+      currentVelocityVector.current.x = round(playerVelocity[0], ROUNDING_PRECISION);
+      currentVelocityVector.current.y = round(playerVelocity[1], ROUNDING_PRECISION);
+      currentVelocityVector.current.z = round(playerVelocity[2], ROUNDING_PRECISION);
     });
   }, [setPlayerRef.velocity]);
 
@@ -53,7 +51,6 @@ export default function Player(props: SphereProps) {
       if (pastPosition !== playerCurrentPosition) {
         playerMovementEmitter.emit('sendCoords', playerCurrentPosition);
         pastPosition = playerCurrentPosition;
-        // console.log(movementLog); For debugging sending coords
       }
     }
 
@@ -61,7 +58,7 @@ export default function Player(props: SphereProps) {
     xVector.set(Number(right) - Number(left), 0, 0);
     newVelocityVector.subVectors(xVector, zVector).normalize().multiplyScalar(SPEED).applyEuler(camera.rotation);
     setPlayerRef.velocity.set(newVelocityVector.x, currentVelocityVector.current.y, newVelocityVector.z);
-    playerCurrentPosition = roundEntriesInVector(playerCurrentPosition, NUM_PLACES_TO_ROUND);
+    playerCurrentPosition = roundEntriesInVector(playerCurrentPosition, ROUNDING_PRECISION);
     
     const canJump:boolean = jump && Math.abs(currentVelocityVector.current.y ) < 0.05 
     && pastVelocity.y === currentVelocityVector.current.y; //Prevent infinite jumping
