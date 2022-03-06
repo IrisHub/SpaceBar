@@ -6,7 +6,7 @@ const dummy = new Object3D();
 
 export default function SceneObject() {
   /**
-   * This file serves several purposes. It renders a high-polygon, highly animated
+   * This file serves several purposes. It renders an animated
    * object into the scene to a) calibrate walking speed/jumping height
    * b) Benchmark performance issues
    * Base taken from https://codesandbox.io/s/4rubo?file=/src/App.js
@@ -46,9 +46,9 @@ export default function SceneObject() {
   });
 
   return (
-    <instancedMesh ref={meshRef} args={[null, null, 1000]} position={[20, 20, 20]}>
-      <torusKnotGeometry args={[5.5, 0.1, 32, 32]}></torusKnotGeometry>
-      <meshPhongMaterial color="black" />
+    <instancedMesh ref={meshRef} args={[null, null, 1]} position={[0, 20, 0]}>
+      <boxGeometry args={[10, 10, 10, 32]}></boxGeometry>
+      <meshPhongMaterial color="lightgreen" />
     </instancedMesh>
   );
 }

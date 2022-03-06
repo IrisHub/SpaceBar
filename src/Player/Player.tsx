@@ -55,16 +55,8 @@ export default function Player(props: SphereProps) {
 
     zVector.set(0, 0, Number(forward) - Number(backward));
     xVector.set(Number(right) - Number(left), 0, 0);
-    newVelocityVector
-      .subVectors(xVector, zVector)
-      .normalize()
-      .multiplyScalar(SPEED)
-      .applyEuler(camera.rotation);
-    setPlayerRef.velocity.set(
-      newVelocityVector.x,
-      currentVelocityVector.current.y,
-      newVelocityVector.z,
-    );
+    newVelocityVector.subVectors(xVector, zVector).normalize().multiplyScalar(SPEED).applyEuler(camera.rotation);
+    setPlayerRef.velocity.set(newVelocityVector.x, currentVelocityVector.current.y, newVelocityVector.z);
   });
 
   return (
