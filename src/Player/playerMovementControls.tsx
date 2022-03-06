@@ -28,33 +28,23 @@ export const playerMovementControls = () => {
   };
 
   useEffect(() => {
-<<<<<<< HEAD:src/Player/playerMovementControls.ts
-    const onKeyDown = (event: { key: string, code: string }) => {
+    const onKeyDown = (event: { key: string }) => {
       console.log(event);
       let key = event.key;
-      if (event.code == 'Space'){
+      if (event.key == ' '){
         key = 'Space';
       }
       setDirection(pressedKey => ({
-=======
-    const onKeyDown = (event: { key: string }) => {
-      setDirection((pressedKey) => ({
->>>>>>> 37bf1b9bc4ceb3a25486cfa34f8cab517b5e4315:src/Player/playerMovementControls.tsx
         ...pressedKey,
         [keyMap[key]]: true,
       }));
     };
-<<<<<<< HEAD:src/Player/playerMovementControls.ts
-    const onKeyUp = (event: { key: string, code:string }) => {
+    const onKeyUp = (event: { key: string }) => {
       let key = event.key;
-      if (event.code == 'Space'){
+      if (event.key == ' '){
         key = 'Space';
       }
       setDirection(pressedKey => ({
-=======
-    const onKeyUp = (event: { key: string }) => {
-      setDirection((pressedKey) => ({
->>>>>>> 37bf1b9bc4ceb3a25486cfa34f8cab517b5e4315:src/Player/playerMovementControls.tsx
         ...pressedKey,
         [keyMap[key]]: false,
       }));
