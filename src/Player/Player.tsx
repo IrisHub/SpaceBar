@@ -5,8 +5,8 @@ import { Vector3 } from 'three';
 import { playerMovementControls } from './playerMovementControls';
 
 const SPEED = 10;
-const HEIGHT = 15;
-const PLAYER_MASS = 10;
+const JUMP_VELOCITY = 15;
+const PLAYER_MASS = 15;
 
 type PlayerVelocity = {
   x: number,
@@ -46,11 +46,11 @@ export default function Player(props: SphereProps) {
     zVector.set(0, 0, Number(forward) - Number(backward));
     xVector.set(Number(right) - Number(left), 0, 0);
     newVelocityVector.subVectors(xVector, zVector).normalize().multiplyScalar(SPEED).applyEuler(camera.rotation);
-    newVelocityVector.y = currentVelocityVector.current.y;
-    if (jump && Math.abs( newVelocityVector.y ) < 0.05){
-      newVelocityVector.y = HEIGHT;
+    playerApi.velocity.set(newVelocityVector.x, currentVelocityVector.current.y, newVelocityVector.z);
+
+    if (jump && Math.abs(currentVelocityVector.current.y ) < 0.05){
+      playerApi.velocity.set(currentVelocityVector.current.x, JUMP_VELOCITY,  currentVelocityVector.current.z);
     }
-    playerApi.velocity.set(newVelocityVector.x,  newVelocityVector.y, newVelocityVector.z);
   });
 
   return (
