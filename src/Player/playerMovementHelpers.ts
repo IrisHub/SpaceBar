@@ -9,12 +9,12 @@ export function serialize(data:PlayerPosition):string {
 }
 
 /**
- * unserialize is a helper function that is a light wrapper around parsing a JSON string.
+ * deserialize is a helper function that is a light wrapper around parsing a JSON string.
  * Returns undefined if error occured.
  * @param data 
  * @returns string
  */
-export function unserialize(data:PlayerPosition) {
+export function deserialize(data:PlayerPosition) {
   try {
     return JSON.parse(data.toString());
   } catch (e) {
