@@ -9,10 +9,10 @@ import movementLog from './playerMovementLog';
  * in-memory movementLog.
  */
 
-let ee = new EventEmitter();
-ee.on('send_coords', async (data: PlayerPosition) => {
+let playerMovementEmitter = new EventEmitter();
+playerMovementEmitter.on('sendCoords', async (data: PlayerPosition) => {
   const packagedData = serialize(data);
   movementLog.push(packagedData);
 });
 
-export default ee;
+export default playerMovementEmitter;

@@ -21,3 +21,18 @@ export function unserialize(data:PlayerPosition) {
     return undefined;
   }
 }
+
+/**
+ * roundEntriesInVector is a helper function that rounds a vector
+ * to a number of places.
+ * @param vector 
+ * @param numToRound 
+ * @returns vector
+ */
+export function roundEntriesInVector(vector:PlayerPosition, numToRound:number){
+
+  for (let [key, value] of Object.entries(vector)) {
+    vector[key as keyof PlayerPosition] = parseFloat(value.toFixed(numToRound));
+  }
+  return vector;
+}
