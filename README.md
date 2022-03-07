@@ -1,5 +1,8 @@
 # 3-D Spatial Audio
-A simple 3D spatial audio environment made with WebRTC, WebGL and Three.js
+A simple 3D spatial audio environment made with WebRTC, WebGL and Three.js.
+
+<img width="1607" alt="Screen Shot 2022-03-07 at 12 04 18" src="https://user-images.githubusercontent.com/31233283/157109499-091550d7-91ed-4022-a48f-231dc8367249.png">
+
 
 ## Branches
 Branches should be named with name/branch-name. For example, shalin/simple-peer-integration.
