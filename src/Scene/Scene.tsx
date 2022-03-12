@@ -6,6 +6,8 @@ import Floor from './Floor';
 import PlayerCameraControls from '../Player/playerCameraControls';
 import SceneObject from './SceneObject';
 import Skybox from './Skybox';
+import Model from './Model';
+
 
 export default function Scene() {
   /**
@@ -22,6 +24,7 @@ export default function Scene() {
           <Physics gravity={[0, -30, 0]}>
             <Player/>
             <SceneObject/>
+            <Model/>
             <Floor/>
             <gridHelper args={[100, 100, 'black', 'grey']}/>
           </Physics>
