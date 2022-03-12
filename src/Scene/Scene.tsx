@@ -24,7 +24,7 @@ export default function Scene() {
           <Physics gravity={[0, -30, 0]}>
             <Player/>
             <SceneObject/>
-            <Model/>
+            <Model modelPath="./gunship/scene.gltf" scaleFactor={0.03}/>
             <Floor/>
             <gridHelper args={[100, 100, 'black', 'grey']}/>
           </Physics>
