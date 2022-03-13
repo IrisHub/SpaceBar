@@ -7,6 +7,7 @@ import PlayerCameraControls from '../Player/playerCameraControls';
 import SceneObject from './SceneObject';
 import Skybox from './Skybox';
 import Model from './Model';
+import { getS3Path } from '../utils';
 
 
 export default function Scene() {
@@ -24,7 +25,7 @@ export default function Scene() {
           <Physics gravity={[0, -30, 0]}>
             <Player/>
             <SceneObject/>
-            <Model modelPath="./gunship/scene.gltf" scaleFactor={0.03}/>
+            <Model modelPath={getS3Path('models/gunship/scene.gltf')} scaleFactor={0.03}/>
             <Floor/>
             <gridHelper args={[100, 100, 'black', 'grey']}/>
           </Physics>

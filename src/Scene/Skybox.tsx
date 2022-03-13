@@ -1,5 +1,6 @@
 import { useThree } from '@react-three/fiber';
 import { CubeTextureLoader } from 'three';
+import { getS3Path } from '../utils';
 
 export default function Skybox() {
   /**
@@ -11,11 +12,16 @@ export default function Skybox() {
   const { scene } = useThree();
   const loader = new CubeTextureLoader();
   loader.setCrossOrigin('anonymous');
-  const sides = ['negz', 'posz', 'posy', 'negy', 'posx', 'negx'];
-  const filePath = 'https://3dspatialaudio-textures.s3.us-west-2.amazonaws.com/';
-  const extension = '.jpg'; 
+  const sides = [
+    'textures/negz.jpg',
+    'textures/posz.jpg', 
+    'textures/posy.jpg', 
+    'textures/negy.jpg', 
+    'textures/posx.jpg', 
+    'textures/negx.jpg',
+  ];
   const pathStrings = sides.map(side => {
-    return filePath + side + extension;
+    return getS3Path(side);
   });
   const texture = loader.load(pathStrings);
   scene.background = texture;
