@@ -18,11 +18,11 @@ type ModelProps = {
  *
  * @returns model to render
  */
-function Model(props: ModelProps) {
+function GLTFModel(props: ModelProps) {
   const gltf = useLoader(GLTFLoader, props.modelPath);
   gltf.scene.scale.multiplyScalar(props.scaleFactor);
 
   return <primitive position={props.position} object={gltf.scene} dispose={null} />;
 }
 
-export default Model;
+export default GLTFModel;
