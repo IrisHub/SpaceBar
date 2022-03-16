@@ -25,7 +25,7 @@ export default function Scene() {
           <Physics gravity={[0, -30, 0]}>
             <Player/>
             <SceneObject/>
-            <Model modelPath={getS3Path('models/gunship/scene.gltf')} scaleFactor={0.03}/>
+            <Model position={[10, 11, 60]} modelPath={getS3Path('models/gunship/scene.gltf')} scaleFactor={0.03}/>
             <Floor/>
             <gridHelper args={[100, 100, 'black', 'grey']}/>
           </Physics>

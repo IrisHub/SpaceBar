@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import { playerMovementControls } from './playerMovementControls';
 import playerMovementEmitter from './playerMovementEmitter';
 import { PlayerPosition, PlayerVelocity } from '../allTypes';
-import { roundEntriesInVector, round } from './playerMovementHelpers';
+import { roundEntriesInVector, round } from './playerMovementUtils';
 import { Vector3 } from 'three';
 
 const SPEED = 10;
@@ -32,18 +32,26 @@ export default function Player(props: SphereProps) {
   let pastPosition = new Vector3();
   let pastVelocity = new Vector3();
 
-
   const currentVelocityVector = useRef<PlayerVelocity>({ x: 0, y: 0, z: 0 });
   useEffect(() => {
     setPlayerRef.velocity.subscribe((playerVelocity) => {
-      currentVelocityVector.current.x = round(playerVelocity[0], ROUNDING_PRECISION);
-      currentVelocityVector.current.y = round(playerVelocity[1], ROUNDING_PRECISION);
-      currentVelocityVector.current.z = round(playerVelocity[2], ROUNDING_PRECISION);
+      currentVelocityVector.current.x = round(
+        playerVelocity[0],
+        ROUNDING_PRECISION,
+      );
+      currentVelocityVector.current.y = round(
+        playerVelocity[1],
+        ROUNDING_PRECISION,
+      );
+      currentVelocityVector.current.z = round(
+        playerVelocity[2],
+        ROUNDING_PRECISION,
+      );
     });
   }, [setPlayerRef.velocity]);
 
   useFrame(() => {
-    let playerCurrentPosition:PlayerPosition = camera.position;    
+    let playerCurrentPosition: PlayerPosition = camera.position;
     if (playerRef.current != null) {
       playerRef.current.getWorldPosition(playerCurrentPosition); //Position of player copied to camera position
       playerCurrentPosition = roundEntriesInVector(playerCurrentPosition, 3);
@@ -56,14 +64,31 @@ export default function Player(props: SphereProps) {
 
     zVector.set(0, 0, Number(forward) - Number(backward));
     xVector.set(Number(right) - Number(left), 0, 0);
-    newVelocityVector.subVectors(xVector, zVector).normalize().multiplyScalar(SPEED).applyEuler(camera.rotation);
-    setPlayerRef.velocity.set(newVelocityVector.x, currentVelocityVector.current.y, newVelocityVector.z);
-    playerCurrentPosition = roundEntriesInVector(playerCurrentPosition, ROUNDING_PRECISION);
-    
-    const canJump:boolean = jump && Math.abs(currentVelocityVector.current.y ) < 0.05 
-    && pastVelocity.y === currentVelocityVector.current.y; //Prevent infinite jumping
-    if (canJump){
-      setPlayerRef.velocity.set(currentVelocityVector.current.x, JUMP_VELOCITY,  currentVelocityVector.current.z);
+    newVelocityVector
+      .subVectors(xVector, zVector)
+      .normalize()
+      .multiplyScalar(SPEED)
+      .applyEuler(camera.rotation);
+    setPlayerRef.velocity.set(
+      newVelocityVector.x,
+      currentVelocityVector.current.y,
+      newVelocityVector.z,
+    );
+    playerCurrentPosition = roundEntriesInVector(
+      playerCurrentPosition,
+      ROUNDING_PRECISION,
+    );
+
+    const canJump: boolean =
+      jump &&
+      Math.abs(currentVelocityVector.current.y) < 0.05 &&
+      pastVelocity.y === currentVelocityVector.current.y; //Prevent infinite jumping
+    if (canJump) {
+      setPlayerRef.velocity.set(
+        currentVelocityVector.current.x,
+        JUMP_VELOCITY,
+        currentVelocityVector.current.z,
+      );
     }
     pastVelocity.y = currentVelocityVector.current.y;
   });
