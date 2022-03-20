@@ -25,7 +25,13 @@ export default function Scene() {
         <Physics gravity={[0, -30, 0]}>
           <Player />
           {/* <SceneObject /> */}
-          <CollisionObject mass={10} position={[10, 1, 15]} />
+          <CollisionObject
+            args={[10]}
+            mass={10}
+            position={[10, 1, 15]}
+            type={'Static'}
+            onCollide={() => console.log('I collided!')}
+          />
 
           <GLTFModel
             position={[10, 11, 60]}

@@ -3,12 +3,11 @@ import { SphereProps, useSphere } from '@react-three/cannon';
 
 export default function CollisionObject(props: SphereProps) {
   const [collisionRef] = useSphere(() => ({
-    args: [10],
-    color: 'lightgreen',
+    args: props.args,
     mass: props.mass,
     position: props.position,
-    type: 'Static',
-    onCollide: () => console.log('I collided!'),
+    type: props.type,
+    onCollide: props.onCollide,
     ...props,
   }));
 
