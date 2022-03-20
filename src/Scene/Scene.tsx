@@ -4,11 +4,11 @@ import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/cannon';
 import Floor from './Floor';
 import PlayerCameraControls from '../Player/playerCameraControls';
-import SceneObject from './SceneObject';
+// import SceneObject from './SceneObject';
 import Skybox from './Skybox';
 import GLTFModel from './GLTFModel';
+import CollisionObject from './CollisionObject';
 import { getS3Path } from '../utils';
-
 
 export default function Scene() {
   /**
@@ -18,17 +18,23 @@ export default function Scene() {
   return (
     <div style={{ height: window.innerHeight }}>
       <Canvas>
-        <PlayerCameraControls/>
-        <Skybox/>
-        <ambientLight/>
-        <pointLight position={[10, 10, 10]}/>
-          <Physics gravity={[0, -30, 0]}>
-            <Player/>
-            <SceneObject/>
-            <GLTFModel position={[10, 11, 60]} modelPath={getS3Path('models/gunship/scene.gltf')} scaleFactor={0.03}/>
-            <Floor/>
-            <gridHelper args={[100, 100, 'black', 'grey']}/>
-          </Physics>
+        <PlayerCameraControls />
+        <Skybox />
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
+        <Physics gravity={[0, -30, 0]}>
+          <Player />
+          {/* <SceneObject /> */}
+          <CollisionObject mass={10} position={[10, 1, 15]} />
+
+          <GLTFModel
+            position={[10, 11, 60]}
+            modelPath={getS3Path('models/gunship/scene.gltf')}
+            scaleFactor={0.03}
+          />
+          <Floor />
+          <gridHelper args={[100, 100, 'black', 'grey']} />
+        </Physics>
       </Canvas>
     </div>
   );
