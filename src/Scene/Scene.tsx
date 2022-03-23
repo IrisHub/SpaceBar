@@ -4,7 +4,6 @@ import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/cannon';
 import Floor from './Floor';
 import PlayerCameraControls from '../Player/playerCameraControls';
-// import SceneObject from './SceneObject';
 import Skybox from './Skybox';
 import GLTFModel from './GLTFModel';
 import CollisionObject from './CollisionObject';
@@ -24,7 +23,6 @@ export default function Scene() {
         <pointLight position={[10, 10, 10]} />
         <Physics gravity={[0, -30, 0]}>
           <Player />
-          {/* <SceneObject /> */}
           <CollisionObject
             args={[10]}
             mass={10}

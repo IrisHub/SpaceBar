@@ -16,13 +16,13 @@ export const playerMovementControls = () => {
   });
 
   const keyMap: { [key: string]: string } = {
-    W: 'forward',
+    w: 'forward',
     ArrowUp: 'forward',
-    A: 'left',
+    a: 'left',
     ArrowLeft: 'left',
-    S: 'backward',
+    s: 'backward',
     ArrowDown: 'backward',
-    D: 'right',
+    d: 'right',
     ArrowRight: 'right',
     Space: 'jump',
   };
