@@ -2,7 +2,9 @@ import SimplePeer from 'simple-peer';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from "react";
 import { PeerForm } from './PeerForm';
-import signalhubws from 'signalhubws';
+
+// import signalhubws from 'signalhubws';
+// import WebSocket from 'ws';
 
 function Peer() {
     const location = useLocation();
@@ -11,13 +13,15 @@ function Peer() {
         trickle: true,
     });
     
-    const hub = signalhubws("", ["wss://spacebar-ws-2.herokuapp.com/"]);
+    
+    // const hub = signalhubws("", ["wss://spacebar-ws-2.herokuapp.com/"]);
 
     useEffect(() => {
         peer.on('signal', (data) => {
             // console.log('Received signal from peer:', JSON.stringify(data));
             // () => console.log("broadcasted")
-            hub.broadcast("firstPeer", JSON.stringify(data));
+            // hub.broadcast("firstPeer", JSON.stringify(data));
+
         });
     });
   
