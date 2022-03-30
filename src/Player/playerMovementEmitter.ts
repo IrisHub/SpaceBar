@@ -12,6 +12,7 @@ import movementLog from './playerMovementLog';
 let playerMovementEmitter = new EventEmitter();
 playerMovementEmitter.on('sendCoords', async (data: PlayerPosition) => {
   const packagedData = serialize(data);
+
   movementLog.push(packagedData);
 });
 

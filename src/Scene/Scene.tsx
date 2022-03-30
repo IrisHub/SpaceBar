@@ -6,8 +6,11 @@ import Floor from './Floor';
 import PlayerCameraControls from '../Player/playerCameraControls';
 import Skybox from './Skybox';
 import GLTFModel from './GLTFModel';
-import CollisionObject from './CollisionObject';
+import Box from './Shapes/Box';
+import Sphere from './Shapes/Sphere';
+
 import { getS3Path } from '../utils';
+import Cylinder from './Shapes/Cylinder';
 
 export default function Scene() {
   /**
@@ -23,12 +26,33 @@ export default function Scene() {
         <pointLight position={[10, 10, 10]} />
         <Physics gravity={[0, -30, 0]}>
           <Player />
-          <CollisionObject
+          <Sphere
             args={[10]}
             mass={10}
             position={[10, 1, 15]}
             type={'Static'}
             onCollide={() => console.log('I collided!')}
+            color={'red'}
+          />
+
+          <Box
+            args={[10, 10, 10]}
+            mass={10}
+            position={[25, 1, 15]}
+            type={'Static'}
+            onCollide={() => console.log('I also collided!')}
+            color={'yellow'}
+
+          />
+
+          <Cylinder
+            args={[10, 10, 10]}
+            mass={10}
+            position={[5, 1, 15]}
+            type={'Static'}
+            onCollide={() => console.log('I also collided!')}
+            color={'green'}
+
           />
 
           <GLTFModel
@@ -36,6 +60,7 @@ export default function Scene() {
             modelPath={getS3Path('models/gunship/scene.gltf')}
             scaleFactor={0.03}
           />
+          {/* <GLTFCollision position={[1, 5, 0]} rotation={[0.4, 0.1, 0.1]} /> */}
           <Floor />
           <gridHelper args={[100, 100, 'black', 'grey']} />
         </Physics>
