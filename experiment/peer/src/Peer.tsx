@@ -3,25 +3,30 @@ import { useLocation } from 'react-router-dom';
 import { useEffect } from "react";
 import { PeerForm } from './PeerForm';
 
-// import signalhubws from 'signalhubws';
-// import WebSocket from 'ws';
-
 function Peer() {
     const location = useLocation();
     const peer = new SimplePeer({
         initiator: location.hash === '#1', // The intiator peer is the one with #1 in the URL
         trickle: true,
     });
-    
-    
-    // const hub = signalhubws("", ["wss://spacebar-ws-2.herokuapp.com/"]);
 
-    useEffect(() => {
+    // TODO(SHALIN): Move to utils.ts
+    const useMountEffect = (func: () => void) => useEffect(func ,[]);
+
+    // Create a test websocket connection to our node server in ../signaler/app.ts.
+    // Eventually we want to use a real signaling server -- something like 
+    // wss://spacebar-ws-2.herokuapp.com/
+    const ws = new WebSocket('ws://localhost:8080/');
+
+    // We will only get a signal if the peer is the initiator.
+    // When the websocket connection is open, send the signal peer's signal our 
+    // node server.
+    useMountEffect(() => {
         peer.on('signal', (data) => {
-            // console.log('Received signal from peer:', JSON.stringify(data));
-            // () => console.log("broadcasted")
-            // hub.broadcast("firstPeer", JSON.stringify(data));
-
+            console.log('Received signal from peer:', JSON.stringify(data));
+            ws.onopen = function (_) {
+                ws.send(JSON.stringify(data));
+            };
         });
     });
   

@@ -14,7 +14,4 @@ function App() {
   );
 }
 
-// private peer: SimplePeer.Instance;
-
-
 export default App;

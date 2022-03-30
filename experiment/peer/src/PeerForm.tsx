@@ -1,17 +1,10 @@
 import SimplePeer from "simple-peer"; 
-import { useLocation } from 'react-router-dom';
 import React from 'react';
 
 export function PeerForm(props: { peer: SimplePeer.Instance }) {
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         const data = (event.currentTarget.elements[0] as HTMLInputElement).value;
         console.log('Submitting form', data);
-        // Send an initial signal to the peer when the user clicks the submit button.
-        const ws = new WebSocket('ws://localhost:8080/');
-        ws.onopen = function (_) {
-            ws.send(JSON.stringify(data));
-          };
-          
     } 
 
     return (
