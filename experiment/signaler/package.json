@@ -8,7 +8,7 @@
     "ws": "^8.5.0"
   },
   "scripts": {
-    "start": "nodemon app.ts",
+    "watch": "nodemon app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
