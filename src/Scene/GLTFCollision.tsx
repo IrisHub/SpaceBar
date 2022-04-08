@@ -2,38 +2,25 @@ import React, { useMemo } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { useLoader } from '@react-three/fiber';
 import { getS3Path } from '../utils';
-import { useConvexPolyhedron } from '@react-three/cannon';
-import { Geometry } from 'three-stdlib';
+import { Box3 } from 'three';
+import { BoxProps, useBox } from '@react-three/cannon';
 
-// @ts-ignore
-function toConvexProps(bufferGeometry) {
-  const geo = new Geometry().fromBufferGeometry(bufferGeometry);
-  // Merge duplicate vertices resulting from glTF export.
-  // Cannon assumes contiguous, closed meshes to work
-  geo.mergeVertices();
-  return [geo.vertices.map((v) => [v.x, v.y, v.z]), geo.faces.map((f) => [f.a, f.b, f.c]), []]; // prettier-ignore
-}
-// @ts-ignore
-function GLTFCollision(props) {
-  const { nodes } = useLoader(
+export default function GLTFCollision(props: BoxProps) {
+  const gltf = useLoader(
     GLTFLoader,
     getS3Path('models/gunship/scene.gltf'),
   );
-  console.log(nodes);
-  //@ts-ignore
-  const geo = useMemo(() => toConvexProps(nodes[0]), [nodes]);
-  const [ref] = useConvexPolyhedron(() => ({ mass: 100, ...props, args: geo }));
+  gltf.scene.scale.multiplyScalar(0.03);
+  let bbox = useMemo(() => new Box3().setFromObject(gltf.scene), [gltf.scene]);
+  const [collisionRef] = useBox(() => ({
+    args: [bbox.min.x, bbox.min.y,  bbox.min.z],
+    mass: props.mass,
+    position: props.position,
+    type: props.type,
+    onCollide: props.onCollide,
+  }));
+
   return (
-    <mesh
-      castShadow
-      receiveShadow
-      ref={ref}
-      //@ts-ignore
-      geometry={nodes[0]}
-      {...props}
-    >
-      <meshStandardMaterial />
-    </mesh>
+    <primitive ref={collisionRef} position={props.position} object={gltf.scene} dispose={null} />
   );
 }
-export default GLTFCollision;

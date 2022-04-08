@@ -1,7 +1,7 @@
 import React from 'react';
 import { SphereProps, useSphere } from '@react-three/cannon';
 
-interface MySphere extends SphereProps{
+interface CustomSphere extends SphereProps{
   color: string
 }
 /**
@@ -13,7 +13,7 @@ interface MySphere extends SphereProps{
  * @param props args: Array<number>, mass: number, position: Triplet, type: string, onCollide: Function
  * @returns
  */
-export default function Sphere(props: MySphere) {
+export default function Sphere(props: CustomSphere) {
 
   const [collisionRef] = useSphere(() => ({
     args: props.args,

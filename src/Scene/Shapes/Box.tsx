@@ -1,8 +1,8 @@
 import React from 'react';
 import { BoxProps, useBox } from '@react-three/cannon';
 
-interface MyBox extends BoxProps{
-  color: string
+interface CustomBox extends BoxProps {
+  color: string;
 }
 /**
  * CollisionObject component renders an object with collision detection.
@@ -13,8 +13,7 @@ interface MyBox extends BoxProps{
  * @param props args: Array<number>, mass: number, position: Triplet, type: string, onCollide: Function
  * @returns
  */
-export default function Box(props: MyBox) {
-
+export default function Box(props: CustomBox) {
   const [collisionRef] = useBox(() => ({
     args: props.args,
     mass: props.mass,
@@ -27,7 +26,7 @@ export default function Box(props: MyBox) {
   return (
     <mesh ref={collisionRef}>
       <boxBufferGeometry args={props.args} />
-      <meshPhongMaterial color= {props.color} />
+      <meshPhongMaterial color={props.color} />
     </mesh>
   );
 }
