@@ -1,20 +1,19 @@
 import React from 'react';
-import { BoxProps, useBox } from '@react-three/cannon';
+import { SphereProps, useSphere } from '@react-three/cannon';
 
-interface CustomBox extends BoxProps {
-  color: string;
+interface CustomSphere extends SphereProps{
+  color: string
 }
 /**
- * CollisionObject component renders an object with collision detection.
+ * Sphere component renders a sphere with collision detection.
  * This component accepts props that determine its size, position, type, and mass,
  * and a callback to be called upon a collision.
- *
- * TODO: Support passing props for multiple shapes rather than just a sphere...
  * @param props args: Array<number>, mass: number, position: Triplet, type: string, onCollide: Function
  * @returns
  */
-export default function Box(props: CustomBox) {
-  const [collisionRef] = useBox(() => ({
+export default function Sphere(props: CustomSphere) {
+
+  const [collisionRef] = useSphere(() => ({
     args: props.args,
     mass: props.mass,
     position: props.position,
@@ -25,7 +24,7 @@ export default function Box(props: CustomBox) {
 
   return (
     <mesh ref={collisionRef}>
-      <boxBufferGeometry args={props.args} />
+      <sphereBufferGeometry args={props.args} />
       <meshPhongMaterial color={props.color} />
     </mesh>
   );

@@ -5,12 +5,11 @@ import { Physics } from '@react-three/cannon';
 import Floor from './Floor';
 import PlayerCameraControls from '../Player/playerCameraControls';
 import Skybox from './Skybox';
-// import GLTFModel from './GLTFModel';
-// import Box from './Shapes/Box';
-// import Sphere from './Shapes/Sphere';
+import Box from '../Shapes/Box';
+import Sphere from '../Shapes/Sphere';
 import { getS3Path } from '../utils';
-// import Cylinder from './Shapes/Cylinder';
-import GLTFCollision from './GLTFCollision';
+import Cylinder from '../Shapes/Cylinder';
+import GLTFCollisionModel from '../Shapes/GLTFCollision';
 
 export default function Scene() {
   /**
@@ -26,42 +25,36 @@ export default function Scene() {
         <pointLight position={[10, 10, 10]} />
         <Physics gravity={[0, -30, 0]}>
           <Player />
-          {/* <Sphere
+          <Sphere
             args={[10]}
             mass={10}
-            position={[10, 1, 15]}
+            position={[5, 1, -15]}
             type={'Static'}
             onCollide={() => console.log('I collided!')}
             color={'red'}
           />
 
           <Box
-            args={[10, 10, 10]}
+            args={[10, 10, 20]}
             mass={10}
-            position={[25, 1, 15]}
+            position={[25, 1, -15]}
             type={'Static'}
             onCollide={() => console.log('I also collided!')}
             color={'yellow'}
           />
 
           <Cylinder
-            args={[10, 10, 10]}
+            args={[10, 10, 5]}
             mass={10}
-            position={[5, 1, 15]}
+            position={[50, 1, -15]}
             type={'Static'}
             onCollide={() => console.log('I also collided!')}
             color={'green'}
-          /> */}
+          />
 
-          {/* <GLTFModel
-            position={[10, 11, 60]}
-            modelPath={getS3Path('models/gunship/scene.gltf')}
-            scaleFactor={0.03}
-          /> */}
-
-          <GLTFCollision
+          <GLTFCollisionModel
           mass={10}
-          position={[30, 0, 50]}
+          position={[5, 0, 50]}
           type={'Static'}
           onCollide={() => console.log('I also collided!')}
           modelScaleFactor={1}
@@ -69,7 +62,7 @@ export default function Scene() {
           modelPath={getS3Path('models/plant/scene.gltf')}
           /> 
 
-      <GLTFCollision
+      <GLTFCollisionModel
           mass={10}
           position={[50, 0, 30]}
           type={'Static'}
@@ -79,7 +72,7 @@ export default function Scene() {
           modelPath={getS3Path('models/plant2/scene.gltf')}
           /> 
 
-        <GLTFCollision
+        <GLTFCollisionModel
           mass={10}
           position={[10, 1, 15]}
           type={'Static'}
@@ -88,7 +81,6 @@ export default function Scene() {
           bboxScaleFactor={0.5}
           modelPath={getS3Path('models/gunship/scene.gltf')}
           /> 
-
 
 
           <Floor />

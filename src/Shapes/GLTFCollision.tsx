@@ -10,7 +10,16 @@ interface CustomGLTF extends BoxProps{
   bboxScaleFactor: number
   modelPath: string
 }
-export default function GLTFCollision(props: CustomGLTF) {
+
+/**
+ * GLTFCollisionModel component renders a GLTF with a bounding box for collision detection.
+ * This component accepts props that determine its size, position, type, 
+ * a callback to be called upon a collision, path to GLTF to load, and scaling factors for the model and bbox.
+ * @param props args: Array<number>, mass: number, position: Triplet, type: string, onCollide: Function,
+ * modelScaleFactor: number, bboxScaleFactor: number, modelPath
+ * @returns
+ */
+export default function GLTFCollisionModel(props: CustomGLTF) {
   const gltf = useLoader(
     GLTFLoader,
     props.modelPath,
