@@ -6,10 +6,10 @@ import Floor from './Floor';
 import PlayerCameraControls from '../Player/playerCameraControls';
 import Skybox from './Skybox';
 // import GLTFModel from './GLTFModel';
-import Box from './Shapes/Box';
-import Sphere from './Shapes/Sphere';
-// import { getS3Path } from '../utils';
-import Cylinder from './Shapes/Cylinder';
+// import Box from './Shapes/Box';
+// import Sphere from './Shapes/Sphere';
+import { getS3Path } from '../utils';
+// import Cylinder from './Shapes/Cylinder';
 import GLTFCollision from './GLTFCollision';
 
 export default function Scene() {
@@ -26,7 +26,7 @@ export default function Scene() {
         <pointLight position={[10, 10, 10]} />
         <Physics gravity={[0, -30, 0]}>
           <Player />
-          <Sphere
+          {/* <Sphere
             args={[10]}
             mass={10}
             position={[10, 1, 15]}
@@ -51,7 +51,7 @@ export default function Scene() {
             type={'Static'}
             onCollide={() => console.log('I also collided!')}
             color={'green'}
-          />
+          /> */}
 
           {/* <GLTFModel
             position={[10, 11, 60]}
@@ -61,10 +61,39 @@ export default function Scene() {
 
           <GLTFCollision
           mass={10}
-          position={[25, 1, 15]}
+          position={[30, 0, 50]}
           type={'Static'}
           onCollide={() => console.log('I also collided!')}
+          modelScaleFactor={1}
+          bboxScaleFactor={1}
+          modelPath={getS3Path('models/plant/scene.gltf')}
+          maxBoundingBox={false}
           /> 
+
+      <GLTFCollision
+          mass={10}
+          position={[50, 0, 30]}
+          type={'Static'}
+          onCollide={() => console.log('I also collided!')}
+          modelScaleFactor={1}
+          bboxScaleFactor={1}
+          modelPath={getS3Path('models/plant2/scene.gltf')}
+          maxBoundingBox={false}
+          /> 
+
+        <GLTFCollision
+          mass={10}
+          position={[10, 1, 15]}
+          type={'Static'}
+          onCollide={() => console.log('I also collided!')}
+          modelScaleFactor={0.03}
+          bboxScaleFactor={0.5}
+          modelPath={getS3Path('models/gunship/scene.gltf')}
+          maxBoundingBox={true}
+          /> 
+
+
+
           <Floor />
           <gridHelper args={[100, 100, 'black', 'grey']} />
         </Physics>
