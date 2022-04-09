@@ -67,7 +67,6 @@ export default function Scene() {
           modelScaleFactor={1}
           bboxScaleFactor={1}
           modelPath={getS3Path('models/plant/scene.gltf')}
-          maxBoundingBox={false}
           /> 
 
       <GLTFCollision
@@ -76,9 +75,8 @@ export default function Scene() {
           type={'Static'}
           onCollide={() => console.log('I also collided!')}
           modelScaleFactor={1}
-          bboxScaleFactor={1}
+          bboxScaleFactor={0.5}
           modelPath={getS3Path('models/plant2/scene.gltf')}
-          maxBoundingBox={false}
           /> 
 
         <GLTFCollision
@@ -89,7 +87,6 @@ export default function Scene() {
           modelScaleFactor={0.03}
           bboxScaleFactor={0.5}
           modelPath={getS3Path('models/gunship/scene.gltf')}
-          maxBoundingBox={true}
           /> 
 
 
