@@ -1,0 +1,1 @@
+export const GRAVITY: [number, number, number] = [0, -30, 0];

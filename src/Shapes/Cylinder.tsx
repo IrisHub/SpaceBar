@@ -3,6 +3,8 @@ import { CylinderProps, useCylinder } from '@react-three/cannon';
 
 interface CustomCylinder extends CylinderProps {
   color: string;
+  dimensions: [number, number, number]
+
 }
 /**
  * Cylinder component renders a cylinder with collision detection.
@@ -13,7 +15,7 @@ interface CustomCylinder extends CylinderProps {
  */
 export default function Cylinder(props: CustomCylinder) {
   const [collisionRef] = useCylinder(() => ({
-    args: props.args,
+    args: props.dimensions,
     mass: props.mass,
     position: props.position,
     type: props.type,

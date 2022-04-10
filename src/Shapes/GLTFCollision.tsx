@@ -14,10 +14,14 @@ interface CustomGLTF extends BoxProps{
 
 /**
  * GLTFCollisionModel component renders a GLTF with a bounding box for collision detection.
+ * 
  * This component accepts props that determine its size, position, type, 
  * a callback to be called upon a collision, path to GLTF to load, and scaling factors for the model and bbox.
- * @param props args: Array<number>, mass: number, position: Triplet, type: string, onCollide: Function,
- * modelScaleFactor: number, bboxScaleFactor: number, modelPath
+ * 
+ * The component loads a GLTF with the useLoader hook, makes memoized calls to clone the loaded scene
+ * in order to be able to load multiple instances of the same GLTF, then scales the model and bounding box
+ * to the provided props.  The scaled bounding box hooks into the Cannon physics engine with the useBox hook and returned collisionRef. 
+ * @param props customGLTF
  * @returns
  */
 export default function GLTFCollisionModel(props: CustomGLTF) {
@@ -30,7 +34,6 @@ export default function GLTFCollisionModel(props: CustomGLTF) {
   copiedScene.scale.multiplyScalar(props.modelScaleFactor);
 
   let bbox = useMemo(() => new Box3().setFromObject(copiedScene), [copiedScene]);
-
 
   const bboxSize = bbox.getSize(new Vector3());
   const scaledBbox = bboxSize.multiplyScalar(props.bboxScaleFactor).toArray();

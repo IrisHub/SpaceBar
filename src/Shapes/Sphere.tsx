@@ -3,6 +3,8 @@ import { SphereProps, useSphere } from '@react-three/cannon';
 
 interface CustomSphere extends SphereProps{
   color: string
+  dimensions: [number]
+
 }
 /**
  * Sphere component renders a sphere with collision detection.
@@ -14,7 +16,7 @@ interface CustomSphere extends SphereProps{
 export default function Sphere(props: CustomSphere) {
 
   const [collisionRef] = useSphere(() => ({
-    args: props.args,
+    args: props.dimensions,
     mass: props.mass,
     position: props.position,
     type: props.type,

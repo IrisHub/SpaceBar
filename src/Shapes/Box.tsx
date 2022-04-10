@@ -3,6 +3,7 @@ import { BoxProps, useBox } from '@react-three/cannon';
 
 interface CustomBox extends BoxProps {
   color: string;
+  dimensions: [number, number, number]
 }
 /**
  * Box component renders a box with collision detection.
@@ -13,7 +14,7 @@ interface CustomBox extends BoxProps {
  */
 export default function Box(props: CustomBox) {
   const [collisionRef] = useBox(() => ({
-    args: props.args,
+    args: props.dimensions,
     mass: props.mass,
     position: props.position,
     type: props.type,

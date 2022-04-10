@@ -10,6 +10,7 @@ import Sphere from '../Shapes/Sphere';
 import { getS3Path } from '../utils';
 import Cylinder from '../Shapes/Cylinder';
 import GLTFCollisionModel from '../Shapes/GLTFCollision';
+import { GRAVITY } from '../worldConstants';
 
 export default function Scene() {
   /**
@@ -23,10 +24,10 @@ export default function Scene() {
         <Skybox />
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
-        <Physics gravity={[0, -30, 0]}>
+        <Physics gravity={GRAVITY}>
           <Player />
           <Sphere
-            args={[10]}
+            dimensions={[10]}
             mass={10}
             position={[5, 1, -15]}
             type={'Static'}
@@ -35,7 +36,7 @@ export default function Scene() {
           />
 
           <Box
-            args={[10, 10, 20]}
+            dimensions={[10, 10, 20]}
             mass={10}
             position={[25, 1, -15]}
             type={'Static'}
@@ -54,7 +55,7 @@ export default function Scene() {
           /> 
 
           <Cylinder
-            args={[10, 10, 5]}
+            dimensions={[10, 10, 5]}
             mass={10}
             position={[50, 1, -15]}
             type={'Static'}
