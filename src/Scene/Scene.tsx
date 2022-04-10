@@ -9,7 +9,7 @@ import Box from '../Shapes/Box';
 import Sphere from '../Shapes/Sphere';
 import { getS3Path } from '../utils';
 import Cylinder from '../Shapes/Cylinder';
-import GLTFCollisionModel from '../Shapes/GLTFCollision';
+import GLTFModel from '../Shapes/GLTFModel';
 import { GRAVITY } from '../worldConstants';
 
 export default function Scene() {
@@ -42,13 +42,14 @@ export default function Scene() {
             color={'yellow'}
           />
 
-      <GLTFCollisionModel
+      <GLTFModel
           mass={10}
           position={[-50, 30, -50]}
           type={'Static'}
           modelScaleFactor={0.001}
           bboxScaleFactor={0.5}
           modelPath={getS3Path('models/gunship/scene.gltf')}
+          collision={true}
           /> 
 
           <Cylinder
@@ -59,52 +60,59 @@ export default function Scene() {
             color={'green'}
           />
 
-          <GLTFCollisionModel
+          <GLTFModel
           mass={10}
           position={[5, 0, 50]}
           type={'Static'}
           modelScaleFactor={1}
           bboxScaleFactor={1}
           modelPath={getS3Path('models/plant/scene.gltf')}
+          collision={false}
+
           /> 
 
-      <GLTFCollisionModel
+      <GLTFModel
           mass={10}
           position={[50, 0, 30]}
           type={'Static'}
           modelScaleFactor={1}
           bboxScaleFactor={0.5}
           modelPath={getS3Path('models/plant2/scene.gltf')}
+          collision={false}
+
           /> 
 
-        <GLTFCollisionModel
+        <GLTFModel
           mass={5}
           position={[-200, 1, -200 ]}
           type={'Static'}
           modelScaleFactor={0.3}
           bboxScaleFactor={0.}
           modelPath={getS3Path('models/mushroom_tree/scene.gltf')}
+          collision={false}
           /> 
 
 
         
-       <GLTFCollisionModel
+       <GLTFModel
           mass={10}
           position={[-90, 1, -20 ]}
           type={'Static'}
           modelScaleFactor={0.3}
           bboxScaleFactor={0.5}
           modelPath={getS3Path('models/mushroom_tree/scene.gltf')}
+          collision={true}
           /> 
 
  
-        <GLTFCollisionModel
+        <GLTFModel
           mass={10}
           position={[50, 1, 65 ]}
           type={'Static'}
           modelScaleFactor={0.3}
           bboxScaleFactor={0.5}
           modelPath={getS3Path('models/mushroom_tree/scene.gltf')}
+          collision={true}
           />  
 
 
