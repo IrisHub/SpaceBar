@@ -43,6 +43,16 @@ export default function Scene() {
             color={'yellow'}
           />
 
+      <GLTFCollisionModel
+          mass={10}
+          position={[-50, 30, -50]}
+          type={'Static'}
+          onCollide={() => console.log('I also collided!')}
+          modelScaleFactor={0.001}
+          bboxScaleFactor={0.5}
+          modelPath={getS3Path('models/gunship/scene.gltf')}
+          /> 
+
           <Cylinder
             args={[10, 10, 5]}
             mass={10}
@@ -73,14 +83,37 @@ export default function Scene() {
           /> 
 
         <GLTFCollisionModel
-          mass={10}
-          position={[10, 1, 15]}
+          mass={5}
+          position={[-200, 1, -200 ]}
           type={'Static'}
           onCollide={() => console.log('I also collided!')}
-          modelScaleFactor={0.03}
-          bboxScaleFactor={0.5}
-          modelPath={getS3Path('models/gunship/scene.gltf')}
+          modelScaleFactor={0.3}
+          bboxScaleFactor={0.}
+          modelPath={getS3Path('models/mushroom_tree/scene.gltf')}
           /> 
+
+
+        
+       <GLTFCollisionModel
+          mass={10}
+          position={[-90, 1, -20 ]}
+          type={'Static'}
+          onCollide={() => console.log('I also collided!')}
+          modelScaleFactor={0.3}
+          bboxScaleFactor={0.5}
+          modelPath={getS3Path('models/mushroom_tree/scene.gltf')}
+          /> 
+
+ 
+        <GLTFCollisionModel
+          mass={10}
+          position={[50, 1, 65 ]}
+          type={'Static'}
+          onCollide={() => console.log('I also collided!')}
+          modelScaleFactor={0.3}
+          bboxScaleFactor={0.5}
+          modelPath={getS3Path('models/mushroom_tree/scene.gltf')}
+          />  
 
 
           <Floor />

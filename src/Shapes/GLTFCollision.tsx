@@ -4,6 +4,7 @@ import { useLoader } from '@react-three/fiber';
 import { Box3 } from 'three';
 import { BoxProps, useBox } from '@react-three/cannon';
 import { Vector3 } from 'three';
+import { SkeletonUtils } from 'three-stdlib';
 
 interface CustomGLTF extends BoxProps{
   modelScaleFactor: number
@@ -20,12 +21,16 @@ interface CustomGLTF extends BoxProps{
  * @returns
  */
 export default function GLTFCollisionModel(props: CustomGLTF) {
-  const gltf = useLoader(
+  const { scene } = useLoader(
     GLTFLoader,
     props.modelPath,
   );
-  gltf.scene.scale.multiplyScalar(props.modelScaleFactor);
-  let bbox = useMemo(() => new Box3().setFromObject(gltf.scene), [gltf.scene]);
+  // Must use Skeleton utils to support copies of skinned meshes https://github.com/mrdoob/three.js/issues/11573
+  let copiedScene = useMemo(() => SkeletonUtils.clone(scene), [scene]);
+  copiedScene.scale.multiplyScalar(props.modelScaleFactor);
+
+  let bbox = useMemo(() => new Box3().setFromObject(copiedScene), [copiedScene]);
+
 
   const bboxSize = bbox.getSize(new Vector3());
   const scaledBbox = bboxSize.multiplyScalar(props.bboxScaleFactor).toArray();
@@ -39,6 +44,6 @@ export default function GLTFCollisionModel(props: CustomGLTF) {
   }));
 
   return (
-    <primitive ref={collisionRef} position={props.position} object={gltf.scene} dispose={null} />
+    <primitive ref={collisionRef} position={props.position} object={copiedScene} dispose={null} />
   );
 }
