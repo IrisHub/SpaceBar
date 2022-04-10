@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { SphereProps, useSphere } from '@react-three/cannon';
 
 interface CustomSphere extends SphereProps{
   color: string
   dimensions: [number]
+  collision: boolean
+
 
 }
 /**
@@ -15,19 +17,29 @@ interface CustomSphere extends SphereProps{
  */
 export default function Sphere(props: CustomSphere) {
 
-  const [collisionRef] = useSphere(() => ({
-    args: props.dimensions,
-    mass: props.mass,
-    position: props.position,
-    type: props.type,
-    onCollide: props.onCollide,
-    ...props,
-  }));
+  let collisionRef = createRef();
+  if (props.collision){
+    [collisionRef] = useSphere(() => ({
+      args: props.dimensions,
+      mass: props.mass,
+      position: props.position,
+      type: props.type,
+      onCollide: props.onCollide,
+      ...props,
+    }));
+  }
 
   return (
-    <mesh ref={collisionRef}>
-      <sphereBufferGeometry args={props.dimensions} />
-      <meshPhongMaterial color={props.color} />
-    </mesh>
+  <>
+  {props.collision &&  <mesh ref={collisionRef}>
+    <sphereBufferGeometry args={props.dimensions} />
+    <meshPhongMaterial color={props.color} />
+  </mesh>}
+
+  {!props.collision &&  <mesh position={props.position}>
+    <sphereBufferGeometry args={props.dimensions} />
+    <meshPhongMaterial color={props.color} />
+  </mesh>}
+  </>
   );
 }

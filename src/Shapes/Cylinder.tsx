@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { CylinderProps, useCylinder } from '@react-three/cannon';
 
 interface CustomCylinder extends CylinderProps {
   color: string;
   dimensions: [number, number, number]
+  collision: boolean
 
 }
 /**
@@ -14,19 +15,31 @@ interface CustomCylinder extends CylinderProps {
  * @returns
  */
 export default function Cylinder(props: CustomCylinder) {
-  const [collisionRef] = useCylinder(() => ({
-    args: props.dimensions,
-    mass: props.mass,
-    position: props.position,
-    type: props.type,
-    onCollide: props.onCollide,
-    ...props,
-  }));
+
+  let collisionRef = createRef();
+  if (props.collision){
+    [collisionRef] = useCylinder(() => ({
+      args: props.dimensions,
+      mass: props.mass,
+      position: props.position,
+      type: props.type,
+      onCollide: props.onCollide,
+      ...props,
+    }));
+  }
 
   return (
-    <mesh ref={collisionRef}>
+    <>
+    {props.collision &&  <mesh ref={collisionRef}>
       <cylinderBufferGeometry args={props.dimensions} />
       <meshPhongMaterial color={props.color} />
-    </mesh>
+    </mesh>}
+
+    {!props.collision &&  <mesh position={props.position}>
+      <cylinderBufferGeometry args={props.dimensions} />
+      <meshPhongMaterial color={props.color} />
+    </mesh>}
+    </>
+  
   );
 }

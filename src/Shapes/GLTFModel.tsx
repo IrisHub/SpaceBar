@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { createRef, useMemo } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { useLoader } from '@react-three/fiber';
 import { Box3 } from 'three';
@@ -33,12 +33,12 @@ export default function GLTFModel(props: CustomGLTF) {
   // Must use Skeleton utils to support copies of skinned meshes https://github.com/mrdoob/three.js/issues/11573
   let copiedScene = useMemo(() => SkeletonUtils.clone(scene), [scene]);
   copiedScene.scale.multiplyScalar(props.modelScaleFactor);
-  let collisionRef;
+  let collisionRef = createRef();
   if (props.collision){
     let bbox = useMemo(() => new Box3().setFromObject(copiedScene), [copiedScene]);
     const bboxSize = bbox.getSize(new Vector3());
     const scaledBbox = bboxSize.multiplyScalar(props.bboxScaleFactor).toArray();
-    collisionRef = useBox(() => ({
+    [collisionRef] = useBox(() => ({
       args: scaledBbox, //Must accept array and not vector3
       mass: props.mass,
       position: props.position,

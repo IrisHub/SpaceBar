@@ -32,6 +32,7 @@ export default function Scene() {
             position={[5, 1, -15]}
             type={'Static'}
             color={'red'}
+            collision= {true}
           />
 
           <Box
@@ -40,6 +41,7 @@ export default function Scene() {
             position={[25, 1, -15]}
             type={'Static'}
             color={'yellow'}
+            collision= {true}
           />
 
       <GLTFModel
@@ -58,6 +60,7 @@ export default function Scene() {
             position={[50, 1, -15]}
             type={'Static'}
             color={'green'}
+            collision={false}
           />
 
           <GLTFModel
