@@ -10,7 +10,7 @@ interface CustomSphere extends SphereProps{
  * Sphere component renders a sphere with collision detection.
  * This component accepts props that determine its size, position, type, and mass,
  * and a callback to be called upon a collision.
- * @param props args: Array<number>, mass: number, position: Triplet, type: string, onCollide: Function
+ * @param props CustomSphere
  * @returns
  */
 export default function Sphere(props: CustomSphere) {
@@ -26,7 +26,7 @@ export default function Sphere(props: CustomSphere) {
 
   return (
     <mesh ref={collisionRef}>
-      <sphereBufferGeometry args={props.args} />
+      <sphereBufferGeometry args={props.dimensions} />
       <meshPhongMaterial color={props.color} />
     </mesh>
   );

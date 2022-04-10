@@ -10,7 +10,7 @@ interface CustomCylinder extends CylinderProps {
  * Renders a cylinder component with collision detection.
  * This component accepts props that determine its size, position, type, and mass,
  * and a callback to be called upon a collision.
- * @param props args: Array<number>, mass: number, position: Triplet, type: string, onCollide: Function
+ * @param props customCylinder
  * @returns
  */
 export default function Cylinder(props: CustomCylinder) {
@@ -25,7 +25,7 @@ export default function Cylinder(props: CustomCylinder) {
 
   return (
     <mesh ref={collisionRef}>
-      <cylinderBufferGeometry args={props.args} />
+      <cylinderBufferGeometry args={props.dimensions} />
       <meshPhongMaterial color={props.color} />
     </mesh>
   );

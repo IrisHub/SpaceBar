@@ -9,7 +9,7 @@ interface CustomBox extends BoxProps {
  * Box component renders a box with collision detection.
  * This component accepts props that determine its size, position, type, and mass,
  * and a callback to be called upon a collision.
- * @param props args: Array<number>, mass: number, position: Triplet, type: string, onCollide: Function
+ * @param props customBox
  * @returns
  */
 export default function Box(props: CustomBox) {
@@ -24,7 +24,7 @@ export default function Box(props: CustomBox) {
 
   return (
     <mesh ref={collisionRef}>
-      <boxBufferGeometry args={props.args} />
+      <boxBufferGeometry args={props.dimensions} />
       <meshPhongMaterial color={props.color} />
     </mesh>
   );
