@@ -5,7 +5,6 @@ interface CustomCylinder extends CylinderProps {
   color: string;
   dimensions: [number, number, number]
   collision: boolean
-
 }
 /**
  * Renders a cylinder component with collision detection.

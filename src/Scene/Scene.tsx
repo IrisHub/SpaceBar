@@ -1,16 +1,16 @@
 import React from 'react';
-import Player from '../Player/Player';
 import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/cannon';
-import Floor from './Floor';
+
+import Player from '../Player/Player';
 import PlayerCameraControls from '../Player/playerCameraControls';
+import Floor from './Floor';
 import Skybox from './Skybox';
-import Box from '../Shapes/Box';
-import Sphere from '../Shapes/Sphere';
+
+import { Box, Cylinder, Sphere, GLTFModel } from '../Shapes';
+
 import { getS3Path } from '../utils';
-import Cylinder from '../Shapes/Cylinder';
-import GLTFModel from '../Shapes/GLTFModel';
-import { GRAVITY } from '../worldConstants';
+import { GRAVITY_CONSTANT, POINT_LIGHT_CONSTANT } from '../worldConstants';
 
 export default function Scene() {
   /**
@@ -23,8 +23,8 @@ export default function Scene() {
         <PlayerCameraControls />
         <Skybox />
         <ambientLight />
-        <pointLight position={[10, 10, 10]} />
-        <Physics gravity={GRAVITY}>
+        <pointLight position={POINT_LIGHT_CONSTANT} />
+        <Physics gravity={GRAVITY_CONSTANT}>
           <Player />
           <Sphere
             dimensions={[10]}
@@ -90,7 +90,7 @@ export default function Scene() {
           position={[-200, 1, -200 ]}
           type={'Static'}
           modelScaleFactor={0.3}
-          bboxScaleFactor={0.}
+          bboxScaleFactor={0.4}
           modelPath={getS3Path('models/mushroom_tree/scene.gltf')}
           collision={false}
           /> 
