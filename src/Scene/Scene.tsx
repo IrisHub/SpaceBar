@@ -31,8 +31,8 @@ export default function Scene() {
             mass={10}
             position={[5, 1, -15]}
             type={'Static'}
-            color={'red'}
-            collision= {true}
+            color={'gray'}
+            collision={true}
           />
 
           <Box
@@ -40,19 +40,19 @@ export default function Scene() {
             mass={10}
             position={[25, 1, -15]}
             type={'Static'}
-            color={'yellow'}
-            collision= {true}
+            color={'grey'}
+            collision={true}
           />
 
-      <GLTFModel
-          mass={10}
-          position={[-50, 30, -50]}
-          type={'Static'}
-          modelScaleFactor={0.001}
-          bboxScaleFactor={0.5}
-          modelPath={getS3Path('models/gunship/scene.gltf')}
-          collision={true}
-          /> 
+          <GLTFModel
+            mass={10}
+            position={[-50, 30, -50]}
+            type={'Static'}
+            modelScaleFactor={0.001}
+            bboxScaleFactor={0.5}
+            modelPath={getS3Path('models/gunship/scene.gltf')}
+            collision={true}
+          />
 
           <Cylinder
             dimensions={[10, 10, 5]}
@@ -64,60 +64,54 @@ export default function Scene() {
           />
 
           <GLTFModel
-          mass={10}
-          position={[5, 0, 50]}
-          type={'Static'}
-          modelScaleFactor={1}
-          bboxScaleFactor={1}
-          modelPath={getS3Path('models/plant/scene.gltf')}
-          collision={false}
+            mass={10}
+            position={[5, 0, 50]}
+            type={'Static'}
+            modelScaleFactor={1}
+            bboxScaleFactor={1}
+            modelPath={getS3Path('models/plant/scene.gltf')}
+            collision={false}
+          />
 
-          /> 
+          <GLTFModel
+            mass={10}
+            position={[50, 0, 30]}
+            type={'Static'}
+            modelScaleFactor={1}
+            bboxScaleFactor={0.5}
+            modelPath={getS3Path('models/plant2/scene.gltf')}
+            collision={false}
+          />
 
-      <GLTFModel
-          mass={10}
-          position={[50, 0, 30]}
-          type={'Static'}
-          modelScaleFactor={1}
-          bboxScaleFactor={0.5}
-          modelPath={getS3Path('models/plant2/scene.gltf')}
-          collision={false}
+          <GLTFModel
+            mass={5}
+            position={[-200, 1, -200]}
+            type={'Static'}
+            modelScaleFactor={0.3}
+            bboxScaleFactor={0.4}
+            modelPath={getS3Path('models/mushroom_tree/scene.gltf')}
+            collision={false}
+          />
 
-          /> 
+          <GLTFModel
+            mass={10}
+            position={[-90, 1, -20]}
+            type={'Static'}
+            modelScaleFactor={0.3}
+            bboxScaleFactor={0.5}
+            modelPath={getS3Path('models/mushroom_tree/scene.gltf')}
+            collision={true}
+          />
 
-        <GLTFModel
-          mass={5}
-          position={[-200, 1, -200 ]}
-          type={'Static'}
-          modelScaleFactor={0.3}
-          bboxScaleFactor={0.4}
-          modelPath={getS3Path('models/mushroom_tree/scene.gltf')}
-          collision={false}
-          /> 
-
-
-        
-       <GLTFModel
-          mass={10}
-          position={[-90, 1, -20 ]}
-          type={'Static'}
-          modelScaleFactor={0.3}
-          bboxScaleFactor={0.5}
-          modelPath={getS3Path('models/mushroom_tree/scene.gltf')}
-          collision={true}
-          /> 
-
- 
-        <GLTFModel
-          mass={10}
-          position={[50, 1, 65 ]}
-          type={'Static'}
-          modelScaleFactor={0.3}
-          bboxScaleFactor={0.5}
-          modelPath={getS3Path('models/mushroom_tree/scene.gltf')}
-          collision={true}
-          />  
-
+          <GLTFModel
+            mass={10}
+            position={[50, 1, 65]}
+            type={'Static'}
+            modelScaleFactor={0.3}
+            bboxScaleFactor={0.5}
+            modelPath={getS3Path('models/mushroom_tree/scene.gltf')}
+            collision={true}
+          />
 
           <Floor />
           <gridHelper args={[100, 100, 'black', 'grey']} />

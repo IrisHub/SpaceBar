@@ -14,17 +14,17 @@ export default function Skybox() {
   loader.setCrossOrigin('anonymous');
   const sides = [
     'textures/negz.jpg',
-    'textures/posz.jpg', 
-    'textures/posy.jpg', 
-    'textures/negy.jpg', 
-    'textures/posx.jpg', 
+    'textures/posz.jpg',
+    'textures/posy.jpg',
+    'textures/negy.jpg',
+    'textures/posx.jpg',
     'textures/negx.jpg',
   ];
-  const pathStrings = sides.map(side => {
+  const pathStrings = sides.map((side) => {
     return getS3Path(side);
   });
   const texture = loader.load(pathStrings);
   scene.background = texture;
-  
-  return (null);
+
+  return null;
 }

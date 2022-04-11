@@ -1,12 +1,10 @@
 import React, { createRef } from 'react';
 import { SphereProps, useSphere } from '@react-three/cannon';
 
-interface CustomSphere extends SphereProps{
-  color: string
-  dimensions: [number]
-  collision: boolean
-
-
+interface CustomSphere extends SphereProps {
+  color: string;
+  dimensions: [number];
+  collision: boolean;
 }
 /**
  * Sphere component renders a sphere with collision detection.
@@ -16,9 +14,8 @@ interface CustomSphere extends SphereProps{
  * @returns
  */
 export default function Sphere(props: CustomSphere) {
-
   let collisionRef = createRef();
-  if (props.collision){
+  if (props.collision) {
     [collisionRef] = useSphere(() => ({
       args: props.dimensions,
       mass: props.mass,
@@ -30,16 +27,20 @@ export default function Sphere(props: CustomSphere) {
   }
 
   return (
-  <>
-  {props.collision &&  <mesh ref={collisionRef}>
-    <sphereBufferGeometry args={props.dimensions} />
-    <meshPhongMaterial color={props.color} />
-  </mesh>}
+    <>
+      {props.collision && (
+        <mesh ref={collisionRef}>
+          <sphereBufferGeometry args={props.dimensions} />
+          <meshPhongMaterial color={props.color} />
+        </mesh>
+      )}
 
-  {!props.collision &&  <mesh position={props.position}>
-    <sphereBufferGeometry args={props.dimensions} />
-    <meshPhongMaterial color={props.color} />
-  </mesh>}
-  </>
+      {!props.collision && (
+        <mesh position={props.position}>
+          <sphereBufferGeometry args={props.dimensions} />
+          <meshPhongMaterial color={props.color} />
+        </mesh>
+      )}
+    </>
   );
 }

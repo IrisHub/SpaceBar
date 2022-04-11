@@ -11,12 +11,11 @@ export default function SceneObject() {
    * b) Benchmark performance issues
    * Base taken from https://codesandbox.io/s/4rubo?file=/src/App.js
    */
-  const meshRef =
-    useRef<{
-      rotation: { x: number; y: number };
-      instanceMatrix: any;
-      setMatrixAt: any;
-    }>();
+  const meshRef = useRef<{
+    rotation: { x: number; y: number };
+    instanceMatrix: any;
+    setMatrixAt: any;
+  }>();
 
   useFrame(({ clock }) => {
     const time = clock.getElapsedTime();
