@@ -69,7 +69,7 @@ export default function Scene() {
             type={'Static'}
             modelScaleFactor={1}
             bboxScaleFactor={1}
-            modelPath={getS3Path('models/plant/scene.gltf')}
+            modelPath={getS3Path('models/smallBluePlant/scene.gltf')}
             collision={false}
           />
 
@@ -79,7 +79,7 @@ export default function Scene() {
             type={'Static'}
             modelScaleFactor={1}
             bboxScaleFactor={0.5}
-            modelPath={getS3Path('models/plant2/scene.gltf')}
+            modelPath={getS3Path('models/smallBluePlantPot/scene.gltf')}
             collision={false}
           />
 
@@ -89,7 +89,7 @@ export default function Scene() {
             type={'Static'}
             modelScaleFactor={0.3}
             bboxScaleFactor={0.4}
-            modelPath={getS3Path('models/mushroom_tree/scene.gltf')}
+            modelPath={getS3Path('models/mushroomTree/scene.gltf')}
             collision={false}
           />
 
@@ -99,7 +99,7 @@ export default function Scene() {
             type={'Static'}
             modelScaleFactor={0.3}
             bboxScaleFactor={0.5}
-            modelPath={getS3Path('models/mushroom_tree/scene.gltf')}
+            modelPath={getS3Path('models/mushroomTree/scene.gltf')}
             collision={true}
           />
 
@@ -109,7 +109,7 @@ export default function Scene() {
             type={'Static'}
             modelScaleFactor={0.3}
             bboxScaleFactor={0.5}
-            modelPath={getS3Path('models/mushroom_tree/scene.gltf')}
+            modelPath={getS3Path('models/mushroomTree/scene.gltf')}
             collision={true}
           />
 
