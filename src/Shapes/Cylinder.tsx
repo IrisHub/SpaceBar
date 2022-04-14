@@ -1,13 +1,17 @@
 import React, { createRef } from 'react';
 import { CylinderProps, useCylinder } from '@react-three/cannon';
 
+/**
+ * CustomCylinder extends props
+ * for useCylinder hook used to render a cylinder in Cannon.JS's physics engine
+ */
 interface CustomCylinder extends CylinderProps {
   color: string;
   dimensions: [number, number, number];
   collision: boolean;
 }
 /**
- * Renders a cylinder component with collision detection.
+ * Cylinder component renders a cylinder with collision detection.
  * This component accepts props that determine its size, position, type, and mass,
  * and a callback to be called upon a collision.
  * @param props customCylinder

@@ -1,6 +1,10 @@
 import React, { createRef } from 'react';
 import { SphereProps, useSphere } from '@react-three/cannon';
 
+/**
+ * CustomSphere extends props
+ * for useSphere hook used to render a sphere in Cannon.JS's physics engine
+ */
 interface CustomSphere extends SphereProps {
   color: string;
   dimensions: [number];

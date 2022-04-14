@@ -1,6 +1,10 @@
 import React, { createRef } from 'react';
 import { BoxProps, useBox } from '@react-three/cannon';
 
+/**
+ * CustomBox extends props
+ * for useBox hook used to render a box in Cannon.JS's physics engine
+ */
 interface CustomBox extends BoxProps {
   color: string;
   dimensions: [number, number, number];
