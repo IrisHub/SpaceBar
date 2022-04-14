@@ -8,7 +8,7 @@ interface CustomCylinder extends CylinderProps {
 }
 /**
  * Renders a cylinder component with collision detection.
- * This component accepts props that determine its size, position, type, and mass,
+ * Accepts props that determine its size, position, type, and mass,
  * and a callback to be called upon a collision.
  * @param props customCylinder
  * @returns
