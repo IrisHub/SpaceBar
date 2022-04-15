@@ -9,10 +9,3 @@ export type PlayerVelocity = {
   y: number;
   z: number;
 };
-
-export enum Directions {
-  Up = 1,
-  Down,
-  Left,
-  Right,
-}
