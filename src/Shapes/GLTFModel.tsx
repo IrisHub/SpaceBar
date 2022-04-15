@@ -14,7 +14,7 @@ interface CustomGLTF extends BoxProps {
 }
 
 /**
- * GLTFCollisionModel component renders a GLTF with a bounding box for collision detection.
+ * GLTFModel component renders a GLTF with a bounding box for collision detection.
  *
  * This component accepts props that determine its size, position, type,
  * a callback to be called upon a collision, path to GLTF to load, and scaling factors for the model and bbox.
