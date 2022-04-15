@@ -11,11 +11,15 @@ export default function SceneObject() {
    * b) Benchmark performance issues
    * Base taken from https://codesandbox.io/s/4rubo?file=/src/App.js
    */
-  const meshRef = useRef<{ rotation: { x: number, y: number }, instanceMatrix: any, setMatrixAt: any }>();
+  const meshRef = useRef<{
+    rotation: { x: number; y: number };
+    instanceMatrix: any;
+    setMatrixAt: any;
+  }>();
 
   useFrame(({ clock }) => {
     const time = clock.getElapsedTime();
-    if (!meshRef.current){
+    if (!meshRef.current) {
       return;
     }
     if (meshRef.current) {
@@ -46,10 +50,9 @@ export default function SceneObject() {
   });
 
   return (
-    <instancedMesh ref={meshRef} args={[null, null, 1]} position={[0, 20, 0]}>
+    <instancedMesh ref={meshRef} args={[null, null, 1]} position={[0, 5, 0]}>
       <boxGeometry args={[10, 10, 10, 32]}></boxGeometry>
       <meshPhongMaterial color="lightgreen" />
     </instancedMesh>
   );
 }
-

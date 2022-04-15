@@ -1,6 +1,6 @@
 /**
  * getS3Path converts a shorthand file path to a full path to an s3 bucket.
- * @param path 
+ * @param path
  * @returns string
  */
 export function getS3Path(path: string) {

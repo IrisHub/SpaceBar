@@ -29,22 +29,21 @@ export const playerMovementControls = () => {
 
   useEffect(() => {
     const onKeyDown = (event: { key: string }) => {
-      console.log(event);
       let key = event.key;
-      if (event.key == ' '){
+      if (event.key == ' ') {
         key = 'Space';
       }
-      setDirection(pressedKey => ({
+      setDirection((pressedKey) => ({
         ...pressedKey,
         [keyMap[key]]: true,
       }));
     };
     const onKeyUp = (event: { key: string }) => {
       let key = event.key;
-      if (event.key == ' '){
+      if (event.key == ' ') {
         key = 'Space';
       }
-      setDirection(pressedKey => ({
+      setDirection((pressedKey) => ({
         ...pressedKey,
         [keyMap[key]]: false,
       }));
