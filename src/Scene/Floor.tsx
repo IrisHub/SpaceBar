@@ -1,7 +1,12 @@
 import { usePlane } from '@react-three/cannon';
 import React from 'react';
 
-export default function Floor() {
+type FloorProps = {
+  length: number;
+  width: number;
+};
+
+export default function Floor(props: FloorProps) {
   /**
    * Defines a basic floor component as a flat plane rotated 90 degrees
    * This floor is partially transparent and will come with gridlines to
@@ -12,7 +17,10 @@ export default function Floor() {
   }));
   return (
     <mesh ref={ref} rotation={[-Math.PI / 2, 0, 0]}>
-      <planeBufferGeometry attach="geometry" args={[100, 100]} />
+      <planeBufferGeometry
+        attach="geometry"
+        args={[props.length, props.width]}
+      />
       <meshBasicMaterial
         attach="material"
         color="#000000"

@@ -9,7 +9,7 @@ interface CustomBox extends BoxProps {
   color?: string;
   transparent?: boolean;
   dimensions: [number, number, number];
-  collision: boolean;
+  collision?: boolean;
 }
 /**
  * Box component renders a box with collision detection.

@@ -10,7 +10,12 @@ import Skybox from './Skybox';
 import { Box, Cylinder, Sphere, GLTFModel } from '../Shapes';
 
 import { getS3Path } from '../utils';
-import { GRAVITY_CONSTANT, POINT_LIGHT_CONSTANT } from '../worldConstants';
+import {
+  FLOOR_WIDTH_CONSTANT,
+  FLOOR_LENGTH_CONSTANT,
+  GRAVITY_CONSTANT,
+  POINT_LIGHT_CONSTANT,
+} from '../worldConstants';
 
 export default function Scene() {
   /**
@@ -40,8 +45,6 @@ export default function Scene() {
             mass={10}
             position={[5, 1, 5]}
             type={'Static'}
-            collision={true}
-            transparent={true}
           />
 
           <GLTFModel
@@ -113,8 +116,15 @@ export default function Scene() {
             collision={true}
           />
 
-          <Floor />
-          <gridHelper args={[100, 100, 'black', 'grey']} />
+          <Floor length={FLOOR_LENGTH_CONSTANT} width={FLOOR_WIDTH_CONSTANT} />
+          <gridHelper
+            args={[
+              FLOOR_LENGTH_CONSTANT,
+              FLOOR_WIDTH_CONSTANT,
+              'black',
+              'grey',
+            ]}
+          />
         </Physics>
       </Canvas>
     </div>
