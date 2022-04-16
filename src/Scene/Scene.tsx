@@ -38,10 +38,10 @@ export default function Scene() {
           <Box
             dimensions={[10, 10, 20]}
             mass={10}
-            position={[25, 1, -15]}
+            position={[5, 1, 5]}
             type={'Static'}
-            color={'grey'}
             collision={true}
+            transparent={true}
           />
 
           <GLTFModel

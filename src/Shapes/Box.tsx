@@ -6,7 +6,8 @@ import { BoxProps, useBox } from '@react-three/cannon';
  * for useBox hook used to render a box in Cannon.JS's physics engine
  */
 interface CustomBox extends BoxProps {
-  color: string;
+  color?: string;
+  transparent?: boolean;
   dimensions: [number, number, number];
   collision: boolean;
 }
@@ -19,6 +20,12 @@ interface CustomBox extends BoxProps {
  */
 export default function Box(props: CustomBox) {
   let collisionRef = createRef();
+  let opacity = 1;
+  let transparent = false;
+  if (props.transparent) {
+    opacity = 0.0;
+    transparent = true;
+  }
   if (props.collision) {
     [collisionRef] = useBox(() => ({
       args: props.dimensions,
@@ -35,7 +42,11 @@ export default function Box(props: CustomBox) {
       {props.collision && (
         <mesh ref={collisionRef}>
           <boxBufferGeometry args={props.dimensions} />
-          <meshPhongMaterial color={props.color} />
+          <meshPhongMaterial
+            color={props.color}
+            transparent={transparent}
+            opacity={opacity}
+          />
         </mesh>
       )}
 
