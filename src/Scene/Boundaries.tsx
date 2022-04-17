@@ -4,7 +4,7 @@ import Box from '../Shapes/Box';
 
 /**
  * Boundaries functional component renders four boundaries of a plane given
- * a plane's length and width.
+ * a plane's length and width. Collisions registered by using Box components with collisions to true.
  * @param props: PlaneProps
  * @returns
  */
