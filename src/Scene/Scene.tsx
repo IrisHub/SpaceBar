@@ -118,10 +118,9 @@ export default function Scene() {
           />
 
           <Floor
-            length={FLOOR_LENGTH_CONSTANT}
-            width={FLOOR_WIDTH_CONSTANT}
+            lengthX={FLOOR_LENGTH_CONSTANT}
+            widthZ={FLOOR_WIDTH_CONSTANT}
             boundary={true}
-            debug={true}
           />
         </Physics>
       </Canvas>

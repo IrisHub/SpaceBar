@@ -1,64 +1,15 @@
-import { usePlane } from '@react-three/cannon';
 import React from 'react';
-import Box from '../Shapes/Box';
-
-type FloorProps = {
-  length: number;
-  width: number;
-  boundary?: boolean;
-  debug?: boolean;
-};
-
-function Boundaries(props: FloorProps) {
-  let boundaryColor;
-
-  if (props.debug) {
-    boundaryColor = {
-      color: 'yellow',
-    };
-  } else {
-    boundaryColor = {
-      transparent: true,
-    };
-  }
-  return (
-    <>
-      <Box
-        position={[0, 0, props.width]}
-        dimensions={[props.length * 2, 50, 1]}
-        collision={true}
-        {...boundaryColor}
-      />
-      <Box
-        position={[0, 0, -props.width]}
-        dimensions={[props.length * 2, 50, 1]}
-        collision={true}
-        {...boundaryColor}
-      />
-
-      <Box
-        position={[-props.length, 0, 0]}
-        dimensions={[1, 50, props.width * 2]}
-        collision={true}
-        {...boundaryColor}
-      />
-
-      <Box
-        position={[props.length, 0, 0]}
-        dimensions={[1, 50, props.width * 2]}
-        collision={true}
-        {...boundaryColor}
-      />
-    </>
-  );
-}
+import { usePlane } from '@react-three/cannon';
+import Boundaries from './Boundaries';
+import { PlaneProps } from '../allTypes';
 
 /**
  * Defines a basic floor component as a flat plane rotated 90 degrees
+ * If boundary prop is passed, renders plane with collidable boundaries on each side of the plane.
  * This floor is partially transparent and will come with gridlines to
  * calibrate movement.
  */
-export default function Floor(props: FloorProps) {
+export default function Floor(props: PlaneProps) {
   const [ref] = usePlane(() => ({
     rotation: [-Math.PI / 2, 0, 0],
   }));
@@ -68,8 +19,8 @@ export default function Floor(props: FloorProps) {
       {props.boundary && (
         <>
           <Boundaries
-            length={props.length}
-            width={props.width}
+            lengthX={props.lengthX}
+            widthZ={props.widthZ}
             debug={props.debug}
           />
         </>
@@ -77,7 +28,7 @@ export default function Floor(props: FloorProps) {
       <mesh ref={ref} rotation={[-Math.PI / 2, 0, 0]}>
         <planeBufferGeometry
           attach="geometry"
-          args={[props.length * 2, props.width * 2]}
+          args={[props.lengthX * 2, props.widthZ * 2]}
         />
         <meshBasicMaterial
           attach="material"
@@ -87,7 +38,9 @@ export default function Floor(props: FloorProps) {
         />
       </mesh>
 
-      <gridHelper args={[2 * props.length, 2 * props.width, 'black', 'grey']} />
+      <gridHelper
+        args={[props.lengthX * 2, props.widthZ * 2, 'black', 'grey']}
+      />
     </>
   );
 }

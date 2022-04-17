@@ -9,3 +9,11 @@ export type PlayerVelocity = {
   y: number;
   z: number;
 };
+
+export type PlaneProps = {
+  lengthX: number;
+  widthZ: number;
+  boundary?: boolean;
+  boundaryHeight?: number;
+  debug?: boolean;
+};
