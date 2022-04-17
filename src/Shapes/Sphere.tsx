@@ -6,9 +6,10 @@ import { SphereProps, useSphere } from '@react-three/cannon';
  * for useSphere hook used to render a sphere in Cannon.JS's physics engine
  */
 interface CustomSphere extends SphereProps {
-  color: string;
+  color?: string;
+  transparent?: boolean;
   dimensions: [number];
-  collision: boolean;
+  collision?: boolean;
 }
 /**
  * Sphere component renders a sphere with collision detection.
@@ -19,6 +20,14 @@ interface CustomSphere extends SphereProps {
  */
 export default function Sphere(props: CustomSphere) {
   let collisionRef = createRef();
+  let opacity = 1;
+  let transparent = false;
+  if (props.transparent) {
+    opacity = 0.0;
+    transparent = true;
+  }
+
+  let meshProps;
   if (props.collision) {
     [collisionRef] = useSphere(() => ({
       args: props.dimensions,
@@ -28,23 +37,25 @@ export default function Sphere(props: CustomSphere) {
       onCollide: props.onCollide,
       ...props,
     }));
+    meshProps = {
+      ref: collisionRef,
+    };
+  } else {
+    meshProps = {
+      position: props.position,
+    };
   }
 
   return (
     <>
-      {props.collision && (
-        <mesh ref={collisionRef}>
-          <sphereBufferGeometry args={props.dimensions} />
-          <meshPhongMaterial color={props.color} />
-        </mesh>
-      )}
-
-      {!props.collision && (
-        <mesh position={props.position}>
-          <sphereBufferGeometry args={props.dimensions} />
-          <meshPhongMaterial color={props.color} />
-        </mesh>
-      )}
+      <mesh {...meshProps}>
+        <sphereBufferGeometry args={props.dimensions} />
+        <meshPhongMaterial
+          color={props.color}
+          transparent={transparent}
+          opacity={opacity}
+        />
+      </mesh>
     </>
   );
 }

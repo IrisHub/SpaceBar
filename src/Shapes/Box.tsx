@@ -22,10 +22,13 @@ export default function Box(props: CustomBox) {
   let collisionRef = createRef();
   let opacity = 1;
   let transparent = false;
+
   if (props.transparent) {
     opacity = 0.0;
     transparent = true;
   }
+
+  let meshProps;
   if (props.collision) {
     [collisionRef] = useBox(() => ({
       args: props.dimensions,
@@ -35,27 +38,25 @@ export default function Box(props: CustomBox) {
       onCollide: props.onCollide,
       ...props,
     }));
+    meshProps = {
+      ref: collisionRef,
+    };
+  } else {
+    meshProps = {
+      position: props.position,
+    };
   }
 
   return (
     <>
-      {props.collision && (
-        <mesh ref={collisionRef}>
-          <boxBufferGeometry args={props.dimensions} />
-          <meshPhongMaterial
-            color={props.color}
-            transparent={transparent}
-            opacity={opacity}
-          />
-        </mesh>
-      )}
-
-      {!props.collision && (
-        <mesh position={props.position}>
-          <boxBufferGeometry args={props.dimensions} />
-          <meshPhongMaterial color={props.color} />
-        </mesh>
-      )}
+      <mesh {...meshProps}>
+        <boxBufferGeometry args={props.dimensions} />
+        <meshPhongMaterial
+          color={props.color}
+          transparent={transparent}
+          opacity={opacity}
+        />
+      </mesh>
     </>
   );
 }
