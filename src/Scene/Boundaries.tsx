@@ -5,6 +5,7 @@ import Box from '../Shapes/Box';
 /**
  * Boundaries functional component renders four boundaries of a plane given
  * a plane's length and width. Collisions registered by using Box components with collisions to true.
+ * Boundaries are fullytranslucent unless debug prop is set to true.
  * @param props: PlaneProps
  * @returns
  */

@@ -121,6 +121,7 @@ export default function Scene() {
             lengthX={PLANE_LENGTH_X}
             widthZ={PLANE_WIDTH_Z}
             boundary={true}
+            debug={true}
           />
         </Physics>
       </Canvas>
