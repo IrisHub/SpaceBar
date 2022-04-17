@@ -45,6 +45,7 @@ export default function Scene() {
             mass={10}
             position={[5, 1, 5]}
             type={'Static'}
+            color={'red'}
           />
 
           <GLTFModel
@@ -116,14 +117,11 @@ export default function Scene() {
             collision={true}
           />
 
-          <Floor length={FLOOR_LENGTH_CONSTANT} width={FLOOR_WIDTH_CONSTANT} />
-          <gridHelper
-            args={[
-              FLOOR_LENGTH_CONSTANT,
-              FLOOR_WIDTH_CONSTANT,
-              'black',
-              'grey',
-            ]}
+          <Floor
+            length={FLOOR_LENGTH_CONSTANT}
+            width={FLOOR_WIDTH_CONSTANT}
+            boundary={true}
+            debug={true}
           />
         </Physics>
       </Canvas>
