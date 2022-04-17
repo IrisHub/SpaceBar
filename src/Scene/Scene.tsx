@@ -11,10 +11,10 @@ import { Box, Cylinder, Sphere, GLTFModel } from '../Shapes';
 
 import { getS3Path } from '../utils';
 import {
-  FLOOR_WIDTH_CONSTANT,
-  FLOOR_LENGTH_CONSTANT,
-  GRAVITY_CONSTANT,
-  POINT_LIGHT_CONSTANT,
+  GRAVITY,
+  PLANE_LENGTH_X,
+  PLANE_WIDTH_Z,
+  POINT_LIGHT,
 } from '../worldConstants';
 
 export default function Scene() {
@@ -28,8 +28,8 @@ export default function Scene() {
         <PlayerCameraControls />
         <Skybox />
         <ambientLight />
-        <pointLight position={POINT_LIGHT_CONSTANT} />
-        <Physics gravity={GRAVITY_CONSTANT}>
+        <pointLight position={POINT_LIGHT} />
+        <Physics gravity={GRAVITY}>
           <Player />
           <Sphere
             dimensions={[10]}
@@ -118,8 +118,8 @@ export default function Scene() {
           />
 
           <Floor
-            lengthX={FLOOR_LENGTH_CONSTANT}
-            widthZ={FLOOR_WIDTH_CONSTANT}
+            lengthX={PLANE_LENGTH_X}
+            widthZ={PLANE_WIDTH_Z}
             boundary={true}
           />
         </Physics>
