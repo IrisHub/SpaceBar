@@ -1,4 +1,5 @@
 import SimplePeer from "simple-peer";
+import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 
 // TODO(SHALIN): Move shared types to a shared folder in parent directory.
 enum PayloadType {
@@ -26,6 +27,7 @@ enum PayloadType {
 class SimpleSignaler {
     private peer: SimplePeer.Instance;
     private ws: WebSocket;
+    
     constructor(peer: SimplePeer.Instance, socket_url: string, port: number) {
         this.peer = peer;
 
@@ -45,6 +47,17 @@ class SimpleSignaler {
         this.peer.on('close', () => this._handleClose());
         
     }
+
+    // Functions that handle messages from the client and send to the signaling server.
+
+    sendMessage(data: any) {
+        console.log("send", data);
+        const payload = createPayload(PayloadType.MESSAGE, data);
+        this.ws.send(payload);
+    }
+
+
+    // Functions that handle messages from the signaling server.
 
     _handleSignal(data: SimplePeer.SignalData) {
         console.log("_handleSignal", data);
