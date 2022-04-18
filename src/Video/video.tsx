@@ -6,10 +6,25 @@ const VideoContainer = styled.div`
   z-index: 999;
 `;
 
+const Video = styled.video`
+  height: ${(props) => props.height || 150}px;
+  width: ${(props) => props.width || 150}px;
+`;
+
 const AudioToggle = styled.button``;
 const VideoToggle = styled.button``;
 
-function VideoPlayer() {
+type VideoProps = {
+  height?: number;
+  width?: number;
+};
+
+enum VideoAudioOptions {
+  audio = 'audio',
+  video = 'video',
+}
+
+function VideoPlayer(props: VideoProps) {
   const [audioOn, setAudioOn] = useState(true);
   const [videoOn, setVideoOn] = useState(true);
 
@@ -22,22 +37,24 @@ function VideoPlayer() {
 
   useEffect(() => {
     async function getMedia() {
-      let stream = await navigator.mediaDevices.getUserMedia(permissions);
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
+      try {
+        let stream = await navigator.mediaDevices.getUserMedia(permissions);
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.play();
+        }
+      } catch (err) {
+        console.error(err);
       }
-      return stream;
     }
     getMedia();
   }, []);
 
-  function toggleVideoAudio(trackKind: string) {
+  function toggleVideoAudio(trackKind: VideoAudioOptions) {
     if (videoRef.current?.srcObject) {
       let stream = videoRef.current.srcObject as MediaStream;
       stream.getTracks().forEach(function (track) {
         if (track.readyState == 'live' && track.kind === trackKind) {
-          // track.stop(); Permanent
           track.enabled = !track.enabled;
         }
       });
@@ -47,26 +64,23 @@ function VideoPlayer() {
   }
 
   function handleVideo() {
-    console.log('video fired');
     setVideoOn(!videoOn);
-    toggleVideoAudio('video');
+    toggleVideoAudio(VideoAudioOptions.video);
   }
 
   function handleAudio() {
-    console.log('audio fired');
     setAudioOn(!audioOn);
-    toggleVideoAudio('audio');
+    toggleVideoAudio(VideoAudioOptions.audio);
   }
 
   return (
     <VideoContainer>
-      <video
+      <Video
         ref={videoRef}
-        className="vid"
-        height="120"
-        width="160"
+        height={props.height}
+        width={props.width}
         autoPlay
-      ></video>
+      ></Video>
 
       <AudioToggle onClick={handleAudio}>Audio </AudioToggle>
       <VideoToggle onClick={handleVideo}> Video</VideoToggle>
