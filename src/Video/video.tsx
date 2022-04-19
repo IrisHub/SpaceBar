@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
-// import { ReactComponent as VideoCam } from '../icons/videocam.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faMicrophoneSlash,
@@ -61,6 +60,23 @@ enum VideoAudioOptions {
   all = 'all',
 }
 
+/**
+ * VideoPlayer component renders configurable video & audio media from a user's device.
+ * Renders UI to toggle audio & video on & off.
+ *
+ * The component uses the useRef hook to obtain a reference to a <video/> component.
+ * It requests permission for audio / video with navigator.mediaDevices.getUserMedia()
+ * in useEffect hooks invoked upon component mount & upon change in audioOn or videoOn state.
+ * The srcObject of the video Ref is then set to the stream returned from the navigator browser API.
+ *
+ * On a state change update to end video or audio, endMedia is invoked with appropriate type specified.
+ * This function then stops each appropriate live track to end the stream & turn off the user's webcam light.
+ *
+ * On a state change update to start video or audio, endMedia is invoked again to clear any current active streams,
+ * then startMedia is invoked to receive a stream from the navigator browser API and reset videoRef's srcObject to this stream.
+ * @param props VideoProps
+ * @returns
+ */
 function VideoPlayer(props: VideoProps) {
   const [audioOn, setAudioOn] = useState(true);
   const [videoOn, setVideoOn] = useState(true);
@@ -68,25 +84,28 @@ function VideoPlayer(props: VideoProps) {
   let videoRef = useRef<HTMLVideoElement | null>(null);
 
   function endMedia(trackKind: VideoAudioOptions) {
-    if (videoRef.current?.srcObject) {
-      let stream = videoRef.current.srcObject as MediaStream;
-      stream.getTracks().forEach(function (track) {
-        if (trackKind === 'all') {
-          if (track.readyState == 'live') {
-            track.stop();
+    try {
+      if (videoRef.current?.srcObject) {
+        let stream = videoRef.current.srcObject as MediaStream;
+        stream.getTracks().forEach(function (track) {
+          if (trackKind === 'all') {
+            if (track.readyState == 'live') {
+              track.stop();
+            }
+          } else {
+            if (track.readyState == 'live' && track.kind === trackKind) {
+              track.stop();
+            }
           }
-        } else {
-          if (track.readyState == 'live' && track.kind === trackKind) {
-            track.stop();
-          }
-        }
-      });
-    } else {
-      console.error('No valid src object present');
+        });
+      }
+    } catch (err) {
+      //TODO: Log errors to internal log
+      throw err;
     }
   }
 
-  async function startMedia(permissions: object) {
+  async function startMedia(permissions: MediaStreamConstraints) {
     let stream = await navigator.mediaDevices.getUserMedia(permissions);
     if (videoRef.current) {
       videoRef.current.srcObject = stream;
@@ -119,7 +138,9 @@ function VideoPlayer(props: VideoProps) {
         let permissions = configurePermissions();
         startMedia(permissions);
       } catch (err) {
-        console.error(err);
+        // TODO: handle common error status described here
+        // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+        throw err;
       }
     }
     getMedia();
