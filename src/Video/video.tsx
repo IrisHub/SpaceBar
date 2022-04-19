@@ -1,5 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
+// import { ReactComponent as VideoCam } from '../icons/videocam.svg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faMicrophoneSlash,
+  faMicrophone,
+  faVideo,
+  faVideoSlash,
+} from '@fortawesome/free-solid-svg-icons';
 
 const VideoContainer = styled.div`
   position: absolute;
@@ -11,8 +19,21 @@ const Video = styled.video`
   width: ${(props) => props.width || 150}px;
 `;
 
-const AudioToggle = styled.button``;
-const VideoToggle = styled.button``;
+const MicrophoneSlash = styled(FontAwesomeIcon)`
+  color: #ed4650;
+`;
+
+const Microphone = styled(FontAwesomeIcon)`
+  color: black;
+`;
+
+const VideoIcon = styled(FontAwesomeIcon)`
+  color: black;
+`;
+
+const VideoIconSlash = styled(FontAwesomeIcon)`
+  color: #ed4650;
+`;
 
 type VideoProps = {
   height?: number;
@@ -82,8 +103,17 @@ function VideoPlayer(props: VideoProps) {
         autoPlay
       ></Video>
 
-      <AudioToggle onClick={handleAudio}>Audio </AudioToggle>
-      <VideoToggle onClick={handleVideo}> Video</VideoToggle>
+      {audioOn ? (
+        <Microphone onClick={handleAudio} icon={faMicrophone} />
+      ) : (
+        <MicrophoneSlash onClick={handleAudio} icon={faMicrophoneSlash} />
+      )}
+
+      {videoOn ? (
+        <VideoIcon onClick={handleVideo} icon={faVideo} />
+      ) : (
+        <VideoIconSlash onClick={handleVideo} icon={faVideoSlash} />
+      )}
     </VideoContainer>
   );
 }
