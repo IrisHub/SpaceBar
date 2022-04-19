@@ -56,6 +56,32 @@ function VideoPlayer(props: VideoProps) {
 
   let videoRef = useRef<HTMLVideoElement | null>(null);
 
+  function turnVideoAudioOff(trackKind: VideoAudioOptions) {
+    if (videoRef.current?.srcObject) {
+      let stream = videoRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach(function (track) {
+        if (track.readyState == 'live' && track.kind === trackKind) {
+          track.stop();
+        }
+      });
+    } else {
+      console.error('No valid src object present');
+    }
+  }
+
+  function turnOff() {
+    if (videoRef.current?.srcObject) {
+      let stream = videoRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach(function (track) {
+        if (track.readyState == 'live') {
+          track.stop();
+        }
+      });
+    } else {
+      console.error('No valid src object present');
+    }
+  }
+
   useEffect(() => {
     async function getMedia() {
       try {
@@ -71,27 +97,66 @@ function VideoPlayer(props: VideoProps) {
     getMedia();
   }, []);
 
-  function toggleVideoAudio(trackKind: VideoAudioOptions) {
-    if (videoRef.current?.srcObject) {
-      let stream = videoRef.current.srcObject as MediaStream;
-      stream.getTracks().forEach(function (track) {
-        if (track.readyState == 'live' && track.kind === trackKind) {
-          track.enabled = !track.enabled;
+  useEffect(() => {
+    async function updateAudio() {
+      if (!audioOn) {
+        turnVideoAudioOff(VideoAudioOptions.audio);
+      } else {
+        let newPermissions;
+        if (videoOn) {
+          newPermissions = {
+            video: true,
+            audio: true,
+          };
+        } else {
+          newPermissions = {
+            audio: true,
+          };
         }
-      });
-    } else {
-      console.error('No valid src object present');
+        turnOff();
+        let stream = await navigator.mediaDevices.getUserMedia(newPermissions);
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.play();
+        }
+      }
     }
-  }
+    updateAudio();
+  }, [audioOn]);
 
-  function handleVideo() {
+  useEffect(() => {
+    async function updateVideo() {
+      if (!videoOn) {
+        turnVideoAudioOff(VideoAudioOptions.video);
+      } else {
+        let newPermissions;
+        if (audioOn) {
+          newPermissions = {
+            video: true,
+            audio: true,
+          };
+        } else {
+          newPermissions = {
+            video: true,
+          };
+        }
+        turnOff();
+        let stream = await navigator.mediaDevices.getUserMedia(newPermissions);
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.play();
+        }
+      }
+    }
+    updateVideo();
+  }, [videoOn]);
+
+  async function handleVideo() {
     setVideoOn(!videoOn);
-    toggleVideoAudio(VideoAudioOptions.video);
   }
 
-  function handleAudio() {
+  async function handleAudio() {
     setAudioOn(!audioOn);
-    toggleVideoAudio(VideoAudioOptions.audio);
   }
 
   return (
