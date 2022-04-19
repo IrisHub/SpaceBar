@@ -12,27 +12,42 @@ import {
 const VideoContainer = styled.div`
   position: absolute;
   z-index: 999;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Video = styled.video`
   height: ${(props) => props.height || 150}px;
   width: ${(props) => props.width || 150}px;
+  background-color: black;
+`;
+
+const IconContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: rgb(220, 220, 220, 0.5);
+  border-radius: 32px;
 `;
 
 const MicrophoneSlash = styled(FontAwesomeIcon)`
   color: #ed4650;
+  margin: 2%;
 `;
 
 const Microphone = styled(FontAwesomeIcon)`
   color: black;
+  margin: 2%;
 `;
 
 const VideoIcon = styled(FontAwesomeIcon)`
   color: black;
+  margin: 2%;
 `;
 
 const VideoIconSlash = styled(FontAwesomeIcon)`
   color: #ed4650;
+  margin: 2%;
 `;
 
 type VideoProps = {
@@ -153,17 +168,18 @@ function VideoPlayer(props: VideoProps) {
         autoPlay
       ></Video>
 
-      {audioOn ? (
-        <Microphone onClick={handleAudio} icon={faMicrophone} />
-      ) : (
-        <MicrophoneSlash onClick={handleAudio} icon={faMicrophoneSlash} />
-      )}
-
-      {videoOn ? (
-        <VideoIcon onClick={handleVideo} icon={faVideo} />
-      ) : (
-        <VideoIconSlash onClick={handleVideo} icon={faVideoSlash} />
-      )}
+      <IconContainer>
+        {audioOn ? (
+          <Microphone onClick={handleAudio} icon={faMicrophone} />
+        ) : (
+          <MicrophoneSlash onClick={handleAudio} icon={faMicrophoneSlash} />
+        )}
+        {videoOn ? (
+          <VideoIcon onClick={handleVideo} icon={faVideo} />
+        ) : (
+          <VideoIconSlash onClick={handleVideo} icon={faVideoSlash} />
+        )}{' '}
+      </IconContainer>
     </VideoContainer>
   );
 }

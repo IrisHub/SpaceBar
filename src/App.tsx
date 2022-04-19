@@ -5,7 +5,7 @@ import VideoPlayer from './Video/video';
 function App() {
   return (
     <>
-      <VideoPlayer />
+      <VideoPlayer height={115} width={150} />
       <Scene />
     </>
   );
