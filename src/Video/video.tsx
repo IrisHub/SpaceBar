@@ -43,25 +43,27 @@ type VideoProps = {
 enum VideoAudioOptions {
   audio = 'audio',
   video = 'video',
+  all = 'all',
 }
 
 function VideoPlayer(props: VideoProps) {
   const [audioOn, setAudioOn] = useState(true);
   const [videoOn, setVideoOn] = useState(true);
 
-  const permissions = {
-    video: true,
-    audio: true,
-  };
-
   let videoRef = useRef<HTMLVideoElement | null>(null);
 
-  function turnVideoAudioOff(trackKind: VideoAudioOptions) {
+  function endMedia(trackKind: VideoAudioOptions) {
     if (videoRef.current?.srcObject) {
       let stream = videoRef.current.srcObject as MediaStream;
       stream.getTracks().forEach(function (track) {
-        if (track.readyState == 'live' && track.kind === trackKind) {
-          track.stop();
+        if (trackKind === 'all') {
+          if (track.readyState == 'live') {
+            track.stop();
+          }
+        } else {
+          if (track.readyState == 'live' && track.kind === trackKind) {
+            track.stop();
+          }
         }
       });
     } else {
@@ -69,27 +71,38 @@ function VideoPlayer(props: VideoProps) {
     }
   }
 
-  function turnOff() {
-    if (videoRef.current?.srcObject) {
-      let stream = videoRef.current.srcObject as MediaStream;
-      stream.getTracks().forEach(function (track) {
-        if (track.readyState == 'live') {
-          track.stop();
-        }
-      });
-    } else {
-      console.error('No valid src object present');
+  async function startMedia(permissions: object) {
+    let stream = await navigator.mediaDevices.getUserMedia(permissions);
+    if (videoRef.current) {
+      videoRef.current.srcObject = stream;
+      videoRef.current.play();
     }
+  }
+
+  function configurePermissions() {
+    let newPermissions;
+    if (!videoOn && audioOn) {
+      newPermissions = {
+        audio: true,
+      };
+    } else if (videoOn && !audioOn) {
+      newPermissions = {
+        video: true,
+      };
+    } else {
+      newPermissions = {
+        video: true,
+        audio: true,
+      };
+    }
+    return newPermissions;
   }
 
   useEffect(() => {
     async function getMedia() {
       try {
-        let stream = await navigator.mediaDevices.getUserMedia(permissions);
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          videoRef.current.play();
-        }
+        let permissions = configurePermissions();
+        startMedia(permissions);
       } catch (err) {
         console.error(err);
       }
@@ -100,25 +113,11 @@ function VideoPlayer(props: VideoProps) {
   useEffect(() => {
     async function updateAudio() {
       if (!audioOn) {
-        turnVideoAudioOff(VideoAudioOptions.audio);
+        endMedia(VideoAudioOptions.audio);
       } else {
-        let newPermissions;
-        if (videoOn) {
-          newPermissions = {
-            video: true,
-            audio: true,
-          };
-        } else {
-          newPermissions = {
-            audio: true,
-          };
-        }
-        turnOff();
-        let stream = await navigator.mediaDevices.getUserMedia(newPermissions);
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          videoRef.current.play();
-        }
+        let permissions = configurePermissions();
+        endMedia(VideoAudioOptions.all);
+        startMedia(permissions);
       }
     }
     updateAudio();
@@ -127,25 +126,11 @@ function VideoPlayer(props: VideoProps) {
   useEffect(() => {
     async function updateVideo() {
       if (!videoOn) {
-        turnVideoAudioOff(VideoAudioOptions.video);
+        endMedia(VideoAudioOptions.video);
       } else {
-        let newPermissions;
-        if (audioOn) {
-          newPermissions = {
-            video: true,
-            audio: true,
-          };
-        } else {
-          newPermissions = {
-            video: true,
-          };
-        }
-        turnOff();
-        let stream = await navigator.mediaDevices.getUserMedia(newPermissions);
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          videoRef.current.play();
-        }
+        let permissions = configurePermissions();
+        endMedia(VideoAudioOptions.all);
+        startMedia(permissions);
       }
     }
     updateVideo();
