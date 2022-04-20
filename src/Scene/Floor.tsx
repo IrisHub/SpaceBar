@@ -1,5 +1,6 @@
 import { usePlane } from '@react-three/cannon';
 import React from 'react';
+import { Colors } from '../constants';
 
 export default function Floor() {
   /**
@@ -15,7 +16,7 @@ export default function Floor() {
       <planeBufferGeometry attach="geometry" args={[100, 100]} />
       <meshBasicMaterial
         attach="material"
-        color="#000000"
+        color={Colors.black}
         transparent="true"
         opacity={0.25}
       />

@@ -1,6 +1,6 @@
 import { useThree } from '@react-three/fiber';
 import { CubeTextureLoader } from 'three';
-import { getS3Path } from '../utils';
+import { SkyboxImages } from '../constants';
 
 export default function Skybox() {
   /**
@@ -13,17 +13,14 @@ export default function Skybox() {
   const loader = new CubeTextureLoader();
   loader.setCrossOrigin('anonymous');
   const sides = [
-    'textures/negz.jpg',
-    'textures/posz.jpg',
-    'textures/posy.jpg',
-    'textures/negy.jpg',
-    'textures/posx.jpg',
-    'textures/negx.jpg',
+    SkyboxImages.negz,
+    SkyboxImages.posz,
+    SkyboxImages.posy,
+    SkyboxImages.negy,
+    SkyboxImages.posx,
+    SkyboxImages.negx,
   ];
-  const pathStrings = sides.map((side) => {
-    return getS3Path(side);
-  });
-  const texture = loader.load(pathStrings);
+  const texture = loader.load(sides);
   scene.background = texture;
 
   return null;
