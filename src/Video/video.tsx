@@ -138,7 +138,7 @@ function VideoPlayer(props: VideoProps) {
         let permissions = configurePermissions();
         startMedia(permissions);
       } catch (err) {
-        // TODO: handle common error status described here
+        // TODO(SAM): handle common error status described here
         // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
         throw err;
       }
