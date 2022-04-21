@@ -9,7 +9,14 @@ import Skybox from './Skybox';
 
 import { Box, Cylinder, Sphere, GLTFModel } from '../Shapes';
 
-import { PhysicsConstants, Plants, Objects, Colors, Dims, Mass } from '../constants';
+import {
+  PhysicsConstants,
+  Plants,
+  Objects,
+  Colors,
+  Dims,
+  Mass,
+} from '../constants';
 
 export default function Scene() {
   /**
@@ -22,8 +29,8 @@ export default function Scene() {
         <PlayerCameraControls />
         <Skybox />
         <ambientLight />
-        <pointLight position={PhysicsConstants.pointLightconstant} />
-        <Physics gravity={PhysicsConstants.gravityConstant}>
+        <pointLight position={PhysicsConstants.pointLight} />
+        <Physics gravity={PhysicsConstants.gravity}>
           <Player />
           <Sphere
             dimensions={[10]}
@@ -78,7 +85,7 @@ export default function Scene() {
             type={'Static'}
             modelScaleFactor={1}
             bboxScaleFactor={0.5}
-            modelPath={Objects.smallBluePlantPotPath}
+            modelPath={Plants.smallBluePlantPotPath}
             collision={false}
           />
 
@@ -113,7 +120,9 @@ export default function Scene() {
           />
 
           <Floor />
-          <gridHelper args={[Dims.floorSize, Dims.floorSize, Colors.black, Colors.grey]} />
+          <gridHelper
+            args={[Dims.floorX, Dims.floorZ, Colors.black, Colors.grey]}
+          />
         </Physics>
       </Canvas>
     </div>

@@ -34,18 +34,18 @@ export default function Player(props: SphereProps) {
 
   const currentVelocityVector = useRef<PlayerVelocity>({ x: 0, y: 0, z: 0 });
   useEffect(() => {
-    setPlayerRef.velocity.subscribe((playerVelocity) => {
+    setPlayerRef.velocity.subscribe(playerVelocity => {
       currentVelocityVector.current.x = round(
         playerVelocity[0],
-        ROUNDING_PRECISION,
+        ROUNDING_PRECISION
       );
       currentVelocityVector.current.y = round(
         playerVelocity[1],
-        ROUNDING_PRECISION,
+        ROUNDING_PRECISION
       );
       currentVelocityVector.current.z = round(
         playerVelocity[2],
-        ROUNDING_PRECISION,
+        ROUNDING_PRECISION
       );
     });
   }, [setPlayerRef.velocity]);
@@ -72,11 +72,11 @@ export default function Player(props: SphereProps) {
     setPlayerRef.velocity.set(
       newVelocityVector.x,
       currentVelocityVector.current.y,
-      newVelocityVector.z,
+      newVelocityVector.z
     );
     playerCurrentPosition = roundEntriesInVector(
       playerCurrentPosition,
-      ROUNDING_PRECISION,
+      ROUNDING_PRECISION
     );
 
     const canJump: boolean =
@@ -87,7 +87,7 @@ export default function Player(props: SphereProps) {
       setPlayerRef.velocity.set(
         currentVelocityVector.current.x,
         JUMP_VELOCITY,
-        currentVelocityVector.current.z,
+        currentVelocityVector.current.z
       );
     }
     pastVelocity.y = currentVelocityVector.current.y;
