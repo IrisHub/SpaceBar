@@ -1,9 +1,12 @@
-import express from 'express';
 import ws from 'ws';
-import handleReceive from './receiver';
+import express from 'express';
+import { PeerReceiver } from './receiver';
 
 const app = express();
 const port = 3400;
+
+const wsServer = new ws.Server({ noServer: true });
+const receiver = new PeerReceiver(wsServer);
 
 // Listen on the specified port.
 const server = app.listen(port, () => {
@@ -17,9 +20,8 @@ app.get('/', (req, res) => {
 
 // Set up a headless websocket server that prints any
 // events that come in.
-const wsServer = new ws.Server({ noServer: true });
 wsServer.on('connection', socket => {
-  socket.on('message', handleReceive);
+  socket.on('message', (data) => receiver.handleReceive(data));
 });
 
 // `server` is a vanilla Node.js HTTP server, so use
