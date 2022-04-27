@@ -9,14 +9,14 @@ import Skybox from './Skybox';
 
 import { Box, Cylinder, Sphere, GLTFModel } from '../Shapes';
 
-import { getS3Path } from '../utils';
 import {
-  GRAVITY,
-  PLANE_LENGTH_X,
-  PLANE_WIDTH_Z,
-  POINT_LIGHT,
-} from '../worldConstants';
-import Boundaries from './Boundaries';
+  PhysicsConstants,
+  Plants,
+  Objects,
+  Colors,
+  Dims,
+  Mass,
+} from '../constants';
 
 export default function Scene() {
   /**
@@ -29,62 +29,57 @@ export default function Scene() {
         <PlayerCameraControls />
         <Skybox />
         <ambientLight />
-        <pointLight position={POINT_LIGHT} />
-        <Physics gravity={GRAVITY}>
-          <Boundaries
-            lengthX={PLANE_LENGTH_X}
-            widthZ={PLANE_WIDTH_Z}
-            boundary={true}
-            debug={false}
-          />
+        <pointLight position={PhysicsConstants.pointLight} />
+        <Physics gravity={PhysicsConstants.gravity}>
           <Player />
           <Sphere
             dimensions={[10]}
-            mass={10}
+            mass={Mass.heavyObject}
             position={[5, 1, -15]}
-            color={'gray'}
+            color={Colors.green}
             collision={true}
           />
 
           <Box
             dimensions={[10, 10, 20]}
-            mass={10}
-            position={[5, 1, 5]}
-            color={'red'}
+            mass={Mass.heavyObject}
+            position={[25, 1, -15]}
+            color={Colors.grey}
+            collision={true}
           />
 
           <GLTFModel
-            mass={10}
+            mass={Mass.heavyObject}
             position={[-50, 30, -50]}
             modelScaleFactor={0.001}
             bboxScaleFactor={0.5}
-            modelPath={getS3Path('models/gunship/scene.gltf')}
+            modelPath={Objects.gunshipPath}
             collision={true}
           />
 
           <Cylinder
             dimensions={[10, 10, 5]}
-            mass={10}
+            mass={Mass.heavyObject}
             position={[50, 1, -15]}
-            color={'green'}
+            color={Colors.green}
             collision={false}
           />
 
           <GLTFModel
-            mass={10}
+            mass={Mass.heavyObject}
             position={[5, 0, 50]}
             modelScaleFactor={1}
             bboxScaleFactor={1}
-            modelPath={getS3Path('models/smallBluePlant/scene.gltf')}
+            modelPath={Plants.smallBluePlantPath}
             collision={false}
           />
 
           <GLTFModel
-            mass={10}
+            mass={Mass.heavyObject}
             position={[50, 0, 30]}
             modelScaleFactor={1}
             bboxScaleFactor={0.5}
-            modelPath={getS3Path('models/smallBluePlantPot/scene.gltf')}
+            modelPath={Plants.smallBluePlantPotPath}
             collision={false}
           />
 
@@ -93,29 +88,29 @@ export default function Scene() {
             position={[-200, 1, -200]}
             modelScaleFactor={0.3}
             bboxScaleFactor={0.4}
-            modelPath={getS3Path('models/mushroomTree/scene.gltf')}
+            modelPath={Plants.mushroomTreePath}
             collision={false}
           />
 
           <GLTFModel
-            mass={10}
+            mass={Mass.heavyObject}
             position={[-90, 1, -20]}
             modelScaleFactor={0.3}
             bboxScaleFactor={0.5}
-            modelPath={getS3Path('models/mushroomTree/scene.gltf')}
+            modelPath={Plants.mushroomTreePath}
             collision={true}
           />
 
           <GLTFModel
-            mass={10}
+            mass={Mass.heavyObject}
             position={[50, 1, 65]}
             modelScaleFactor={0.3}
             bboxScaleFactor={0.5}
-            modelPath={getS3Path('models/mushroomTree/scene.gltf')}
+            modelPath={Plants.mushroomTreePath}
             collision={true}
           />
 
-          <Floor lengthX={PLANE_LENGTH_X} widthZ={PLANE_WIDTH_Z} />
+          <Floor lengthX={Dims.floorX} widthZ={Dims.floorZ} />
         </Physics>
       </Canvas>
     </div>

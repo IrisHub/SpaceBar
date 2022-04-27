@@ -6,11 +6,7 @@ import playerMovementEmitter from './playerMovementEmitter';
 import { PlayerPosition, PlayerVelocity } from '../allTypes';
 import { roundEntriesInVector, round } from './playerMovementUtils';
 import { Vector3 } from 'three';
-
-const SPEED = 10;
-const JUMP_VELOCITY = 15;
-const PLAYER_MASS = 15;
-const ROUNDING_PRECISION = 3;
+import { PlayerConstants, MathConstants } from '../constants';
 
 export default function Player(props: SphereProps) {
   /**
@@ -21,7 +17,7 @@ export default function Player(props: SphereProps) {
   const { forward, backward, left, right, jump } = playerMovementControls();
   const { camera } = useThree();
   const [playerRef, setPlayerRef] = useSphere(() => ({
-    mass: PLAYER_MASS,
+    mass: PlayerConstants.mass,
     position: [0, 2, 0],
     type: 'Dynamic',
     ...props,
@@ -37,15 +33,15 @@ export default function Player(props: SphereProps) {
     setPlayerRef.velocity.subscribe((playerVelocity) => {
       currentVelocityVector.current.x = round(
         playerVelocity[0],
-        ROUNDING_PRECISION
+        MathConstants.roundingPrecision
       );
       currentVelocityVector.current.y = round(
         playerVelocity[1],
-        ROUNDING_PRECISION
+        MathConstants.roundingPrecision
       );
       currentVelocityVector.current.z = round(
         playerVelocity[2],
-        ROUNDING_PRECISION
+        MathConstants.roundingPrecision
       );
     });
   }, [setPlayerRef.velocity]);
@@ -67,7 +63,7 @@ export default function Player(props: SphereProps) {
     newVelocityVector
       .subVectors(xVector, zVector)
       .normalize()
-      .multiplyScalar(SPEED)
+      .multiplyScalar(PlayerConstants.jumpVelocity)
       .applyEuler(camera.rotation);
     setPlayerRef.velocity.set(
       newVelocityVector.x,
@@ -76,7 +72,7 @@ export default function Player(props: SphereProps) {
     );
     playerCurrentPosition = roundEntriesInVector(
       playerCurrentPosition,
-      ROUNDING_PRECISION
+      MathConstants.roundingPrecision
     );
 
     const canJump: boolean =
@@ -86,7 +82,7 @@ export default function Player(props: SphereProps) {
     if (canJump) {
       setPlayerRef.velocity.set(
         currentVelocityVector.current.x,
-        JUMP_VELOCITY,
+        PlayerConstants.jumpVelocity,
         currentVelocityVector.current.z
       );
     }

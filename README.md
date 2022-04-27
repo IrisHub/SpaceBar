@@ -12,8 +12,9 @@ Commits should be named with topic: description. For example, README: updated de
 Use the following lint protocol before pushing to any branch. There are no automated lint checks in place yet, but they will likely be coming soon.
 
 1. Download the ESLint extension in VSCode.
-2. Within your project, run `npm i eslint --save-dev` to download the `eslint` module.
-3. Run `./node_modules/.bin/eslint --init` to configure your linter
+2. Download the Prettier extension in VSCode. This is an opinionated code formatter that prettifies code. 
+3. Within your project, run `npm i eslint --save-dev` to download the `eslint` module.
+4. Run `./node_modules/.bin/eslint --init` to configure your linter
 
     **How would you like to use ESLint?** `To check syntax, find problems, and enforce code style`
 
@@ -36,7 +37,14 @@ Use the following lint protocol before pushing to any branch. There are no autom
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
 }
 ```
-5. Linting is now set up by default. You can enter the command palette (`Cmd + Shift + P` by default) and run `> ESLint: Fix all auto-fixable problems` to auto-fix most linter errors. Alternatively, you can configure VSCode to run the linter on _every save_ by going to **Code > Preferences > Settings > Text Editor > "Editor: Code Actions on Save" > "Edit in settings.json"** and adding the following to `User/<yourname>/Library/Application Support/Code/User/settings.json`:
+5. To prevent conflicts between Prettier & ESLint, add the following line in `eslint.json` within `rules` to resolve a conflict on how ESLint should handle comma dangling. Setting comma-dangle to 0 disables checking for dangling commas in ESLint.
+```
+"rules": {
+        "comma-dangle": 0,
+        "@typescript-eslint/comma-dangle": 0
+}
+```
+7. Linting is now set up by default. You can enter the command palette (`Cmd + Shift + P` by default) and run `> ESLint: Fix all auto-fixable problems` to auto-fix most linter errors. Alternatively, you can configure VSCode to run the linter on _every save_ by going to **Code > Preferences > Settings > Text Editor > "Editor: Code Actions on Save" > "Edit in settings.json"** and adding the following to `User/<yourname>/Library/Application Support/Code/User/settings.json`:
 ```
 "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
