@@ -7,7 +7,7 @@ export abstract class PhysicsConstants {
 }
 
 export abstract class MathConstants {
-  static readonly roundingPrecision: number = 3;
+  static readonly roundingPrecision = 3;
 }
 
 export abstract class Plants {
@@ -35,21 +35,21 @@ export abstract class Objects {
 }
 
 export abstract class Colors {
-  static readonly black: string = '#000000';
+  static readonly black = '#000000';
 
-  static readonly grey: string = '#808080';
+  static readonly grey = '#808080';
 
-  static readonly green: string = '#008000';
+  static readonly green = '#008000';
 }
 
 export abstract class Dims {
-  static readonly floorX: number = 1000;
+  static readonly floorX = 1000;
 
-  static readonly floorZ: number = 1000;
+  static readonly floorZ = 1000;
 }
 
 export abstract class Mass {
-  static readonly heavyObject: number = 10;
+  static readonly heavyObject = 10;
 }
 
 export abstract class SkyboxImages {
@@ -67,9 +67,9 @@ export abstract class SkyboxImages {
 }
 
 export abstract class PlayerConstants {
-  static readonly speed: number = 10;
+  static readonly speed = 10;
 
-  static readonly jumpVelocity: number = 15;
+  static readonly jumpVelocity = 15;
 
-  static readonly mass: number = 15;
+  static readonly mass = 15;
 }
