@@ -7,25 +7,19 @@ import { DoubleSide } from 'three';
  * for useBox hook used to render a box in Cannon.JS's physics engine
  */
 interface CustomPlane extends PlaneProps {
+  dimensions: [number, number];
   color?: string;
   transparent?: boolean;
   rotation?: [number, number, number];
-  dimensions: [number, number];
   collision?: boolean;
 }
 
 /**
- * Cylinder component renders a cylinder with collision detection.
- * This component accepts props that determine its size, position, type, and mass,
- * and a callback to be called upon a collision.
- * @param props customCylinder
+ * Plane component renders a plane with collision detection.
+ * @param props customPlane
  * @returns
  */
-export default function Plane({
-  color = 'yellow',
-  type = 'Static',
-  ...props
-}: CustomPlane) {
+export default function Plane({ type = 'Static', ...props }: CustomPlane) {
   let collisionRef = createRef();
   let opacity = 1;
   let transparent = false;
@@ -59,7 +53,7 @@ export default function Plane({
       <mesh {...meshProps}>
         <planeBufferGeometry args={props.dimensions} />
         <meshBasicMaterial
-          color={color}
+          color={props.color}
           transparent={transparent}
           opacity={opacity}
           side={DoubleSide}

@@ -16,6 +16,7 @@ import {
   PLANE_WIDTH_Z,
   POINT_LIGHT,
 } from '../worldConstants';
+import Boundaries from './Boundaries';
 
 export default function Scene() {
   /**
@@ -30,6 +31,12 @@ export default function Scene() {
         <ambientLight />
         <pointLight position={POINT_LIGHT} />
         <Physics gravity={GRAVITY}>
+          <Boundaries
+            lengthX={PLANE_LENGTH_X}
+            widthZ={PLANE_WIDTH_Z}
+            boundary={true}
+            debug={false}
+          />
           <Player />
           <Sphere
             dimensions={[10]}
@@ -117,12 +124,7 @@ export default function Scene() {
             collision={true}
           />
 
-          <Floor
-            lengthX={PLANE_LENGTH_X}
-            widthZ={PLANE_WIDTH_Z}
-            boundary={true}
-            debug={true}
-          />
+          <Floor lengthX={PLANE_LENGTH_X} widthZ={PLANE_WIDTH_Z} />
         </Physics>
       </Canvas>
     </div>

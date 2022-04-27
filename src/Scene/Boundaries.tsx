@@ -1,7 +1,6 @@
 import React from 'react';
 import { PlaneProps } from '../allTypes';
 import Plane from '../Shapes/Plane';
-import { BOUNDARY_HEIGHT } from '../worldConstants';
 
 /**
  * Boundaries functional component renders four boundaries of a plane given
@@ -11,58 +10,49 @@ import { BOUNDARY_HEIGHT } from '../worldConstants';
  * @returns
  */
 function Boundaries(props: PlaneProps) {
-  const boundaryHeight = BOUNDARY_HEIGHT;
-  // let boundaryColor;
+  let visibleBoundaryHeight = 10; //  Plane extends infinitely
+  let boundaryColorConfig;
 
-  // if (props.debug) {
-  //   boundaryColor = {
-  //     color: 'yellow',
-  //   };
-  // } else {
-  //   boundaryColor = {
-  //     transparent: true,
-  //   };
-  // }
+  if (props.debug) {
+    boundaryColorConfig = {
+      color: 'yellow',
+    };
+  } else {
+    boundaryColorConfig = {
+      transparent: true,
+    };
+  }
   return (
     <>
       <Plane
         position={[0, 0, props.widthZ]}
-        dimensions={[props.lengthX * 2, boundaryHeight]}
-        type={'Static'}
+        dimensions={[props.lengthX * 2, visibleBoundaryHeight]}
         collision={true}
         rotation={[0, Math.PI, 0]}
-        color="yellow"
-        // {...boundaryColor}
+        {...boundaryColorConfig}
       />
       <Plane
         position={[0, 0, -props.widthZ]}
-        dimensions={[props.lengthX * 2, boundaryHeight]}
-        type={'Static'}
+        dimensions={[props.lengthX * 2, visibleBoundaryHeight]}
         collision={true}
         rotation={[0, 0, 0]}
-        color="yellow"
-
-        // {...boundaryColor}
+        {...boundaryColorConfig}
       />
 
       <Plane
         position={[-props.lengthX, 0, 0]}
-        dimensions={[boundaryHeight, props.widthZ * 2]}
-        type={'Static'}
+        dimensions={[props.widthZ * 2, visibleBoundaryHeight]}
         collision={true}
         rotation={[0, Math.PI / 2, 0]}
-        color="blue"
-        // {...boundaryColor}
+        {...boundaryColorConfig}
       />
 
       <Plane
         position={[props.lengthX, 0, 0]}
-        dimensions={[boundaryHeight, props.widthZ * 2]}
-        type={'Static'}
+        dimensions={[props.widthZ * 2, visibleBoundaryHeight]}
         collision={true}
         rotation={[0, -Math.PI / 2, 0]}
-        color="red"
-        // {...boundaryColor}
+        {...boundaryColorConfig}
       />
     </>
   );

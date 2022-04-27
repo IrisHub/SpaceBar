@@ -1,6 +1,4 @@
 import React from 'react';
-// import { usePlane } from '@react-three/cannon';
-import Boundaries from './Boundaries';
 import { PlaneProps } from '../allTypes';
 import { Plane } from '../Shapes';
 
@@ -13,15 +11,6 @@ import { Plane } from '../Shapes';
 export default function Floor(props: PlaneProps) {
   return (
     <>
-      {props.boundary && (
-        <>
-          <Boundaries
-            lengthX={props.lengthX}
-            widthZ={props.widthZ}
-            debug={props.debug}
-          />
-        </>
-      )}
       <Plane
         color="#000000"
         dimensions={[props.lengthX * 2, props.widthZ * 2]}
