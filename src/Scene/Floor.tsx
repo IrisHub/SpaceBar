@@ -11,10 +11,6 @@ import { Plane } from '../Shapes';
  * calibrate movement.
  */
 export default function Floor(props: PlaneProps) {
-  // const [ref] = usePlane(() => ({
-  //   rotation: [-Math.PI / 2, 0, 0],
-  // }));
-
   return (
     <>
       {props.boundary && (
@@ -33,22 +29,10 @@ export default function Floor(props: PlaneProps) {
         type={'Static'}
         collision={true}
       />
-      {/* <mesh ref={ref} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeBufferGeometry
-          attach="geometry"
-          args={[props.lengthX * 2, props.widthZ * 2]}
-        />
-        <meshBasicMaterial
-          attach="material"
-          color="#000000"
-          transparent="true"
-          opacity={0.25}
-        />
-      </mesh> */}
 
-      {/* <gridHelper
+      <gridHelper
         args={[props.lengthX * 2, props.widthZ * 2, 'black', 'grey']}
-      /> */}
+      />
     </>
   );
 }

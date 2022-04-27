@@ -1,5 +1,6 @@
 import React, { createRef } from 'react';
 import { PlaneProps, usePlane } from '@react-three/cannon';
+import { DoubleSide } from 'three';
 
 /**
  * CustomBox extends props
@@ -33,9 +34,9 @@ export default function Plane(props: CustomPlane) {
     [collisionRef] = usePlane(() => ({
       args: props.dimensions,
       mass: props.mass,
+      rotation: props.rotation,
       position: props.position,
       type: props.type,
-      rotation: props.rotation,
       onCollide: props.onCollide,
       ...props,
     }));
@@ -44,6 +45,7 @@ export default function Plane(props: CustomPlane) {
     };
   } else {
     meshProps = {
+      rotation: props.rotation,
       position: props.position,
     };
   }
@@ -56,6 +58,7 @@ export default function Plane(props: CustomPlane) {
           color={props.color}
           transparent={transparent}
           opacity={opacity}
+          side={DoubleSide}
         />
       </mesh>
     </>
