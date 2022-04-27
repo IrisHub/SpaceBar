@@ -9,8 +9,14 @@ import Skybox from './Skybox';
 
 import { Box, Cylinder, Sphere, GLTFModel } from '../Shapes';
 
-import { getS3Path } from '../utils';
-import { GRAVITY_CONSTANT, POINT_LIGHT_CONSTANT } from '../worldConstants';
+import {
+  PhysicsConstants,
+  Plants,
+  Objects,
+  Colors,
+  Dims,
+  Mass,
+} from '../constants';
 
 export default function Scene() {
   /**
@@ -23,63 +29,63 @@ export default function Scene() {
         <PlayerCameraControls />
         <Skybox />
         <ambientLight />
-        <pointLight position={POINT_LIGHT_CONSTANT} />
-        <Physics gravity={GRAVITY_CONSTANT}>
+        <pointLight position={PhysicsConstants.pointLight} />
+        <Physics gravity={PhysicsConstants.gravity}>
           <Player />
           <Sphere
             dimensions={[10]}
-            mass={10}
+            mass={Mass.heavyObject}
             position={[5, 1, -15]}
             type={'Static'}
-            color={'gray'}
+            color={Colors.green}
             collision={true}
           />
 
           <Box
             dimensions={[10, 10, 20]}
-            mass={10}
+            mass={Mass.heavyObject}
             position={[25, 1, -15]}
             type={'Static'}
-            color={'grey'}
+            color={Colors.grey}
             collision={true}
           />
 
           <GLTFModel
-            mass={10}
+            mass={Mass.heavyObject}
             position={[-50, 30, -50]}
             type={'Static'}
             modelScaleFactor={0.001}
             bboxScaleFactor={0.5}
-            modelPath={getS3Path('models/gunship/scene.gltf')}
+            modelPath={Objects.gunshipPath}
             collision={true}
           />
 
           <Cylinder
             dimensions={[10, 10, 5]}
-            mass={10}
+            mass={Mass.heavyObject}
             position={[50, 1, -15]}
             type={'Static'}
-            color={'green'}
+            color={Colors.green}
             collision={false}
           />
 
           <GLTFModel
-            mass={10}
+            mass={Mass.heavyObject}
             position={[5, 0, 50]}
             type={'Static'}
             modelScaleFactor={1}
             bboxScaleFactor={1}
-            modelPath={getS3Path('models/smallBluePlant/scene.gltf')}
+            modelPath={Plants.smallBluePlantPath}
             collision={false}
           />
 
           <GLTFModel
-            mass={10}
+            mass={Mass.heavyObject}
             position={[50, 0, 30]}
             type={'Static'}
             modelScaleFactor={1}
             bboxScaleFactor={0.5}
-            modelPath={getS3Path('models/smallBluePlantPot/scene.gltf')}
+            modelPath={Plants.smallBluePlantPotPath}
             collision={false}
           />
 
@@ -89,32 +95,34 @@ export default function Scene() {
             type={'Static'}
             modelScaleFactor={0.3}
             bboxScaleFactor={0.4}
-            modelPath={getS3Path('models/mushroomTree/scene.gltf')}
+            modelPath={Plants.mushroomTreePath}
             collision={false}
           />
 
           <GLTFModel
-            mass={10}
+            mass={Mass.heavyObject}
             position={[-90, 1, -20]}
             type={'Static'}
             modelScaleFactor={0.3}
             bboxScaleFactor={0.5}
-            modelPath={getS3Path('models/mushroomTree/scene.gltf')}
+            modelPath={Plants.mushroomTreePath}
             collision={true}
           />
 
           <GLTFModel
-            mass={10}
+            mass={Mass.heavyObject}
             position={[50, 1, 65]}
             type={'Static'}
             modelScaleFactor={0.3}
             bboxScaleFactor={0.5}
-            modelPath={getS3Path('models/mushroomTree/scene.gltf')}
+            modelPath={Plants.mushroomTreePath}
             collision={true}
           />
 
           <Floor />
-          <gridHelper args={[100, 100, 'black', 'grey']} />
+          <gridHelper
+            args={[Dims.floorX, Dims.floorZ, Colors.black, Colors.grey]}
+          />
         </Physics>
       </Canvas>
     </div>
