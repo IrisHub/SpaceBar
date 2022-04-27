@@ -18,7 +18,10 @@ interface CustomCylinder extends CylinderProps {
  * @param props customCylinder
  * @returns
  */
-export default function Cylinder(props: CustomCylinder) {
+export default function Cylinder({
+  type = 'Static',
+  ...props
+}: CustomCylinder) {
   let collisionRef = createRef();
   let opacity = 1;
   let transparent = false;
@@ -32,7 +35,7 @@ export default function Cylinder(props: CustomCylinder) {
       args: props.dimensions,
       mass: props.mass,
       position: props.position,
-      type: props.type,
+      type: type,
       onCollide: props.onCollide,
       ...props,
     }));

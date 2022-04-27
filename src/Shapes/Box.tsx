@@ -18,7 +18,7 @@ interface CustomBox extends BoxProps {
  * @param props customBox
  * @returns
  */
-export default function Box(props: CustomBox) {
+export default function Box({ type = 'Static', ...props }: CustomBox) {
   let collisionRef = createRef();
   let opacity = 1;
   let transparent = false;
@@ -34,7 +34,7 @@ export default function Box(props: CustomBox) {
       args: props.dimensions,
       mass: props.mass,
       position: props.position,
-      type: props.type,
+      type: type,
       onCollide: props.onCollide,
       ...props,
     }));

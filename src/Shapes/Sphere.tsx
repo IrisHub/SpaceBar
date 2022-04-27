@@ -18,7 +18,7 @@ interface CustomSphere extends SphereProps {
  * @param props CustomSphere
  * @returns
  */
-export default function Sphere(props: CustomSphere) {
+export default function Sphere({ type = 'Static', ...props }: CustomSphere) {
   let collisionRef = createRef();
   let opacity = 1;
   let transparent = false;
@@ -33,7 +33,7 @@ export default function Sphere(props: CustomSphere) {
       args: props.dimensions,
       mass: props.mass,
       position: props.position,
-      type: props.type,
+      type: type,
       onCollide: props.onCollide,
       ...props,
     }));
