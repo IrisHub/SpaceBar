@@ -93,8 +93,7 @@
       "eslint --fix",
       "prettier --write",
       "pretty-quick --staged",
-      "import-sort --write=true",
-      "git add"
+      "import-sort --write=true"
     ]
   }
 }
