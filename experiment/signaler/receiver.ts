@@ -1,14 +1,15 @@
-import ws from 'ws';
+import WebSocket from 'ws';
 import { v4 as uuid } from 'uuid';
 
 export class PeerReceiver {
-    ws: ws.Server<ws.WebSocket>;
-    rooms: Array<string>;
+    wss: WebSocket.Server<WebSocket.WebSocket>;
+    ws: WebSocket;
+    id: number;
     roomCounter: number;
+    websockets = {};
 
-    constructor(ws: ws.Server) {
-        this.ws = ws;
-        this.rooms = [""];
+    constructor(ws: WebSocket.Server) {
+        this.wss = ws;
         this.roomCounter = 0;
     } 
 
@@ -16,7 +17,7 @@ export class PeerReceiver {
     // TODO(SHALIN): Make sure the caller scopes the `this` properly, or change the way these functions are called.
     // For example, calling this function such as `socket.on('message', (data) => receiver.handleReceive(data));` will work fine.
     // However calling this function as `socket.on('message', receiver.handleReceive);` changes what `this` refers to and breaks the code.
-    handleReceive(message: ws.RawData) {
+    handleReceive(message: WebSocket.RawData) {
         const parsedMessage = parse(message);
         const [type, data] = [parsedMessage.type, parsedMessage.data];
     
@@ -42,42 +43,53 @@ export class PeerReceiver {
         }
     }
     
-    _handleNewPeer(message: ws.RawData) {
+    _handleNewPeer(message: WebSocket.RawData) {
         console.log("handleNewPeer", parse(message));
         // This is  where we initiate the peer.
     }
     
-    _handleSendSignal(message: ws.RawData) { 
-        this._createPeer()
-        console.log("handleSendSignal", parse(message));
+    _handleSendSignal(message: WebSocket.RawData) { 
+        this._createRoom()
+        const parsedMessage = parse(message);
+        console.log("handleSendSignal", parsedMessage);
+
+        // Send signal message to all clients except self.
+        this.wss.clients.forEach(client => {
+            if (client !== this.ws && client.readyState === WebSocket.OPEN) {
+                console.log("sending to client")
+                client.send(message);
+            }
+        });        
+        // this.ws.send(message);
     }
     
-    _handleMessage(message: ws.RawData) {
+    _handleMessage(message: WebSocket.RawData) {
         console.log("handleMessage", parse(message));
     }
     
-    _handleJoin(message: ws.RawData) {
+    _handleJoin(message: WebSocket.RawData) {
+        const room = this._createRoom();
         console.log("handleCreateOrJoin", parse(message));
     }
     
-    _handleHangup(message: ws.RawData) {
+    _handleHangup(message: WebSocket.RawData) {
         console.log("handleHangup", parse(message));
     }
     
-    _handleDisconnect(message: ws.RawData) {
+    _handleDisconnect(message: WebSocket.RawData) {
         console.log("handleDisconnect", parse(message));
     } 
 
-    _createPeer() {
-        const room = uuid().toString();
-        this.rooms.push(room);
-        this.roomCounter++;
-        console.log(`Added new room: ${room}. \n Total: ${this.roomCounter}`);
+    _createRoom() {
+        // const room = uuid().toString();
+        // this.rooms.push(room);
+        // this.roomCounter++;
+        // console.log(`Added new room: ${room}. \n Total: ${this.roomCounter}`);
     }
 }
 
 
 // TODO(SHALIN): Move to some kind of utils file.
-function parse(byteArray: ws.RawData)  {
+function parse(byteArray: WebSocket.RawData)  {
     return JSON.parse(byteArray.toString());
 }

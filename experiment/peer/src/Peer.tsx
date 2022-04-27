@@ -1,4 +1,5 @@
 // import SimplePeer from 'simple-peer';
+import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom';
 import { PeerForm } from './PeerForm';
 import SimpleSignaler from './network/simple-signaler'
@@ -11,19 +12,17 @@ const socket_port = 3400;
 
 function Peer() {
   const location = useLocation();
-  
-    const SimplePeer = (window as any)["SimplePeer"]; // Grab the SimplePeer class from the window object.
-    const peer = new SimplePeer({
-        initiator: location.hash === '#1', // The intiator peer is the one with #1 in the URL
-        trickle: true,
-    });
 
-    const signaler = new SimpleSignaler(peer, socket_url, socket_port);
-    signaler.createPeerConnection();
+  useEffect(()=>{
+    // The intiator peer is the one with #1 in the URL
+    new SimpleSignaler(location.hash === "#1", socket_url, socket_port);
+  }, [])
+
+
   
     return (
       <>
-            <PeerForm signaler={signaler} />
+            {/* <PeerForm signaler={signaler} /> */}
             <pre id="outgoing"></pre> 
       </>
     );

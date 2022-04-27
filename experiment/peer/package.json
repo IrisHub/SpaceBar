@@ -25,6 +25,7 @@
     "socket-io-server": "^1.0.5",
     "typescript": "^4.6.2",
     "util": "^0.12.4",
+    "uuid": "^8.3.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -52,7 +53,8 @@
     ]
   },
   "devDependencies": {
-    "@types/simple-peer": "^9.11.4"
+    "@types/simple-peer": "^9.11.4",
+    "@types/uuid": "^8.3.4"
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
