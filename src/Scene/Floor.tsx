@@ -4,8 +4,7 @@ import { Plane } from '../Shapes';
 
 /**
  * Defines a basic floor component as a flat plane rotated 90 degrees
- * If boundary prop is passed, renders plane with collidable boundaries on each side of the plane.
- * This floor is partially transparent and will come with gridlines to
+ * This floor comes with gridlines to
  * calibrate movement.
  */
 export default function Floor(props: PlaneProps) {
