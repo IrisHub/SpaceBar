@@ -21,7 +21,11 @@ interface CustomPlane extends PlaneProps {
  * @param props customCylinder
  * @returns
  */
-export default function Plane(props: CustomPlane) {
+export default function Plane({
+  color = 'yellow',
+  type = 'Static',
+  ...props
+}: CustomPlane) {
   let collisionRef = createRef();
   let opacity = 1;
   let transparent = false;
@@ -36,7 +40,7 @@ export default function Plane(props: CustomPlane) {
       mass: props.mass,
       rotation: props.rotation,
       position: props.position,
-      type: props.type,
+      type: type,
       onCollide: props.onCollide,
       ...props,
     }));
@@ -55,7 +59,7 @@ export default function Plane(props: CustomPlane) {
       <mesh {...meshProps}>
         <planeBufferGeometry args={props.dimensions} />
         <meshBasicMaterial
-          color={props.color}
+          color={color}
           transparent={transparent}
           opacity={opacity}
           side={DoubleSide}

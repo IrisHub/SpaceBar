@@ -26,7 +26,6 @@ export default function Floor(props: PlaneProps) {
         color="#000000"
         dimensions={[props.lengthX * 2, props.widthZ * 2]}
         rotation={[-Math.PI / 2, 0, 0]}
-        type={'Static'}
         collision={true}
       />
 
