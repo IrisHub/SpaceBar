@@ -3,9 +3,11 @@ import { PlaneProps } from '../allTypes';
 import Plane from '../Shapes/Plane';
 
 /**
- * Boundaries functional component renders four boundaries of a plane given
- * a plane's length and width. Collisions registered by using Box components with collisions to true.
- * Boundaries are fullytranslucent unless debug prop is set to true.
+ * Creates a world boundary of 4 impassible Planes that define the edges of the world.
+ * Each plane is a 2D surface that extends infinitely in 3d space.
+ * Given a length (x-coord) and width (z-coord), planes are positioned & rotated to span the 4 edges of
+ * the world. Each boundary is fully translucent unless the debug prop is set to true, in which
+ * case they are set to yellow with a configurable visible height.
  * @param props: PlaneProps
  * @returns
  */
