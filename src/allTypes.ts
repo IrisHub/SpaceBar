@@ -14,6 +14,5 @@ export type PlaneProps = {
   lengthX: number;
   widthZ: number;
   boundary?: boolean;
-  boundaryHeight?: number;
   debug?: boolean;
 };

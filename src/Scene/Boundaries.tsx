@@ -1,6 +1,7 @@
 import React from 'react';
 import { PlaneProps } from '../allTypes';
 import Box from '../Shapes/Box';
+import { BOUNDARY_HEIGHT } from '../worldConstants';
 
 /**
  * Boundaries functional component renders four boundaries of a plane given
@@ -10,14 +11,8 @@ import Box from '../Shapes/Box';
  * @returns
  */
 function Boundaries(props: PlaneProps) {
+  const boundaryHeight = BOUNDARY_HEIGHT;
   let boundaryColor;
-  let boundaryHeight;
-
-  if (!props.boundaryHeight) {
-    boundaryHeight = 50;
-  } else {
-    boundaryHeight = props.boundaryHeight;
-  }
 
   if (props.debug) {
     boundaryColor = {

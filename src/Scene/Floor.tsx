@@ -1,7 +1,8 @@
 import React from 'react';
-import { usePlane } from '@react-three/cannon';
+// import { usePlane } from '@react-three/cannon';
 import Boundaries from './Boundaries';
 import { PlaneProps } from '../allTypes';
+import { Plane } from '../Shapes';
 
 /**
  * Defines a basic floor component as a flat plane rotated 90 degrees
@@ -10,9 +11,9 @@ import { PlaneProps } from '../allTypes';
  * calibrate movement.
  */
 export default function Floor(props: PlaneProps) {
-  const [ref] = usePlane(() => ({
-    rotation: [-Math.PI / 2, 0, 0],
-  }));
+  // const [ref] = usePlane(() => ({
+  //   rotation: [-Math.PI / 2, 0, 0],
+  // }));
 
   return (
     <>
@@ -25,7 +26,14 @@ export default function Floor(props: PlaneProps) {
           />
         </>
       )}
-      <mesh ref={ref} rotation={[-Math.PI / 2, 0, 0]}>
+      <Plane
+        color="#000000"
+        dimensions={[props.lengthX * 2, props.widthZ * 2]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        type={'Static'}
+        collision={true}
+      />
+      {/* <mesh ref={ref} rotation={[-Math.PI / 2, 0, 0]}>
         <planeBufferGeometry
           attach="geometry"
           args={[props.lengthX * 2, props.widthZ * 2]}
@@ -36,11 +44,11 @@ export default function Floor(props: PlaneProps) {
           transparent="true"
           opacity={0.25}
         />
-      </mesh>
+      </mesh> */}
 
-      <gridHelper
+      {/* <gridHelper
         args={[props.lengthX * 2, props.widthZ * 2, 'black', 'grey']}
-      />
+      /> */}
     </>
   );
 }
