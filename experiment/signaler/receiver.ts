@@ -4,9 +4,9 @@ import { v4 as uuid } from 'uuid';
 export class PeerReceiver {
     wss: WebSocket.Server<WebSocket.WebSocket>;
     ws: WebSocket;
-    id: number;
+    id: string;
     roomCounter: number;
-    websockets = {};
+    websockets = {}; // Store all the websockets.
 
     constructor(ws: WebSocket.Server) {
         this.wss = ws;
@@ -18,10 +18,10 @@ export class PeerReceiver {
     // For example, calling this function such as `socket.on('message', (data) => receiver.handleReceive(data));` will work fine.
     // However calling this function as `socket.on('message', receiver.handleReceive);` changes what `this` refers to and breaks the code.
     handleReceive(message: WebSocket.RawData) {
-        const parsedMessage = parse(message);
-        const [type, data] = [parsedMessage.type, parsedMessage.data];
-    
-        console.log(`Received message of type: ${parsedMessage.type}`);
+        const parsed = parse(message);
+        const [type, data, id] = [parsed.type, parsed.data, parsed.id];
+
+        console.log(`Received message of type: ${parsed.type}`);
 
         // TODO(SHALIN): Pull the `type`s from a shared types file instead of hardcoding the strings.
         switch (type) {
@@ -29,7 +29,7 @@ export class PeerReceiver {
                 this._handleNewPeer(data);
                 break
             case "SIGNAL":
-                this._handleSendSignal(data);
+                this._handleSendSignal(id, data);
                 break
             case "MESSAGE":
                 this._handleMessage(data);
@@ -48,18 +48,19 @@ export class PeerReceiver {
         // This is  where we initiate the peer.
     }
     
-    _handleSendSignal(message: WebSocket.RawData) { 
-        this._createRoom()
+    _handleSendSignal(clientID: string, message: WebSocket.RawData) { 
         const parsedMessage = parse(message);
         console.log("handleSendSignal", parsedMessage);
 
         // Send signal message to all clients except self.
         this.wss.clients.forEach(client => {
-            if (client !== this.ws && client.readyState === WebSocket.OPEN) {
+            if (client !== this.ws 
+                && client !== this.websockets[clientID] // Don't send to the client who originally sent the signal.
+                && client.readyState === WebSocket.OPEN) {
                 console.log("sending to client")
                 client.send(message);
             }
-        });        
+        });
         // this.ws.send(message);
     }
     

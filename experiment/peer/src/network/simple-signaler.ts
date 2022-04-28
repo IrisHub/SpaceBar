@@ -1,6 +1,5 @@
 import SimplePeer from "simple-peer";
 import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
-import { v4 as uuid } from 'uuid';
 
 // TODO(SHALIN): Move shared types to a shared folder in parent directory.
 enum PayloadType {
@@ -11,14 +10,20 @@ enum PayloadType {
     JOIN,
 }
 
+interface Payload {
+    id?: string;
+    type: string;
+    data: string;
+}
+
 /**
  * Creates a payload object to send to the signaling server.
  * @param type PayloadType, which gives the payload a type. 
  * @param data The data to be sent, which can be any type since it will be serialized to JSON.
  * @returns A serialized JSON string.
  */
- function createPayload(id: string, type: PayloadType, data: any) {
-    const payload = {
+ function createPayload(type: PayloadType, data: any, id?: string) {
+    const payload: Payload = {
         id: id,
         type: PayloadType[type],
         data: JSON.stringify(data),
@@ -28,32 +33,40 @@ enum PayloadType {
 
 class SimpleSignaler {
     private peer?: SimplePeer.Instance;
-    private id: string;
+    private id?: string;
     private ws: WebSocket;
     
     constructor(initiator: boolean, socket_url: string, port: number) {
         // Create a new UUID for this peer, that we use in every message we send.
         // TODO(SHALIN): Make sure this is only generated once per peer, then cached.
         // If we close the tab and reopen, the behavior should be defined.
-        this.id = uuid().toString();
 
         // TODO(SHALIN): Verify that URL and PORT are valid.
         this.ws = new WebSocket(`ws://${socket_url}:${port}`);
         this.ws.onopen = (event) => {
             console.log("Websocket Connection Opened", event);
-            const Peer = (window as any)["SimplePeer"]; // Grab the SimplePeer class from the window object.
-            this.peer = new Peer({
-                initiator: initiator, 
-                trickle: true,
-            });
-    
-            this.createPeerConnection();
         };
 
         this.ws.onmessage = (event => { 
             // this._handleData(event);
-            console.log(`message received, ${event.data}`);
-            this.peer?.signal(parse(event.data));
+
+            // Check if the data received was the generated ID that identifies us as the user.
+            const receivedID = parse(event.data).id;
+            if (!this.id && receivedID) { // Our Id was not set and we just received one from the server.
+                this.id = receivedID;
+                console.log(`We just received our id! ${this.id}`)
+
+                // If it's indeed the correct ID, then start simple peer since now we have an ID.
+                const Peer = (window as any)["SimplePeer"]; // Grab the SimplePeer class from the window object.
+                this.peer = new Peer({
+                    initiator: initiator, 
+                    trickle: true,
+                });
+                this.createPeerConnection();
+            } else {
+                console.log(`message received, ${event.data}`);
+                this.peer?.signal(parse(event.data));
+            }
         });
     }
     
@@ -74,7 +87,7 @@ class SimpleSignaler {
 
     sendMessage(data: any) {
         console.log("send", data);
-        const payload = createPayload(this.id, PayloadType.MESSAGE, data);
+        const payload = createPayload(PayloadType.MESSAGE, data, this.id);
         this.ws.send(payload);
     }
 
@@ -86,7 +99,7 @@ class SimpleSignaler {
 
         // this.ws.onopen = (event) => {
         //     console.log("Websocket Connection Opened", event);
-        const payload = createPayload(this.id, PayloadType.SIGNAL, data);
+        const payload = createPayload(PayloadType.SIGNAL, data, this.id);
         this.ws.send(payload);
         // };
     }
