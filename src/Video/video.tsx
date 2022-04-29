@@ -61,7 +61,7 @@ enum VideoAudioOptions {
 }
 
 /**
- * VideoPlayer component renders configurable video & audio media from a user's device.
+ * `VideoPlayer` renders configurable video & audio media from a user's device.
  * Renders UI to toggle audio & video on & off.
  *
  * The component uses the useRef hook to obtain a reference to a <video/> component.
