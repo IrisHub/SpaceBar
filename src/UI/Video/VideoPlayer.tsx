@@ -61,7 +61,7 @@ enum VideoAudioOptions {
  * On a state change update to start video or audio, endMedia is invoked again to clear any current active streams,
  * then startMedia is invoked to receive a stream from the navigator browser API and reset videoRef's srcObject to this stream.
  * @param props VideoProps
- * @returns
+ * @returns <VideoPlayer>
  */
 function VideoPlayer(props: VideoProps) {
   const [audioOn, setAudioOn] = useState(true);
@@ -158,11 +158,11 @@ function VideoPlayer(props: VideoProps) {
     updateVideo();
   }, [videoOn]);
 
-  async function handleVideo() {
+  function handleVideo() {
     setVideoOn(!videoOn);
   }
 
-  async function handleAudio() {
+  function handleAudio() {
     setAudioOn(!audioOn);
   }
 

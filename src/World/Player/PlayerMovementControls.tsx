@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 
+/**
+ * Handles keypresses, namely how to emit the appropriate translation
+ * from keypresses into player directions, which are then fed to the main
+ * Player.tsx file to handle the conversio from directions (booleans) to
+ * Cannon.js movement vectors
+ */
 export const playerMovementControls = () => {
-  /**
-   * Handles keypresses, namely how to emit the appropriate translation
-   * from keypresses into player directions, which are then fed to the main
-   * Player.tsx file to handle the conversio from directions (booleans) to
-   * Cannon.js movement vectors
-   */
   const [direction, setDirection] = useState({
     forward: false,
     backward: false,

@@ -8,7 +8,6 @@ import movementLog from './playerMovementLog';
  * and listens for new player x,y,z coordinates on the send_coords channel.  Upon updates, serializes and writes to the
  * in-memory movementLog.
  */
-
 let playerMovementEmitter = new EventEmitter();
 playerMovementEmitter.on('sendCoords', async (data: PlayerPosition) => {
   const packagedData = serialize(data);

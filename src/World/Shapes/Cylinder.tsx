@@ -15,7 +15,7 @@ interface CustomCylinder extends CylinderProps {
  * This component accepts props that determine its size, position, type, and mass,
  * and a callback to be called upon a collision.
  * @param props customCylinder
- * @returns
+ * @returns <Cylinder>
  */
 export default function Cylinder(props: CustomCylinder) {
   let collisionRef = createRef();

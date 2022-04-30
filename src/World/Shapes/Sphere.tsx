@@ -15,7 +15,7 @@ interface CustomSphere extends SphereProps {
  * This component accepts props that determine its size, position, type, and mass,
  * and a callback to be called upon a collision.
  * @param props CustomSphere
- * @returns
+ * @returns <Sphere>
  */
 export default function Sphere(props: CustomSphere) {
   let collisionRef = createRef();
