@@ -40,6 +40,8 @@ export abstract class Colors {
   static readonly grey = '#808080';
 
   static readonly green = '#008000';
+
+  static readonly warningRed = '#ed4650';
 }
 
 export abstract class Dims {

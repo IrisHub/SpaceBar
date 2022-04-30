@@ -7,7 +7,7 @@ import {
   faVideo,
   faVideoSlash,
 } from '@fortawesome/free-solid-svg-icons';
-
+import { Colors } from '../../constants';
 const VideoContainer = styled.div`
   position: absolute;
   z-index: 999;
@@ -18,7 +18,7 @@ const VideoContainer = styled.div`
 const Video = styled.video`
   height: ${(props) => props.height || 150}px;
   width: ${(props) => props.width || 150}px;
-  background-color: black;
+  background-color: ;
 `;
 
 const IconContainer = styled.div`
@@ -29,23 +29,9 @@ const IconContainer = styled.div`
   border-radius: 32px;
 `;
 
-const MicrophoneSlash = styled(FontAwesomeIcon)`
-  color: #ed4650;
-  margin: 2%;
-`;
-
-const Microphone = styled(FontAwesomeIcon)`
-  color: black;
-  margin: 2%;
-`;
-
-const VideoIcon = styled(FontAwesomeIcon)`
-  color: black;
-  margin: 2%;
-`;
-
-const VideoIconSlash = styled(FontAwesomeIcon)`
-  color: #ed4650;
+//  Boolean change color to red
+const Icon = styled(FontAwesomeIcon)`
+  color: ${(props) => props.color};
   margin: 2%;
 `;
 
@@ -190,16 +176,16 @@ function VideoPlayer(props: VideoProps) {
       ></Video>
 
       <IconContainer>
-        {audioOn ? (
-          <Microphone onClick={handleAudio} icon={faMicrophone} />
-        ) : (
-          <MicrophoneSlash onClick={handleAudio} icon={faMicrophoneSlash} />
-        )}
-        {videoOn ? (
-          <VideoIcon onClick={handleVideo} icon={faVideo} />
-        ) : (
-          <VideoIconSlash onClick={handleVideo} icon={faVideoSlash} />
-        )}{' '}
+        <Icon
+          onClick={handleAudio}
+          icon={audioOn ? faMicrophone : faMicrophoneSlash}
+          color={audioOn ? Colors.black : Colors.warningRed}
+        />
+        <Icon
+          onClick={handleVideo}
+          icon={videoOn ? faVideo : faVideoSlash}
+          color={videoOn ? Colors.black : Colors.warningRed}
+        />
       </IconContainer>
     </VideoContainer>
   );
