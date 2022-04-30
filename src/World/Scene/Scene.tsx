@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/cannon';
 
 import Player from '../Player/Player';
-import PlayerCameraControls from '../Player/playerCameraControls';
+import PlayerCameraControls from '../Player/PlayerCameraControls';
 import Floor from './Floor';
 import Skybox from './Skybox';
 
@@ -16,7 +16,7 @@ import {
   Colors,
   Dims,
   Mass,
-} from '../constants';
+} from '../../constants';
 
 export default function Scene() {
   /**

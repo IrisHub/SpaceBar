@@ -1,14 +1,7 @@
 import React from 'react';
-import Scene from './Scene/Scene';
-import VideoPlayer from './Video/video';
-
+import World from './World';
 function App() {
-  return (
-    <>
-      <VideoPlayer height={115} width={150} />
-      <Scene />
-    </>
-  );
+  return <World />;
 }
 
 export default App;
