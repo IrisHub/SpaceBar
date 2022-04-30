@@ -61,10 +61,10 @@ enum VideoAudioOptions {
 }
 
 /**
- * VideoPlayer component renders configurable video & audio media from a user's device.
+ * `VideoPlayer` renders configurable video & audio media from a user's device.
  * Renders UI to toggle audio & video on & off.
  *
- * The component uses the useRef hook to obtain a reference to a <video/> component.
+ * Uses the `useRef` hook to obtain a reference to a `<video/>` component.
  * It requests permission for audio / video with navigator.mediaDevices.getUserMedia()
  * in useEffect hooks invoked upon component mount & upon change in audioOn or videoOn state.
  * The srcObject of the video Ref is then set to the stream returned from the navigator browser API.
