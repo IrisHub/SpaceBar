@@ -1,6 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  VideoContainer,
+  Video,
+  IconContainer,
+  Icon,
+} from './VideoPlayerStyled';
+
 import {
   faMicrophoneSlash,
   faMicrophone,
@@ -8,42 +13,16 @@ import {
   faVideoSlash,
 } from '@fortawesome/free-solid-svg-icons';
 import { Colors } from '../../constants';
-const VideoContainer = styled.div`
-  position: absolute;
-  z-index: 999;
-  display: flex;
-  flex-direction: column;
-`;
 
-const Video = styled.video`
-  height: ${(props) => props.height || 150}px;
-  width: ${(props) => props.width || 150}px;
-  background-color: ;
-`;
-
-const IconContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  background-color: rgb(220, 220, 220, 0.5);
-  border-radius: 32px;
-`;
-
-//  Boolean change color to red
-const Icon = styled(FontAwesomeIcon)`
-  color: ${(props) => props.color};
-  margin: 2%;
-`;
-
-type VideoProps = {
+interface VideoProps {
   height?: number;
   width?: number;
-};
+}
 
-enum VideoAudioOptions {
-  audio = 'audio',
-  video = 'video',
-  all = 'all',
+enum AVOptions {
+  AUDIO,
+  VIDEO,
+  ALL,
 }
 
 /**
@@ -69,25 +48,18 @@ function VideoPlayer(props: VideoProps) {
 
   let videoRef = useRef<HTMLVideoElement | null>(null);
 
-  function endMedia(trackKind: VideoAudioOptions) {
-    try {
-      if (videoRef.current?.srcObject) {
-        let stream = videoRef.current.srcObject as MediaStream;
-        stream.getTracks().forEach(function (track) {
-          if (trackKind === 'all') {
-            if (track.readyState == 'live') {
-              track.stop();
-            }
-          } else {
-            if (track.readyState == 'live' && track.kind === trackKind) {
-              track.stop();
-            }
-          }
-        });
-      }
-    } catch (err) {
-      //TODO: Log errors to internal log
-      throw err;
+  function endMedia(selectedTrackKind: AVOptions) {
+    const stringifiedSelectedTrackKind = AVOptions[selectedTrackKind];
+    if (videoRef.current?.srcObject) {
+      let stream = videoRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach(function (track: MediaStreamTrack) {
+        // if (track.readyState === 'ended') return;
+        if (selectedTrackKind === AVOptions.ALL) {
+          track.stop();
+        } else if (stringifiedSelectedTrackKind === track.kind.toUpperCase()) {
+          track.stop();
+        }
+      });
     }
   }
 
@@ -100,21 +72,10 @@ function VideoPlayer(props: VideoProps) {
   }
 
   function configurePermissions() {
-    let newPermissions;
-    if (!videoOn && audioOn) {
-      newPermissions = {
-        audio: true,
-      };
-    } else if (videoOn && !audioOn) {
-      newPermissions = {
-        video: true,
-      };
-    } else {
-      newPermissions = {
-        video: true,
-        audio: true,
-      };
-    }
+    let newPermissions = {
+      video: videoOn,
+      audio: audioOn,
+    };
     return newPermissions;
   }
 
@@ -122,7 +83,7 @@ function VideoPlayer(props: VideoProps) {
     async function getMedia() {
       try {
         let permissions = configurePermissions();
-        startMedia(permissions);
+        await startMedia(permissions);
       } catch (err) {
         // TODO(SAM): handle common error status described here
         // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
@@ -135,11 +96,11 @@ function VideoPlayer(props: VideoProps) {
   useEffect(() => {
     async function updateAudio() {
       if (!audioOn) {
-        endMedia(VideoAudioOptions.audio);
+        endMedia(AVOptions.AUDIO);
       } else {
         let permissions = configurePermissions();
-        endMedia(VideoAudioOptions.all);
-        startMedia(permissions);
+        endMedia(AVOptions.ALL);
+        await startMedia(permissions);
       }
     }
     updateAudio();
@@ -148,11 +109,11 @@ function VideoPlayer(props: VideoProps) {
   useEffect(() => {
     async function updateVideo() {
       if (!videoOn) {
-        endMedia(VideoAudioOptions.video);
+        endMedia(AVOptions.VIDEO);
       } else {
         let permissions = configurePermissions();
-        endMedia(VideoAudioOptions.all);
-        startMedia(permissions);
+        endMedia(AVOptions.ALL);
+        await startMedia(permissions);
       }
     }
     updateVideo();
