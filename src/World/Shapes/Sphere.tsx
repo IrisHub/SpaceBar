@@ -17,7 +17,7 @@ interface CustomSphere extends SphereProps {
  * @param props CustomSphere
  * @returns <Sphere>
  */
-export default function Sphere(props: CustomSphere) {
+const Sphere = (props: CustomSphere) => {
   let collisionRef = createRef();
   if (props.collision) {
     [collisionRef] = useSphere(() => ({
@@ -47,4 +47,6 @@ export default function Sphere(props: CustomSphere) {
       )}
     </>
   );
-}
+};
+
+export default Sphere;

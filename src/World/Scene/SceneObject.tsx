@@ -10,7 +10,7 @@ const dummy = new Object3D();
  * b) Benchmark performance issues
  * Base taken from https://codesandbox.io/s/4rubo?file=/src/App.js
  */
-export default function SceneObject() {
+const SceneObject = () => {
   const meshRef = useRef<{
     rotation: { x: number; y: number };
     instanceMatrix: any;
@@ -55,4 +55,6 @@ export default function SceneObject() {
       <meshPhongMaterial color="lightgreen" />
     </instancedMesh>
   );
-}
+};
+
+export default SceneObject;

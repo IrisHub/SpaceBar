@@ -7,7 +7,7 @@ import { Colors } from '../../constants';
  * This floor is partially transparent and will come with gridlines to
  * calibrate movement.
  */
-export default function Floor() {
+const Floor = () => {
   const [ref] = usePlane(() => ({
     rotation: [-Math.PI / 2, 0, 0],
   }));
@@ -22,4 +22,6 @@ export default function Floor() {
       />
     </mesh>
   );
-}
+};
+
+export default Floor;

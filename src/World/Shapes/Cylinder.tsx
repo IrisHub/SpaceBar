@@ -17,7 +17,7 @@ interface CustomCylinder extends CylinderProps {
  * @param props customCylinder
  * @returns <Cylinder>
  */
-export default function Cylinder(props: CustomCylinder) {
+const Cylinder = (props: CustomCylinder) => {
   let collisionRef = createRef();
   if (props.collision) {
     [collisionRef] = useCylinder(() => ({
@@ -47,4 +47,6 @@ export default function Cylinder(props: CustomCylinder) {
       )}
     </>
   );
-}
+};
+
+export default Cylinder;

@@ -43,8 +43,8 @@ enum AVOptions {
  * @returns <VideoPlayer>
  */
 function VideoPlayer(props: VideoProps) {
-  const [audioOn, setAudioOn] = useState(true);
-  const [videoOn, setVideoOn] = useState(true);
+  const [audioEnabled, setAudioEnabled] = useState(true);
+  const [videoEnabled, setVideoEnabled] = useState(true);
 
   let videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -73,8 +73,8 @@ function VideoPlayer(props: VideoProps) {
 
   function configurePermissions() {
     let newPermissions = {
-      video: videoOn,
-      audio: audioOn,
+      video: videoEnabled,
+      audio: audioEnabled,
     };
     return newPermissions;
   }
@@ -95,7 +95,7 @@ function VideoPlayer(props: VideoProps) {
 
   useEffect(() => {
     async function updateAudio() {
-      if (!audioOn) {
+      if (!audioEnabled) {
         endMedia(AVOptions.AUDIO);
       } else {
         let permissions = configurePermissions();
@@ -104,11 +104,11 @@ function VideoPlayer(props: VideoProps) {
       }
     }
     updateAudio();
-  }, [audioOn]);
+  }, [audioEnabled]);
 
   useEffect(() => {
     async function updateVideo() {
-      if (!videoOn) {
+      if (!videoEnabled) {
         endMedia(AVOptions.VIDEO);
       } else {
         let permissions = configurePermissions();
@@ -117,14 +117,14 @@ function VideoPlayer(props: VideoProps) {
       }
     }
     updateVideo();
-  }, [videoOn]);
+  }, [videoEnabled]);
 
-  function handleVideo() {
-    setVideoOn(!videoOn);
+  function toggleVideo() {
+    setVideoEnabled(!audioEnabled);
   }
 
-  function handleAudio() {
-    setAudioOn(!audioOn);
+  function toggleAudio() {
+    setAudioEnabled(!audioEnabled);
   }
 
   return (
@@ -138,14 +138,14 @@ function VideoPlayer(props: VideoProps) {
 
       <IconContainer>
         <Icon
-          onClick={handleAudio}
-          icon={audioOn ? faMicrophone : faMicrophoneSlash}
-          color={audioOn ? Colors.black : Colors.warningRed}
+          onClick={toggleAudio}
+          icon={audioEnabled ? faMicrophone : faMicrophoneSlash}
+          color={audioEnabled ? Colors.black : Colors.warningRed}
         />
         <Icon
-          onClick={handleVideo}
-          icon={videoOn ? faVideo : faVideoSlash}
-          color={videoOn ? Colors.black : Colors.warningRed}
+          onClick={toggleVideo}
+          icon={videoEnabled ? faVideo : faVideoSlash}
+          color={videoEnabled ? Colors.black : Colors.warningRed}
         />
       </IconContainer>
     </VideoContainer>

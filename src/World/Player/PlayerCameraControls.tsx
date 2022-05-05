@@ -6,7 +6,7 @@ import React, { useEffect } from 'react';
  * Defines player camera controls, and allows for more custom manipulation
  * of the default Three/drei PointerLockControls component.
  */
-export default function PlayerCameraControls() {
+const PlayerCameraControls = () => {
   const { controls } = useThree();
 
   useEffect(() => {
@@ -45,4 +45,5 @@ export default function PlayerCameraControls() {
       dispatchEvent={undefined}
     />
   );
-}
+};
+export default PlayerCameraControls;

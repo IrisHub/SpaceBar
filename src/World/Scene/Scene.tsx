@@ -22,7 +22,8 @@ import {
  * A "Scene" component that gathers all elements of the scene into
  * a single element that can then be rendered in App.tsx
  */
-export default function Scene() {
+const Scene = () => {
+  // export default function Scene() {
   return (
     <div style={{ height: window.innerHeight }}>
       <Canvas>
@@ -127,4 +128,5 @@ export default function Scene() {
       </Canvas>
     </div>
   );
-}
+};
+export default Scene;

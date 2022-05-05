@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+// import PlayerCameraControls from './PlayerCameraControls';
 
 /**
  * Handles keypresses, namely how to emit the appropriate translation
@@ -6,7 +7,7 @@ import { useEffect, useState } from 'react';
  * Player.tsx file to handle the conversio from directions (booleans) to
  * Cannon.js movement vectors
  */
-export const playerMovementControls = () => {
+const PlayerMovementControls = () => {
   const [direction, setDirection] = useState({
     forward: false,
     backward: false,
@@ -59,3 +60,5 @@ export const playerMovementControls = () => {
 
   return direction;
 };
+
+export default PlayerMovementControls;

@@ -25,7 +25,7 @@ interface CustomGLTF extends BoxProps {
  * @param props customGLTF
  * @returns <GLTFModel>
  */
-export default function GLTFModel(props: CustomGLTF) {
+const GLTFModel = (props: CustomGLTF) => {
   const { scene } = useLoader(GLTFLoader, props.modelPath);
   // Must use Skeleton utils to support copies of skinned meshes https://github.com/mrdoob/three.js/issues/11573
   let copiedScene = useMemo(() => SkeletonUtils.clone(scene), [scene]);
@@ -65,4 +65,6 @@ export default function GLTFModel(props: CustomGLTF) {
       )}
     </>
   );
-}
+};
+
+export default GLTFModel;

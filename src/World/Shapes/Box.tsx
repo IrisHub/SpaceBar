@@ -17,7 +17,7 @@ interface CustomBox extends BoxProps {
  * @param props customBox
  * @returns <Box>
  */
-export default function Box(props: CustomBox) {
+const Box = (props: CustomBox) => {
   let collisionRef = createRef();
   if (props.collision) {
     [collisionRef] = useBox(() => ({
@@ -47,4 +47,6 @@ export default function Box(props: CustomBox) {
       )}
     </>
   );
-}
+};
+
+export default Box;
