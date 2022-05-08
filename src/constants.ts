@@ -41,6 +41,8 @@ export abstract class Colors {
 
   static readonly green = '#008000';
 
+  static readonly dialogBlue = '#8BD9FF';
+
   static readonly warningRed = '#ed4650';
 }
 

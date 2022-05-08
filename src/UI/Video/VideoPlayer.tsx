@@ -13,6 +13,7 @@ import {
   faVideoSlash,
 } from '@fortawesome/free-solid-svg-icons';
 import { Colors } from '../../constants';
+import Dialog from '../Dialog/Dialog';
 
 interface VideoProps {
   height?: number;
@@ -42,9 +43,10 @@ enum AVOptions {
  * @param props VideoProps
  * @returns <VideoPlayer>
  */
-function VideoPlayer(props: VideoProps) {
+const VideoPlayer = (props: VideoProps) => {
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [videoEnabled, setVideoEnabled] = useState(true);
+  const [errMessageOnUserMedia, setErrMessageOnUserMedia] = useState('');
 
   let videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -84,10 +86,27 @@ function VideoPlayer(props: VideoProps) {
       try {
         let permissions = configurePermissions();
         await startMedia(permissions);
-      } catch (err) {
-        // TODO(SAM): handle common error status described here
-        // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
-        throw err;
+      } catch (err: any) {
+        let errMessage: string;
+        if (err.name == 'NotFoundError') {
+          errMessage =
+            'Your device does not have a webcam or microphone to support this.';
+          setErrMessageOnUserMedia(errMessage);
+        } else if (err.name == 'NotReadableError') {
+          errMessage = 'Your webcam or microphone are already in use. ';
+          setErrMessageOnUserMedia(errMessage);
+        } else if (err.name == 'OverconstrainedError') {
+          errMessage =
+            'Your device cannot satisfy the current audio and video constraints.  ';
+          setErrMessageOnUserMedia(errMessage);
+        } else if (err.name == 'NotAllowedError') {
+          errMessage =
+            'Permission for the camera or audio has been denied in the browser.';
+          setErrMessageOnUserMedia(errMessage);
+        } else {
+          errMessage = 'An error has occured. Please refresh & try again.';
+          setErrMessageOnUserMedia(errMessage);
+        }
       }
     }
     getMedia();
@@ -128,28 +147,36 @@ function VideoPlayer(props: VideoProps) {
   }
 
   return (
-    <VideoContainer>
-      <Video
-        ref={videoRef}
-        height={props.height}
-        width={props.width}
-        autoPlay
-      ></Video>
+    <>
+      {errMessageOnUserMedia.length > 0 && (
+        <Dialog text={errMessageOnUserMedia} color={Colors.dialogBlue} />
+      )}
 
-      <IconContainer>
-        <Icon
-          onClick={toggleAudio}
-          icon={audioEnabled ? faMicrophone : faMicrophoneSlash}
-          color={audioEnabled ? Colors.black : Colors.warningRed}
-        />
-        <Icon
-          onClick={toggleVideo}
-          icon={videoEnabled ? faVideo : faVideoSlash}
-          color={videoEnabled ? Colors.black : Colors.warningRed}
-        />
-      </IconContainer>
-    </VideoContainer>
+      {errMessageOnUserMedia.length === 0 && (
+        <VideoContainer>
+          <Video
+            ref={videoRef}
+            height={props.height}
+            width={props.width}
+            autoPlay
+          ></Video>
+
+          <IconContainer>
+            <Icon
+              onClick={toggleAudio}
+              icon={audioEnabled ? faMicrophone : faMicrophoneSlash}
+              color={audioEnabled ? Colors.black : Colors.warningRed}
+            />
+            <Icon
+              onClick={toggleVideo}
+              icon={videoEnabled ? faVideo : faVideoSlash}
+              color={videoEnabled ? Colors.black : Colors.warningRed}
+            />
+          </IconContainer>
+        </VideoContainer>
+      )}
+    </>
   );
-}
+};
 
 export default VideoPlayer;
