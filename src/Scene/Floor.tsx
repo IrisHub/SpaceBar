@@ -1,5 +1,6 @@
 import React from 'react';
-import { PlaneProps } from '../allTypes';
+import { WorldBoxProps } from '../allTypes';
+
 import { Plane } from '../Shapes';
 import { Colors, Dims } from '../constants';
 
@@ -8,7 +9,7 @@ import { Colors, Dims } from '../constants';
  * This floor comes with gridlines to
  * calibrate movement.
  */
-export default function Floor(props: PlaneProps) {
+export default function Floor(props: WorldBoxProps) {
   return (
     <>
       <Plane

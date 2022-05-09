@@ -10,7 +10,6 @@ export type PlayerVelocity = {
   z: number;
 };
 
-export type PlaneProps = {
-  boundary?: boolean;
+export type WorldBoxProps = {
   debug?: boolean;
 };

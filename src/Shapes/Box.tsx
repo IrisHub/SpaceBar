@@ -21,7 +21,7 @@ interface CustomBox extends BoxProps {
 export default function Box({ type = 'Static', ...props }: CustomBox) {
   let collisionRef = createRef();
 
-  let meshProps = {
+  const meshProps = {
     ref: props.collision ? collisionRef : undefined,
     position: props.position,
   };

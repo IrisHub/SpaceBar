@@ -5,7 +5,7 @@ import { Physics } from '@react-three/cannon';
 import Player from '../Player/Player';
 import PlayerCameraControls from '../Player/playerCameraControls';
 import Skybox from './Skybox';
-import WorldBoundaries from './WorldBoundaries';
+import WorldBox from './WorldBox';
 
 import { Box, Cylinder, Sphere, GLTFModel } from '../Shapes';
 
@@ -103,7 +103,7 @@ export default function Scene() {
             collision={true}
           />
 
-          <WorldBoundaries />
+          <WorldBox />
         </Physics>
       </Canvas>
     </div>
