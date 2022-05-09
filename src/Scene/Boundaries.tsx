@@ -1,5 +1,6 @@
 import React from 'react';
 import { PlaneProps } from '../allTypes';
+import { Colors } from '../constants';
 import Plane from '../Shapes/Plane';
 
 /**
@@ -9,7 +10,6 @@ import Plane from '../Shapes/Plane';
  * the world. Each boundary is fully translucent unless the debug prop is set to true, in which
  * case they are set to yellow with a configurable visible height.
  * @param props: PlaneProps
- * @returns
  */
 function Boundaries(props: PlaneProps) {
   let visibleBoundaryHeight = 10; //  Plane extends infinitely
@@ -17,7 +17,7 @@ function Boundaries(props: PlaneProps) {
 
   if (props.debug) {
     boundaryColorConfig = {
-      color: 'yellow',
+      color: Colors.debugYellow,
     };
   } else {
     boundaryColorConfig = {
