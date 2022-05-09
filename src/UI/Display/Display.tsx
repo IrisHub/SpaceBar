@@ -1,10 +1,14 @@
 import React from 'react';
+import { DisplayConstants } from '../../constants';
 import VideoPlayer from '../Video/VideoPlayer';
 
 const Display = () => {
   return (
     <>
-      <VideoPlayer height={115} width={150} />
+      <VideoPlayer
+        height={DisplayConstants.VideoPlayerHeight}
+        width={DisplayConstants.VideoPlayerWidth}
+      />
     </>
   );
 };

@@ -77,3 +77,11 @@ export abstract class PlayerConstants {
 
   static readonly mass = 15;
 }
+
+export abstract class DisplayConstants {
+  static readonly VideoPlayerHeight = 115;
+
+  static readonly VideoPlayerWidth = 150;
+
+  static readonly mass = 15;
+}
