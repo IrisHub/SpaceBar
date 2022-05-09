@@ -21,25 +21,37 @@ interface VideoProps {
 }
 
 enum AVOptions {
-  AUDIO,
-  VIDEO,
-  ALL,
+  audio,
+  video,
+  all,
 }
 
+enum AVErrors {
+  NotFoundError,
+  NotReadableError,
+  OverconstrainedError,
+  NotAllowedError,
+  OtherError,
+}
+
+const AVErrorMessages: Record<string, string> = {
+  NotFoundError:
+    'Your device does not have a webcam or microphone to support this.',
+  NotReadableError: 'Your webcam or microphone are already in use. ',
+  OverconstrainedError:
+    'Your device cannot satisfy the current audio and video constraints. ',
+  NotAllowedError:
+    'Permission for the camera or audio has been denied in the browser.',
+  OtherError: 'An error has occured. Please refresh & try again.',
+};
+
 /**
- * `VideoPlayer` renders configurable video & audio media from a user's device.
- * Renders UI to toggle audio & video on & off.
+ * `VideoPlayer` renders video & audio media from a user's device.
+ *  Renders video & audio icon buttons to toggle video on & off.
+ *  Renders a dialog box with an error message if a request to use the device's audio and or media is unsuccessful.
  *
- * Uses the `useRef` hook to obtain a reference to a `<video/>` component.
- * It requests permission for audio / video with navigator.mediaDevices.getUserMedia()
- * in useEffect hooks invoked upon component mount & upon change in audioOn or videoOn state.
- * The srcObject of the video Ref is then set to the stream returned from the navigator browser API.
- *
- * On a state change update to end video or audio, endMedia is invoked with appropriate type specified.
- * This function then stops each appropriate live track to end the stream & turn off the user's webcam light.
- *
- * On a state change update to start video or audio, endMedia is invoked again to clear any current active streams,
- * then startMedia is invoked to receive a stream from the navigator browser API and reset videoRef's srcObject to this stream.
+ *  Implemented by requesting permission to the web API navigator.mediaDevices.getUserMedia().
+ *  The stateful component uses a ref to the video element to manage toggling video & audio.
  * @param props VideoProps
  * @returns <VideoPlayer>
  */
@@ -50,109 +62,124 @@ const VideoPlayer = (props: VideoProps) => {
 
   let videoRef = useRef<HTMLVideoElement | null>(null);
 
-  function endMedia(selectedTrackKind: AVOptions) {
-    const stringifiedSelectedTrackKind = AVOptions[selectedTrackKind];
+  /**
+   * endMedia obtains a ref to the current MediaStream if it exists,
+   * then iterates through each track of this stream to toggle off audio, video, or all.
+   * @param selectedTrackKind user selected track kind to toggle
+   */
+  const endMedia = (selectedTrackKind: AVOptions) => {
     if (videoRef.current?.srcObject) {
       let stream = videoRef.current.srcObject as MediaStream;
       stream.getTracks().forEach(function (track: MediaStreamTrack) {
-        // if (track.readyState === 'ended') return;
-        if (selectedTrackKind === AVOptions.ALL) {
-          track.stop();
-        } else if (stringifiedSelectedTrackKind === track.kind.toUpperCase()) {
-          track.stop();
+        if (track.readyState === 'live') {
+          if (
+            selectedTrackKind === AVOptions.all ||
+            AVOptions[selectedTrackKind] === track.kind
+          ) {
+            track.stop();
+          }
         }
       });
     }
-  }
+  };
 
-  async function startMedia(permissions: MediaStreamConstraints) {
-    let stream = await navigator.mediaDevices.getUserMedia(permissions);
-    if (videoRef.current) {
-      videoRef.current.srcObject = stream;
-      videoRef.current.play();
+  /*
+   * startMedia starts the stream with a call to navigator.mediaDevices.getUserMedia.
+   * On error, sets an error state and toggles state to render a Dialog component.
+   */
+  const startMedia = async (permissions: MediaStreamConstraints) => {
+    try {
+      let stream = await navigator.mediaDevices.getUserMedia(permissions);
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+      }
+    } catch (err: any) {
+      if (err.name in AVErrorMessages) {
+        setErrMessageOnUserMedia(AVErrorMessages[err.name]);
+      } else {
+        setErrMessageOnUserMedia(
+          AVErrorMessages[AVErrors[AVErrors.OtherError]]
+        );
+      }
     }
-  }
+  };
 
-  function configurePermissions() {
+  /*
+   * configurePermissions sets video & audio permissions for calls to startMedia.
+   */
+  const configurePermissions = () => {
     let newPermissions = {
       video: videoEnabled,
       audio: audioEnabled,
     };
     return newPermissions;
-  }
+  };
 
+  /*
+   * On mount of VideoPlayer, requests permission for video & audio streams.
+   */
   useEffect(() => {
-    async function getMedia() {
-      try {
-        let permissions = configurePermissions();
-        await startMedia(permissions);
-      } catch (err: any) {
-        let errMessage: string;
-        if (err.name == 'NotFoundError') {
-          errMessage =
-            'Your device does not have a webcam or microphone to support this.';
-          setErrMessageOnUserMedia(errMessage);
-        } else if (err.name == 'NotReadableError') {
-          errMessage = 'Your webcam or microphone are already in use. ';
-          setErrMessageOnUserMedia(errMessage);
-        } else if (err.name == 'OverconstrainedError') {
-          errMessage =
-            'Your device cannot satisfy the current audio and video constraints.  ';
-          setErrMessageOnUserMedia(errMessage);
-        } else if (err.name == 'NotAllowedError') {
-          errMessage =
-            'Permission for the camera or audio has been denied in the browser.';
-          setErrMessageOnUserMedia(errMessage);
-        } else {
-          errMessage = 'An error has occured. Please refresh & try again.';
-          setErrMessageOnUserMedia(errMessage);
-        }
-      }
-    }
+    const getMedia = async () => {
+      let permissions = configurePermissions();
+      await startMedia(permissions);
+    };
     getMedia();
   }, []);
 
+  /*
+   * On change of audioEnabled state, ends or restarts audio media.
+   */
   useEffect(() => {
-    async function updateAudio() {
+    const updateAudio = async () => {
       if (!audioEnabled) {
-        endMedia(AVOptions.AUDIO);
+        endMedia(AVOptions.audio);
       } else {
         let permissions = configurePermissions();
-        endMedia(AVOptions.ALL);
+        endMedia(AVOptions.all);
         await startMedia(permissions);
       }
-    }
+    };
     updateAudio();
   }, [audioEnabled]);
 
+  /*
+   * On change of videoEnabled state, ends or restarts video media.
+   */
   useEffect(() => {
-    async function updateVideo() {
+    const updateVideo = async () => {
       if (!videoEnabled) {
-        endMedia(AVOptions.VIDEO);
+        endMedia(AVOptions.video);
       } else {
         let permissions = configurePermissions();
-        endMedia(AVOptions.ALL);
+        endMedia(AVOptions.all);
         await startMedia(permissions);
       }
-    }
+    };
     updateVideo();
   }, [videoEnabled]);
 
-  function toggleVideo() {
-    setVideoEnabled(!audioEnabled);
-  }
+  /*
+   * toggleVideo sets the videoEnabled boolean state in an onClick from the video Icon
+   */
+  const toggleVideo = () => {
+    setVideoEnabled(!videoEnabled);
+  };
 
-  function toggleAudio() {
+  /*
+   * toggleAudio sets the audioEnabled boolean state in an onClick from the audio Icon
+   */
+  const toggleAudio = () => {
     setAudioEnabled(!audioEnabled);
-  }
+  };
 
   return (
     <>
-      {errMessageOnUserMedia.length > 0 && (
-        <Dialog text={errMessageOnUserMedia} color={Colors.dialogBlue} />
+      {errMessageOnUserMedia && (
+        <Dialog text={errMessageOnUserMedia} color={Colors.warningRed} />
       )}
 
-      {errMessageOnUserMedia.length === 0 && (
+      {!errMessageOnUserMedia && (
         <VideoContainer>
           <Video
             ref={videoRef}

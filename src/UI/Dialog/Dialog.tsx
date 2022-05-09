@@ -12,8 +12,8 @@ interface DialogProps {
  */
 const Dialog = (props: DialogProps) => {
   return (
-    <DialogContainer>
-      <DialogText color={props.color}>{props.text}</DialogText>
+    <DialogContainer color={props.color}>
+      <DialogText>{props.text}</DialogText>
     </DialogContainer>
   );
 };

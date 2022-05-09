@@ -11,7 +11,6 @@ export const VideoContainer = styled.div`
 export const Video = styled.video`
   height: ${(props) => props.height || 150}px;
   width: ${(props) => props.width || 150}px;
-  background-color: ;
 `;
 
 export const IconContainer = styled.div`
