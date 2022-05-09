@@ -4,20 +4,12 @@ import { Physics } from '@react-three/cannon';
 
 import Player from '../Player/Player';
 import PlayerCameraControls from '../Player/playerCameraControls';
-import Floor from './Floor';
 import Skybox from './Skybox';
+import WorldBoundaries from './WorldBoundaries';
 
 import { Box, Cylinder, Sphere, GLTFModel } from '../Shapes';
 
-import {
-  PhysicsConstants,
-  Plants,
-  Objects,
-  Colors,
-  Dims,
-  Mass,
-} from '../constants';
-import Boundaries from './Boundaries';
+import { PhysicsConstants, Plants, Objects, Colors, Mass } from '../constants';
 
 export default function Scene() {
   /**
@@ -111,8 +103,7 @@ export default function Scene() {
             collision={true}
           />
 
-          <Floor lengthX={Dims.floorX} widthZ={Dims.floorZ} />
-          <Boundaries></Boundaries>
+          <WorldBoundaries />
         </Physics>
       </Canvas>
     </div>

@@ -11,8 +11,6 @@ export type PlayerVelocity = {
 };
 
 export type PlaneProps = {
-  lengthX: number;
-  widthZ: number;
   boundary?: boolean;
   debug?: boolean;
 };

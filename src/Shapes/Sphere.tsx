@@ -20,14 +20,11 @@ interface CustomSphere extends SphereProps {
  */
 export default function Sphere({ type = 'Static', ...props }: CustomSphere) {
   let collisionRef = createRef();
-  let opacity = 1;
-  let transparent = false;
-  if (props.transparent) {
-    opacity = 0.0;
-    transparent = true;
-  }
+  const meshProps = {
+    ref: props.collision ? collisionRef : undefined,
+    position: props.position,
+  };
 
-  let meshProps;
   if (props.collision) {
     [collisionRef] = useSphere(() => ({
       args: props.dimensions,
@@ -37,13 +34,6 @@ export default function Sphere({ type = 'Static', ...props }: CustomSphere) {
       onCollide: props.onCollide,
       ...props,
     }));
-    meshProps = {
-      ref: collisionRef,
-    };
-  } else {
-    meshProps = {
-      position: props.position,
-    };
   }
 
   return (
@@ -52,8 +42,8 @@ export default function Sphere({ type = 'Static', ...props }: CustomSphere) {
         <sphereBufferGeometry args={props.dimensions} />
         <meshPhongMaterial
           color={props.color}
-          transparent={transparent}
-          opacity={opacity}
+          transparent={props.transparent}
+          opacity={props.transparent ? 0.0 : 1.0}
         />
       </mesh>
     </>

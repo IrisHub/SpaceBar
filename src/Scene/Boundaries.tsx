@@ -11,8 +11,9 @@ export type BoundaryProps = {
  * Each plane is a 2D surface that extends infinitely in 3d space.
  * Given a length (x-coord) and width (z-coord), planes are positioned & rotated to span the 4 edges of
  * the world. Each boundary is fully translucent unless the debug prop is set to true, in which
- * case they are set to yellow with a configurable visible height.
+ * case they are set to yellow.
  * @param props: PlaneProps
+ * @returns Boundaries component
  */
 function Boundaries(props: BoundaryProps) {
   const boundaryColorConfig = {
