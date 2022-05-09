@@ -1,7 +1,7 @@
 import React from 'react';
 import { PlaneProps } from '../allTypes';
 import { Plane } from '../Shapes';
-import { Dims, Colors } from '../constants';
+import { Colors } from '../constants';
 
 /**
  * Defines a basic floor component as a flat plane rotated 90 degrees
@@ -19,7 +19,7 @@ export default function Floor(props: PlaneProps) {
       />
 
       <gridHelper
-        args={[Dims.floorX, Dims.floorZ, Colors.black, Colors.grey]}
+        args={[props.lengthX * 2, props.widthZ * 2, Colors.black, Colors.grey]}
       />
     </>
   );

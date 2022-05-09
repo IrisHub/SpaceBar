@@ -45,13 +45,17 @@ export abstract class Colors {
 }
 
 export abstract class Dims {
-  static readonly floorX = 1000;
+  static readonly floorX = 100;
 
-  static readonly floorZ = 1000;
+  static readonly floorZ = 100;
 }
 
 export abstract class Mass {
   static readonly heavyObject = 10;
+}
+
+export abstract class Boundary {
+  static readonly visiblePlaneHeight = 10;
 }
 
 export abstract class SkyboxImages {

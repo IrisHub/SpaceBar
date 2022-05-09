@@ -17,6 +17,7 @@ import {
   Dims,
   Mass,
 } from '../constants';
+import Boundaries from './Boundaries';
 
 export default function Scene() {
   /**
@@ -111,6 +112,7 @@ export default function Scene() {
           />
 
           <Floor lengthX={Dims.floorX} widthZ={Dims.floorZ} />
+          <Boundaries></Boundaries>
         </Physics>
       </Canvas>
     </div>

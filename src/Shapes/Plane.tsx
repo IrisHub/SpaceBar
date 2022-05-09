@@ -3,8 +3,8 @@ import { PlaneProps, usePlane } from '@react-three/cannon';
 import { DoubleSide } from 'three';
 
 /**
- * CustomBox extends props
- * for useBox hook used to render a box in Cannon.JS's physics engine
+ * CustomPlane extends props
+ * for usePlane hook used to render a plane in Cannon.JS's physics engine
  */
 interface CustomPlane extends PlaneProps {
   dimensions: [number, number];
@@ -17,17 +17,16 @@ interface CustomPlane extends PlaneProps {
 /**
  * Plane component renders a plane with collision detection.
  * @param props customPlane
- * @returns
+ * @returns Plane component
  */
 export default function Plane({ type = 'Static', ...props }: CustomPlane) {
   let collisionRef = createRef();
-  let opacity = 1;
-  let transparent = false;
-  if (props.transparent) {
-    opacity = 0.0;
-    transparent = true;
-  }
-  let meshProps;
+  let meshProps = {
+    ref: props.collision ? collisionRef : undefined,
+    rotation: props.rotation,
+    position: props.position,
+  };
+
   if (props.collision) {
     [collisionRef] = usePlane(() => ({
       args: props.dimensions,
@@ -38,14 +37,6 @@ export default function Plane({ type = 'Static', ...props }: CustomPlane) {
       onCollide: props.onCollide,
       ...props,
     }));
-    meshProps = {
-      ref: collisionRef,
-    };
-  } else {
-    meshProps = {
-      rotation: props.rotation,
-      position: props.position,
-    };
   }
 
   return (
@@ -54,8 +45,8 @@ export default function Plane({ type = 'Static', ...props }: CustomPlane) {
         <planeBufferGeometry args={props.dimensions} />
         <meshBasicMaterial
           color={props.color}
-          transparent={transparent}
-          opacity={opacity}
+          transparent={props.transparent}
+          opacity={props.transparent ? 0.0 : 1.0}
           side={DoubleSide}
         />
       </mesh>

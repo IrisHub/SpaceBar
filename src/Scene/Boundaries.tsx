@@ -1,7 +1,10 @@
 import React from 'react';
-import { PlaneProps } from '../allTypes';
-import { Colors } from '../constants';
+import { Boundary, Colors, Dims } from '../constants';
 import Plane from '../Shapes/Plane';
+
+export type BoundaryProps = {
+  debug?: boolean;
+};
 
 /**
  * Creates a world boundary of 4 impassible Planes that define the edges of the world.
@@ -11,47 +14,41 @@ import Plane from '../Shapes/Plane';
  * case they are set to yellow with a configurable visible height.
  * @param props: PlaneProps
  */
-function Boundaries(props: PlaneProps) {
-  let visibleBoundaryHeight = 10; //  Plane extends infinitely
-  let boundaryColorConfig;
+function Boundaries(props: BoundaryProps) {
+  const boundaryColorConfig = {
+    color: Colors.debugYellow,
+    transparent: !props.debug,
+  };
 
-  if (props.debug) {
-    boundaryColorConfig = {
-      color: Colors.debugYellow,
-    };
-  } else {
-    boundaryColorConfig = {
-      transparent: true,
-    };
-  }
   return (
     <>
-      <Plane
-        position={[0, 0, props.widthZ]}
-        dimensions={[props.lengthX * 2, visibleBoundaryHeight]}
-        collision={true}
-        rotation={[0, Math.PI, 0]}
-        {...boundaryColorConfig}
-      />
-      <Plane
-        position={[0, 0, -props.widthZ]}
-        dimensions={[props.lengthX * 2, visibleBoundaryHeight]}
+      <Plane // North
+        position={[0, 0, -Dims.floorZ]}
+        dimensions={[Dims.floorX * 2, Boundary.visiblePlaneHeight]}
         collision={true}
         rotation={[0, 0, 0]}
         {...boundaryColorConfig}
       />
 
-      <Plane
-        position={[-props.lengthX, 0, 0]}
-        dimensions={[props.widthZ * 2, visibleBoundaryHeight]}
+      <Plane // South
+        position={[0, 0, Dims.floorZ]}
+        dimensions={[Dims.floorX * 2, Boundary.visiblePlaneHeight]}
+        collision={true}
+        rotation={[0, Math.PI, 0]}
+        {...boundaryColorConfig}
+      />
+
+      <Plane // West
+        position={[-Dims.floorX, 0, 0]}
+        dimensions={[Dims.floorZ * 2, Boundary.visiblePlaneHeight]}
         collision={true}
         rotation={[0, Math.PI / 2, 0]}
         {...boundaryColorConfig}
       />
 
-      <Plane
-        position={[props.lengthX, 0, 0]}
-        dimensions={[props.widthZ * 2, visibleBoundaryHeight]}
+      <Plane // East
+        position={[Dims.floorX, 0, 0]}
+        dimensions={[Dims.floorZ * 2, Boundary.visiblePlaneHeight]}
         collision={true}
         rotation={[0, -Math.PI / 2, 0]}
         {...boundaryColorConfig}
