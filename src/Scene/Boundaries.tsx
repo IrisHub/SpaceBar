@@ -4,11 +4,10 @@ import Plane from '../Shapes/Plane';
 import { WorldBoxProps } from '../allTypes';
 
 /**
- * Creates a world boundary of 4 impassible Planes that define the edges of the world.
+ * Renders a boundary of 4 impassible Planes that define the edges of the world.
  * Each plane is a 2D surface that extends infinitely in 3d space.
  * Given a length (x-coord) and width (z-coord), planes are positioned & rotated to span the 4 edges of
- * the world. Each boundary is fully translucent unless the debug prop is set to true, in which
- * case they are set to yellow.
+ * the world. Each boundary is translucent by default, and yellow if debug is set to true.
  * @param props: PlaneProps
  * @returns Boundaries component
  */

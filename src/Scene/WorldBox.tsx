@@ -4,10 +4,10 @@ import Boundaries from './Boundaries';
 import Floor from './Floor';
 
 /**
- * Renders a WorldBox: which is constructed from a Boundaries component & Floor component.
- * <Boundaries> renders 4 impassible Planes that define the edges of the world,
- * and <Floor> renders an impassable horizontal Plane representing the
- * lowest position in the Y direction that a player may reach.
+ * Renders a WorldBox: made from a Boundaries component & Floor component.
+ * Boundaries renders 4 impassible Planes that define the edges of the world,
+ * and Floor renders a horizontal, impassable Plane representing the
+ * lowest reachable position in the Y direction.
  * @param props
  * @returns WorldBox component
  */
