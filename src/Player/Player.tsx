@@ -88,8 +88,8 @@ export default function Player(props: SphereProps) {
   });
 
   return (
-    <React.Fragment>
+    <>
       <mesh ref={playerRef} />
-    </React.Fragment>
+    </>
   );
 }
