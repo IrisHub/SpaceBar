@@ -3,7 +3,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import React, { useEffect, useRef } from 'react';
 import { playerMovementControls } from './playerMovementControls';
 import playerMovementEmitter from './playerMovementEmitter';
-import { PlayerPosition, PlayerVelocity } from '../allTypes';
+import { PlayerPosition, PlayerVelocity } from '../types';
 import { roundEntriesInVector, round } from './playerMovementUtils';
 import { Vector3 } from 'three';
 import { PlayerConstants, MathConstants } from '../constants';
@@ -25,12 +25,12 @@ export default function Player(props: SphereProps) {
   const xVector = new Vector3();
   const zVector = new Vector3();
   const newVelocityVector = new Vector3();
-  let pastPosition = new Vector3();
-  let pastVelocity = new Vector3();
+  let pastPosition: PlayerPosition = new Vector3();
+  let pastVelocity: PlayerVelocity = new Vector3();
 
-  const currentVelocityVector = useRef<PlayerVelocity>({ x: 0, y: 0, z: 0 });
+  const currentVelocityVector = useRef<PlayerVelocity>(new Vector3());
   useEffect(() => {
-    setPlayerRef.velocity.subscribe(playerVelocity => {
+    setPlayerRef.velocity.subscribe((playerVelocity) => {
       currentVelocityVector.current.x = round(
         playerVelocity[0],
         MathConstants.roundingPrecision
@@ -48,14 +48,12 @@ export default function Player(props: SphereProps) {
 
   useFrame(() => {
     let playerCurrentPosition: PlayerPosition = camera.position;
-    if (playerRef.current != null) {
-      playerRef.current.getWorldPosition(playerCurrentPosition); //Position of player copied to camera position
-      playerCurrentPosition = roundEntriesInVector(playerCurrentPosition, 3);
+    playerRef.current?.getWorldPosition(playerCurrentPosition); //Position of player copied to camera position
+    playerCurrentPosition = roundEntriesInVector(playerCurrentPosition, 3);
 
-      if (pastPosition !== playerCurrentPosition) {
-        playerMovementEmitter.emit('sendCoords', playerCurrentPosition);
-        pastPosition = playerCurrentPosition;
-      }
+    if (pastPosition !== playerCurrentPosition) {
+      playerMovementEmitter.emit('sendCoords', playerCurrentPosition);
+      pastPosition = playerCurrentPosition;
     }
 
     zVector.set(0, 0, Number(forward) - Number(backward));

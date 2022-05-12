@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { serialize } from './playerMovementUtils';
-import { PlayerPosition } from '../allTypes';
+import { PlayerPosition } from '../types';
 import movementLog from './playerMovementLog';
 
 /**
