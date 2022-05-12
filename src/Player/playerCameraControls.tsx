@@ -17,32 +17,7 @@ export default function PlayerCameraControls() {
     }
   }, [controls]);
 
-  return (
-    <PointerLockControls
-      ref={controls}
-      key={undefined}
-      attach={undefined}
-      attachArray={undefined}
-      attachObject={undefined}
-      args={undefined}
-      // eslint-disable-next-line react/no-children-prop
-      children={undefined}
-      onUpdate={undefined}
-      domElement={undefined}
-      isLocked={undefined}
-      minPolarAngle={undefined}
-      maxPolarAngle={undefined}
-      connect={undefined}
-      disconnect={undefined}
-      getDirection={undefined}
-      moveForward={undefined}
-      moveRight={undefined}
-      lock={undefined}
-      unlock={undefined}
-      addEventListener={undefined}
-      hasEventListener={undefined}
-      removeEventListener={undefined}
-      dispatchEvent={undefined}
-    />
-  );
+  // @ts-expect-error
+  // Supressing known typing error with Drei: https://github.com/pmndrs/drei/issues/687
+  return <PointerLockControls ref={controls} />;
 }
