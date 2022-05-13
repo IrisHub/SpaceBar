@@ -7,6 +7,7 @@ export const VideoContainer = styled.div`
   z-index: 999;
   display: flex;
   flex-direction: column;
+  background-color: ${Colors.black};
 `;
 
 export const Video = styled.video`
@@ -19,7 +20,6 @@ export const IconContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   background-color: ${Colors.bgGrey};
-  border-radius: 32px;
 `;
 
 //  Boolean change color to red

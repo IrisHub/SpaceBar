@@ -57,6 +57,16 @@ const VideoPlayer = (props: VideoProps) => {
     audio: audioEnabled,
   };
 
+  /*
+   * configurePermissions sets video & audio permissions for calls to startMedia.
+   */
+  const configurePermissions = () => {
+    permissions = {
+      video: videoEnabled,
+      audio: audioEnabled,
+    };
+  };
+
   /**
    * endMedia obtains a ref to the current MediaStream if it exists,
    * then iterates through each track of this stream to toggle off audio, video, or all.
@@ -99,13 +109,12 @@ const VideoPlayer = (props: VideoProps) => {
   };
 
   /*
-   * configurePermissions sets video & audio permissions for calls to startMedia.
+   * restartMedia restarts a audio and or video media stream.
    */
-  const configurePermissions = () => {
-    permissions = {
-      video: videoEnabled,
-      audio: audioEnabled,
-    };
+  const restartMedia = async () => {
+    endMedia(AVOptions.all);
+    configurePermissions();
+    await startMedia();
   };
 
   /*
@@ -127,9 +136,7 @@ const VideoPlayer = (props: VideoProps) => {
       if (!audioEnabled) {
         endMedia(AVOptions.audio);
       } else {
-        configurePermissions();
-        endMedia(AVOptions.all);
-        await startMedia();
+        await restartMedia();
       }
     };
     updateAudio();
@@ -143,9 +150,7 @@ const VideoPlayer = (props: VideoProps) => {
       if (!videoEnabled) {
         endMedia(AVOptions.video);
       } else {
-        configurePermissions();
-        endMedia(AVOptions.all);
-        await startMedia();
+        await restartMedia();
       }
     };
     updateVideo();
