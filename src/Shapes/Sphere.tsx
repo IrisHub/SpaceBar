@@ -1,5 +1,6 @@
-import React, { createRef } from 'react';
+import React, { useRef } from 'react';
 import { SphereProps, useSphere } from '@react-three/cannon';
+import { Event, Object3D } from 'three';
 
 /**
  * CustomSphere extends props
@@ -18,7 +19,8 @@ interface CustomSphere extends SphereProps {
  * @returns
  */
 export default function Sphere(props: CustomSphere) {
-  let collisionRef = createRef();
+  let collisionRef = useRef<Object3D<Event>>(null);
+
   if (props.collision) {
     [collisionRef] = useSphere(() => ({
       args: props.dimensions,

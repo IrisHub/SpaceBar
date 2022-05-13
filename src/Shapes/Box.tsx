@@ -1,5 +1,6 @@
-import React, { createRef } from 'react';
+import React, { useRef } from 'react';
 import { BoxProps, useBox } from '@react-three/cannon';
+import { Event, Object3D } from 'three';
 
 /**
  * CustomBox extends props
@@ -18,7 +19,7 @@ interface CustomBox extends BoxProps {
  * @returns
  */
 export default function Box(props: CustomBox) {
-  let collisionRef = createRef();
+  let collisionRef = useRef<Object3D<Event>>(null);
   if (props.collision) {
     [collisionRef] = useBox(() => ({
       args: props.dimensions,

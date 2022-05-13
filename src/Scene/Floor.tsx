@@ -17,7 +17,7 @@ export default function Floor() {
       <meshBasicMaterial
         attach="material"
         color={Colors.black}
-        transparent="true"
+        transparent={true}
         opacity={0.25}
       />
     </mesh>
