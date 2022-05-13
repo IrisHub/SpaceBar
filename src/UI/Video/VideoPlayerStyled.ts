@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Colors, DisplayConstants } from '../../constants';
 
 export const VideoContainer = styled.div`
   position: absolute;
@@ -9,15 +10,15 @@ export const VideoContainer = styled.div`
 `;
 
 export const Video = styled.video`
-  height: ${(props) => props.height || 150}px;
-  width: ${(props) => props.width || 150}px;
+  height: ${(props) => props.height || DisplayConstants.VideoPlayerHeight}px;
+  width: ${(props) => props.width || DisplayConstants.VideoPlayerWidth}px;
 `;
 
 export const IconContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  background-color: rgb(220, 220, 220, 0.5);
+  background-color: ${Colors.bgGrey};
   border-radius: 32px;
 `;
 

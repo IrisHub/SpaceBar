@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Colors } from '../../constants';
 
 export const DialogContainer = styled.div`
   position: absolute;
@@ -7,7 +8,7 @@ export const DialogContainer = styled.div`
   z-index: 999;
   display: flex;
   flex-direction: column;
-  background-color: white;
+  background-color: ${Colors.white};
   border: 2px solid ${(props) => props.color};
   padding: 1%;
 `;

@@ -25,15 +25,6 @@ enum AVOptions {
   video,
   all,
 }
-
-enum AVErrors {
-  NotFoundError,
-  NotReadableError,
-  OverconstrainedError,
-  NotAllowedError,
-  OtherError,
-}
-
 const AVErrorMessages: Record<string, string> = {
   NotFoundError:
     'Your device does not have a webcam or microphone to support this.',
@@ -60,7 +51,11 @@ const VideoPlayer = (props: VideoProps) => {
   const [videoEnabled, setVideoEnabled] = useState(true);
   const [errMessageOnUserMedia, setErrMessageOnUserMedia] = useState('');
 
-  let videoRef = useRef<HTMLVideoElement | null>(null);
+  let videoRef = useRef<HTMLVideoElement>(null);
+  let permissions = {
+    video: videoEnabled,
+    audio: audioEnabled,
+  };
 
   /**
    * endMedia obtains a ref to the current MediaStream if it exists,
@@ -87,7 +82,7 @@ const VideoPlayer = (props: VideoProps) => {
    * startMedia starts the stream with a call to navigator.mediaDevices.getUserMedia.
    * On error, sets an error state and toggles state to render a Dialog component.
    */
-  const startMedia = async (permissions: MediaStreamConstraints) => {
+  const startMedia = async () => {
     try {
       let stream = await navigator.mediaDevices.getUserMedia(permissions);
       if (videoRef.current) {
@@ -98,9 +93,7 @@ const VideoPlayer = (props: VideoProps) => {
       if (err.name in AVErrorMessages) {
         setErrMessageOnUserMedia(AVErrorMessages[err.name]);
       } else {
-        setErrMessageOnUserMedia(
-          AVErrorMessages[AVErrors[AVErrors.OtherError]]
-        );
+        setErrMessageOnUserMedia(AVErrorMessages.OtherError);
       }
     }
   };
@@ -109,11 +102,10 @@ const VideoPlayer = (props: VideoProps) => {
    * configurePermissions sets video & audio permissions for calls to startMedia.
    */
   const configurePermissions = () => {
-    let newPermissions = {
+    permissions = {
       video: videoEnabled,
       audio: audioEnabled,
     };
-    return newPermissions;
   };
 
   /*
@@ -121,8 +113,8 @@ const VideoPlayer = (props: VideoProps) => {
    */
   useEffect(() => {
     const getMedia = async () => {
-      let permissions = configurePermissions();
-      await startMedia(permissions);
+      configurePermissions();
+      await startMedia();
     };
     getMedia();
   }, []);
@@ -135,9 +127,9 @@ const VideoPlayer = (props: VideoProps) => {
       if (!audioEnabled) {
         endMedia(AVOptions.audio);
       } else {
-        let permissions = configurePermissions();
+        configurePermissions();
         endMedia(AVOptions.all);
-        await startMedia(permissions);
+        await startMedia();
       }
     };
     updateAudio();
@@ -151,9 +143,9 @@ const VideoPlayer = (props: VideoProps) => {
       if (!videoEnabled) {
         endMedia(AVOptions.video);
       } else {
-        let permissions = configurePermissions();
+        configurePermissions();
         endMedia(AVOptions.all);
-        await startMedia(permissions);
+        await startMedia();
       }
     };
     updateVideo();

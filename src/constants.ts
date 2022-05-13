@@ -41,9 +41,13 @@ export abstract class Colors {
 
   static readonly green = '#008000';
 
+  static readonly white = '##FFFFFF';
+
   static readonly dialogBlue = '#8BD9FF';
 
   static readonly warningRed = '#ed4650';
+
+  static readonly bgGrey = 'rgb(220, 220, 220, 0.5)';
 }
 
 export abstract class Dims {
