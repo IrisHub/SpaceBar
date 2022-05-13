@@ -23,7 +23,7 @@ export function deserialize(data: PlayerPosition) {
 }
 
 /**
- * round is a simple helper funciton that rounds a float
+ * round is a simple helper function that rounds a float
  * to a number of places.
  * @param float
  * @param numToRound
