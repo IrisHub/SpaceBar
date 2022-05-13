@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { serialize } from './playerMovementUtils';
-import { PlayerPosition } from '../types';
+import { PlayerMovement } from '../types';
 import movementLog from './playerMovementLog';
 
 /**
@@ -10,10 +10,11 @@ import movementLog from './playerMovementLog';
  */
 
 let playerMovementEmitter = new EventEmitter();
-playerMovementEmitter.on('sendCoords', async (data: PlayerPosition) => {
+playerMovementEmitter.on('sendCoords', async (data: PlayerMovement) => {
   const packagedData = serialize(data);
-
-  movementLog.push(packagedData);
+  if (packagedData) {
+    movementLog.push(packagedData);
+  }
 });
 
 export default playerMovementEmitter;

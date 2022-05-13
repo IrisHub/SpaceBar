@@ -1,11 +1,15 @@
-import { PlayerPosition, PlayerVelocity } from '../types';
+import { PlayerMovement } from '../types';
 /**
  * serialize is a helper function that is a light wrapper around stringifying a JSON object.
  * @param data
  * @returns string
  */
-export function serialize(data: PlayerPosition): string {
-  return JSON.stringify(data);
+export function serialize(data: PlayerMovement): string | undefined {
+  try {
+    return JSON.stringify(data);
+  } catch (e) {
+    return undefined;
+  }
 }
 
 /**
@@ -14,7 +18,7 @@ export function serialize(data: PlayerPosition): string {
  * @param data
  * @returns string
  */
-export function deserialize(data: PlayerPosition) {
+export function deserialize(data: PlayerMovement) {
   try {
     return JSON.parse(data.toString());
   } catch (e) {
@@ -40,11 +44,11 @@ export function round(float: Number, numToRound: number): number {
  * @returns vector
  */
 export function roundEntriesInVector(
-  vector: PlayerPosition | PlayerVelocity,
+  vector: PlayerMovement,
   numToRound: number
 ) {
-  for (let [key, value] of Object.entries(vector)) {
-    vector[key as keyof PlayerPosition] = round(value, numToRound);
+  for (const [key, value] of Object.entries(vector)) {
+    vector[key as keyof PlayerMovement] = round(value, numToRound);
   }
   return vector;
 }

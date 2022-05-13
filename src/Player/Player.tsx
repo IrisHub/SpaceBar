@@ -3,7 +3,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import React, { useEffect, useRef } from 'react';
 import { playerMovementControls } from './playerMovementControls';
 import playerMovementEmitter from './playerMovementEmitter';
-import { PlayerPosition, PlayerVelocity } from '../types';
+import { PlayerMovement } from '../types';
 import { roundEntriesInVector, round } from './playerMovementUtils';
 import { Vector3 } from 'three';
 import { PlayerConstants, MathConstants } from '../constants';
@@ -25,10 +25,10 @@ export default function Player(props: SphereProps) {
   const xVector = new Vector3();
   const zVector = new Vector3();
   const newVelocityVector = new Vector3();
-  let pastPosition: PlayerPosition = new Vector3();
-  let pastVelocity: PlayerVelocity = new Vector3();
+  let pastPosition: PlayerMovement = new Vector3();
+  let pastVelocity: PlayerMovement = new Vector3();
 
-  const currentVelocityVector = useRef<PlayerVelocity>(new Vector3());
+  const currentVelocityVector = useRef<PlayerMovement>(new Vector3());
   useEffect(() => {
     setPlayerRef.velocity.subscribe((playerVelocity) => {
       currentVelocityVector.current.x = round(
@@ -46,9 +46,10 @@ export default function Player(props: SphereProps) {
     });
   }, [setPlayerRef.velocity]);
 
+  let playerCurrentPosition: PlayerMovement = camera.position;
+
   useFrame(() => {
-    let playerCurrentPosition: PlayerPosition = camera.position;
-    playerRef.current?.getWorldPosition(playerCurrentPosition); //Position of player copied to camera position
+    playerRef.current?.getWorldPosition(playerCurrentPosition as Vector3); //Position of player copied to camera position
     playerCurrentPosition = roundEntriesInVector(playerCurrentPosition, 3);
 
     if (pastPosition !== playerCurrentPosition) {
