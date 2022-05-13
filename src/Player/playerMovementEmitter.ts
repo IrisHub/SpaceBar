@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { serialize } from './playerMovementUtils';
-import { PlayerMovement } from '../types';
+import { SimpleVector3 } from '../types';
 import movementLog from './playerMovementLog';
 
 /**
@@ -10,7 +10,7 @@ import movementLog from './playerMovementLog';
  */
 
 let playerMovementEmitter = new EventEmitter();
-playerMovementEmitter.on('sendCoords', async (data: PlayerMovement) => {
+playerMovementEmitter.on('sendCoords', async (data: SimpleVector3) => {
   const packagedData = serialize(data);
   if (packagedData) {
     movementLog.push(packagedData);

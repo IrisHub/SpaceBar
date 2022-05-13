@@ -3,7 +3,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import React, { useEffect, useRef } from 'react';
 import { playerMovementControls } from './playerMovementControls';
 import playerMovementEmitter from './playerMovementEmitter';
-import { roundEntriesInVector, round } from './playerMovementUtils';
+import { roundEntriesInVector3, round } from './playerMovementUtils';
 import { Vector3 } from 'three';
 import { PlayerConstants, MathConstants } from '../constants';
 
@@ -49,10 +49,10 @@ export default function Player(props: SphereProps) {
 
   useFrame(() => {
     playerRef.current?.getWorldPosition(playerCurrentPosition); //Position of player copied to camera position
-    playerCurrentPosition = roundEntriesInVector(
+    playerCurrentPosition = roundEntriesInVector3(
       playerCurrentPosition,
-      3
-    ) as Vector3;
+      MathConstants.roundingPrecision
+    );
 
     if (pastPosition !== playerCurrentPosition) {
       playerMovementEmitter.emit('sendCoords', playerCurrentPosition);
@@ -71,12 +71,12 @@ export default function Player(props: SphereProps) {
       currentVelocityVector.current.y,
       newVelocityVector.z
     );
-    playerCurrentPosition = roundEntriesInVector(
+    playerCurrentPosition = roundEntriesInVector3(
       playerCurrentPosition,
       MathConstants.roundingPrecision
-    ) as Vector3;
+    );
 
-    const canJump: boolean =
+    const canJump =
       jump &&
       Math.abs(currentVelocityVector.current.y) < 0.05 &&
       pastVelocity.y === currentVelocityVector.current.y; //Prevent infinite jumping
