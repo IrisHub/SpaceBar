@@ -9,7 +9,7 @@ import { Vector3 } from 'three';
 import { PlayerConstants, MathConstants } from '../../constants';
 
 /**
- * Defines a custom player object (a default Cannon.js sphere and handles player movement)
+ * Defines a custom player object (a default Cannon.js sphere) and handles player movement
  * Movement works by examining keypresses and updating the player's velocity (handled by Cannon.js)
  * according to keypress logic defined in ./playerMovementControls.ts.
  */
