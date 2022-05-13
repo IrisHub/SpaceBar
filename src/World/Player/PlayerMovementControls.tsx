@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 /**
  * Handles keypresses, namely how to emit the appropriate translation
  * from keypresses into player directions, which are then fed to the main
- * Player.tsx file to handle the conversio from directions (booleans) to
+ * Player.tsx file to handle the conversion from directions (booleans) to
  * Cannon.js movement vectors
  */
 const PlayerMovementControls = () => {
