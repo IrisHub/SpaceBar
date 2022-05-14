@@ -45,7 +45,10 @@ export function round(float: Number, numToRound: number): number {
  * @param numToRound
  * @returns vector
  */
-export function roundEntriesInVector3(vector: Vector3, numToRound: number) {
+export function roundEntriesInVector3(
+  vector: SimpleVector3,
+  numToRound: number
+) {
   for (const [key, value] of Object.entries(vector)) {
     vector[key as keyof SimpleVector3] = round(value, numToRound);
   }
