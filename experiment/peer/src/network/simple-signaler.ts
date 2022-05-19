@@ -1,4 +1,5 @@
 import SimplePeer from "simple-peer";
+import { json } from "stream/consumers";
 import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 
 // TODO(SHALIN): Move shared types to a shared folder in parent directory.
@@ -64,23 +65,21 @@ class SimpleSignaler {
                 });
                 this.createPeerConnection();
             } else {
-                console.log(`message received, ${event.data}`);
-                this.peer?.signal(parse(event.data));
+                this._handleMessageFromWebsocket(event);
             }
         });
     }
     
     createPeerConnection() {
-        this.peer?.on('signal', (data) => this._handleSignal(data));
-        this.peer?.on('connect', () => this._handleConnection());
-        this.peer?.on('error', (err) => this._handleError(err));
-        this.peer?.on('stream', (stream) => this._handleStream(stream));
-        this.peer?.on('data', (data) => this._handleData(data));
+        this.peer?.on('signal', (data) => this._handlePeerSignal(data));
+        this.peer?.on('connect', () => this._handlePeerConnection());
+        this.peer?.on('error', (err) => this._handlePeerError(err));
+        this.peer?.on('stream', (stream) => this._handlePeerStream(stream));
+        this.peer?.on('data', (data) => this._handlePeerData(data));
         // peer.on('track', (track, stream) =>
         //   this._handleTrack(track, stream),
         // );
         this.peer?.on('close', () => this._handleClose());
-        
     }
 
     // Functions that handle messages from the client and send to the signaling server.
@@ -93,30 +92,60 @@ class SimpleSignaler {
 
 
     // Functions that handle messages from the signaling server.
-
-    _handleSignal(data: SimplePeer.SignalData) {
-        console.log("_handleSignal", data);
-
-        // this.ws.onopen = (event) => {
-        //     console.log("Websocket Connection Opened", event);
-        const payload = createPayload(PayloadType.SIGNAL, data, this.id);
-        this.ws.send(payload);
-        // };
+    _handleMessageFromWebsocket(event: MessageEvent<any>) {
+        // just handle messages that we get from the websocket server.
+        const data = parse(event.data);
+        if (data.type === 'offer') {
+            this.peer?.signal(data);
+            console.log("we got an offer!", data);
+        } else if (data.type === 'answer') {
+            console.log("we got an answer, and now can establish a connection!", data);
+            this.peer?.signal(data);
+        } else if (data.type === 'candidate') {
+            // lets try signaling the candidate
+            console.log("we got a  candidate:", data.type);
+            this.peer?.signal(data);
+        } else {
+            console.log("we got a  message other than an answer:", data.type);
+        }
     }
 
-    _handleConnection() {
+
+
+    // Functions that handle messages that come from Simple peer listeners.
+
+    _handlePeerSignal(data: SimplePeer.SignalData) {
+        if (data.type === "answer") {
+            console.log("sending answer to other peer", data);
+            const payload = createPayload(PayloadType.SIGNAL, data, this.id);
+            this.ws.send(payload);
+        } else if (data.type === "offer") {
+            console.log("sending offer to peer", data);
+            const payload = createPayload(PayloadType.SIGNAL, data, this.id);
+            this.ws.send(payload);
+        } else if (data.type === "candidate") {
+            console.log("sending candidates to peers");
+            const payload = createPayload(PayloadType.SIGNAL, data, this.id);
+            this.ws.send(payload);
+        }
+    }
+
+    _handlePeerConnection() {
         console.log("_handleConnection (peer) connected!");
+
+        const payload = createPayload(PayloadType.MESSAGE, "HELLO WORLD OVER WEBRTC", this.id);
+        this.peer?.send(payload);
     }
 
-    _handleError(err: Error) {
+    _handlePeerError(err: Error) {
         console.log("_handleError", err);
     }
 
-    _handleStream(stream: MediaStream) {
+    _handlePeerStream(stream: MediaStream) {
         console.log("_handleStream", stream);
     }
 
-    _handleData(data: any) {
+    _handlePeerData(data: any) {
         console.log("_handleData from signaling server ", parse(data));
     }
 

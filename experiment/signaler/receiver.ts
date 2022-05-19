@@ -1,5 +1,6 @@
 import WebSocket from 'ws';
 import { v4 as uuid } from 'uuid';
+import { type } from 'os';
 
 export class PeerReceiver {
     wss: WebSocket.Server<WebSocket.WebSocket>;
@@ -52,15 +53,28 @@ export class PeerReceiver {
         const parsedMessage = parse(message);
         console.log("handleSendSignal", parsedMessage);
 
-        // Send signal message to all clients except self.
-        this.wss.clients.forEach(client => {
-            if (client !== this.ws 
-                && client !== this.websockets[clientID] // Don't send to the client who originally sent the signal.
-                && client.readyState === WebSocket.OPEN) {
-                console.log("sending to client")
-                client.send(message);
-            }
-        });
+        if (parsedMessage.type === 'offer' || parsedMessage.type === 'candidate') {
+            // Send signal message to all clients except self.
+            this.wss.clients.forEach(client => {
+                if (client !== this.ws 
+                    && client !== this.websockets[clientID] // Don't send to the client who originally sent the signal.
+                    && client.readyState === WebSocket.OPEN) {
+                    console.log("sending to client")
+                    client.send(message);
+                }
+            });
+        } else if (parsedMessage.type === 'answer') {
+            console.log("sending an answer to the original peer which is", this.wss.clients.size);
+            // Send signal message to all clients except self.
+            this.wss.clients.forEach(client => {
+                if (client !== this.websockets[clientID] // Don't send to the client who originally sent the signal.
+                    && client.readyState === WebSocket.OPEN) {
+                    console.log("sending to client")
+                    client.send(message);
+                }
+            });
+        }
+
         // this.ws.send(message);
     }
     
