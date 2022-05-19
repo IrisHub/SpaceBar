@@ -5,10 +5,8 @@ import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 // TODO(SHALIN): Move shared types to a shared folder in parent directory.
 enum PayloadType {
     SIGNAL,
-    MESSAGE,
-    HANGUP,
-    NEW_PEER,
-    JOIN,
+    CANDIDATE,
+    DATA
 }
 
 interface Payload {
@@ -86,7 +84,7 @@ class SimpleSignaler {
 
     sendMessage(data: any) {
         console.log("send", data);
-        const payload = createPayload(PayloadType.MESSAGE, data, this.id);
+        const payload = createPayload(PayloadType.DATA, data, this.id);
         this.ws.send(payload);
     }
 
@@ -133,7 +131,7 @@ class SimpleSignaler {
     _handlePeerConnection() {
         console.log("_handleConnection (peer) connected!");
 
-        const payload = createPayload(PayloadType.MESSAGE, "HELLO WORLD OVER WEBRTC", this.id);
+        const payload = createPayload(PayloadType.DATA, "HELLO WORLD OVER WEBRTC", this.id);
         this.peer?.send(payload);
     }
 

@@ -2,18 +2,15 @@ import WebSocket from 'ws';
 import { v4 as uuid } from 'uuid';
 import { type } from 'os';
 
-export class PeerReceiver {
+export class SignalingServer {
     wss: WebSocket.Server<WebSocket.WebSocket>;
     ws: WebSocket;
     id: string;
-    roomCounter: number;
-    websockets = {}; // Store all the websockets.
+    connections = {}; // Store all the websockets.
 
     constructor(ws: WebSocket.Server) {
         this.wss = ws;
-        this.roomCounter = 0;
     } 
-
 
     // TODO(SHALIN): Make sure the caller scopes the `this` properly, or change the way these functions are called.
     // For example, calling this function such as `socket.on('message', (data) => receiver.handleReceive(data));` will work fine.
@@ -53,27 +50,27 @@ export class PeerReceiver {
         const parsedMessage = parse(message);
         console.log("handleSendSignal", parsedMessage);
 
-        if (parsedMessage.type === 'offer' || parsedMessage.type === 'candidate') {
+        // if (parsedMessage.type === 'offer' || parsedMessage.type === 'candidate') {
+        //     // Send signal message to all clients except self.
+        //     this.wss.clients.forEach(client => {
+        //         if (client !== this.ws 
+        //             && client !== this.connections[clientID] // Don't send to the client who originally sent the signal.
+        //             && client.readyState === WebSocket.OPEN) {
+        //             console.log("sending to client")
+        //             client.send(message);
+        //         }
+        //     });
+        // } else if (parsedMessage.type === 'answer') {
+        //     console.log("sending an answer to the original peer which is", this.wss.clients.size);
             // Send signal message to all clients except self.
             this.wss.clients.forEach(client => {
-                if (client !== this.ws 
-                    && client !== this.websockets[clientID] // Don't send to the client who originally sent the signal.
+                if (client !== this.connections[clientID] // Don't send to the client who originally sent the signal.
                     && client.readyState === WebSocket.OPEN) {
                     console.log("sending to client")
                     client.send(message);
                 }
             });
-        } else if (parsedMessage.type === 'answer') {
-            console.log("sending an answer to the original peer which is", this.wss.clients.size);
-            // Send signal message to all clients except self.
-            this.wss.clients.forEach(client => {
-                if (client !== this.websockets[clientID] // Don't send to the client who originally sent the signal.
-                    && client.readyState === WebSocket.OPEN) {
-                    console.log("sending to client")
-                    client.send(message);
-                }
-            });
-        }
+        // }
 
         // this.ws.send(message);
     }
