@@ -19,6 +19,8 @@ interface CustomCylinder extends CylinderProps {
  * @returns <Cylinder>
  */
 const Cylinder = (props: CustomCylinder) => {
+  const { mass, dimensions, position, type, onCollide, transparent, color } =
+    props;
   let collisionRef = createRef();
 
   const meshProps = {
@@ -28,11 +30,11 @@ const Cylinder = (props: CustomCylinder) => {
 
   if (props.collision) {
     [collisionRef] = useCylinder(() => ({
-      args: props.dimensions,
-      mass: props.mass,
-      position: props.position,
+      args: dimensions,
+      mass: mass,
+      position: position,
       type: type,
-      onCollide: props.onCollide,
+      onCollide: onCollide,
       ...props,
     }));
   }
@@ -40,11 +42,11 @@ const Cylinder = (props: CustomCylinder) => {
   return (
     <>
       <mesh {...meshProps}>
-        <cylinderBufferGeometry args={props.dimensions} />
+        <cylinderBufferGeometry args={dimensions} />
         <meshPhongMaterial
-          color={props.color}
-          transparent={props.transparent}
-          opacity={props.transparent ? 0.0 : 1.0}
+          color={color}
+          transparent={transparent}
+          opacity={transparent ? 0.0 : 1.0}
         />
       </mesh>
     </>

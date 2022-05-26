@@ -1,7 +1,7 @@
 import React from 'react';
 import { Boundary, Colors, Dims } from '../constants';
-import Plane from '../Shapes/Plane';
-import { WorldBoxProps } from '../allTypes';
+import Plane from '../World/Shapes/Plane';
+import { WorldBoundariesProps } from '../allTypes';
 
 /**
  * Renders a boundary of 4 impassible Planes that define the edges of the world.
@@ -11,7 +11,7 @@ import { WorldBoxProps } from '../allTypes';
  * @param props: PlaneProps
  * @returns Boundaries component
  */
-function Boundaries(props: WorldBoxProps) {
+function Boundaries(props: WorldBoundariesProps) {
   const boundaryColorConfig = {
     color: Colors.debugYellow,
     transparent: !props.debug,

@@ -10,6 +10,6 @@ export type PlayerVelocity = {
   z: number;
 };
 
-export type WorldBoxProps = {
+export type WorldBoundariesProps = {
   debug?: boolean;
 };

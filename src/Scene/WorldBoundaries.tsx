@@ -1,17 +1,17 @@
 import React from 'react';
-import { WorldBoxProps } from '../allTypes';
+import { WorldBoundariesProps } from '../allTypes';
+import Floor from '../World/Scene/Floor';
 import Boundaries from './Boundaries';
-import Floor from './Floor';
 
 /**
- * Renders a WorldBox: made from a Boundaries component & Floor component.
+ * Renders WorldBoundaries: made from a Boundaries component & Floor component.
  * Boundaries renders 4 impassible Planes that define the edges of the world,
  * and Floor renders a horizontal, impassable Plane representing the
  * lowest reachable position in the Y direction.
  * @param props
- * @returns WorldBox component
+ * @returns WorldBoundaries component
  */
-const WorldBox = (props: WorldBoxProps) => {
+const WorldBoundaries = (props: WorldBoundariesProps) => {
   return (
     <>
       <Floor debug={props.debug} />
@@ -20,4 +20,4 @@ const WorldBox = (props: WorldBoxProps) => {
   );
 };
 
-export default WorldBox;
+export default WorldBoundaries;

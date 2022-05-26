@@ -5,8 +5,6 @@ import { Physics } from '@react-three/cannon';
 import Player from '../Player/Player';
 import PlayerCameraControls from '../Player/PlayerCameraControls';
 import Skybox from './Skybox';
-import WorldBox from './WorldBox';
-
 import { Box, Cylinder, Sphere, GLTFModel } from '../Shapes';
 
 import {
@@ -16,6 +14,7 @@ import {
   Colors,
   Mass,
 } from '../../constants';
+import WorldBoundaries from '../../Scene/WorldBoundaries';
 
 /**
  * A "Scene" component that gathers all elements of the scene into
@@ -38,6 +37,7 @@ const Scene = () => {
             position={[5, 1, -15]}
             color={Colors.green}
             collision={true}
+            type={'Static'}
           />
 
           <Box
@@ -46,6 +46,7 @@ const Scene = () => {
             position={[25, 1, -15]}
             color={Colors.grey}
             collision={true}
+            type={'Static'}
           />
 
           <GLTFModel
@@ -55,6 +56,7 @@ const Scene = () => {
             bboxScaleFactor={0.5}
             modelPath={Objects.gunshipPath}
             collision={true}
+            type={'Static'}
           />
 
           <Cylinder
@@ -63,6 +65,7 @@ const Scene = () => {
             position={[50, 1, -15]}
             color={Colors.green}
             collision={false}
+            type={'Static'}
           />
 
           <GLTFModel
@@ -72,6 +75,7 @@ const Scene = () => {
             bboxScaleFactor={1}
             modelPath={Plants.smallBluePlantPath}
             collision={false}
+            type={'Static'}
           />
 
           <GLTFModel
@@ -81,6 +85,7 @@ const Scene = () => {
             bboxScaleFactor={0.5}
             modelPath={Plants.smallBluePlantPotPath}
             collision={false}
+            type={'Static'}
           />
 
           <GLTFModel
@@ -90,6 +95,7 @@ const Scene = () => {
             bboxScaleFactor={0.4}
             modelPath={Plants.mushroomTreePath}
             collision={false}
+            type={'Static'}
           />
 
           <GLTFModel
@@ -99,6 +105,7 @@ const Scene = () => {
             bboxScaleFactor={0.5}
             modelPath={Plants.mushroomTreePath}
             collision={true}
+            type={'Static'}
           />
 
           <GLTFModel
@@ -108,9 +115,10 @@ const Scene = () => {
             bboxScaleFactor={0.5}
             modelPath={Plants.mushroomTreePath}
             collision={true}
+            type={'Static'}
           />
 
-          <WorldBox />
+          <WorldBoundaries />
         </Physics>
       </Canvas>
     </div>

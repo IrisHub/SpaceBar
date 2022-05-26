@@ -19,6 +19,9 @@ interface CustomBox extends BoxProps {
  * @returns <Box>
  */
 const Box = (props: CustomBox) => {
+  const { mass, dimensions, position, type, onCollide, transparent, color } =
+    props;
+
   let collisionRef = createRef();
 
   const meshProps = {
@@ -28,22 +31,22 @@ const Box = (props: CustomBox) => {
 
   if (props.collision) {
     [collisionRef] = useBox(() => ({
-      args: props.dimensions,
-      mass: props.mass,
-      position: props.position,
+      args: dimensions,
+      mass: mass,
+      position: position,
       type: type,
-      onCollide: props.onCollide,
+      onCollide: onCollide,
       ...props,
     }));
   }
   return (
     <>
       <mesh {...meshProps}>
-        <boxBufferGeometry args={props.dimensions} />
+        <boxBufferGeometry args={dimensions} />
         <meshPhongMaterial
-          color={props.color}
-          transparent={props.transparent}
-          opacity={props.transparent ? 0.0 : 1.0}
+          color={color}
+          transparent={transparent}
+          opacity={transparent ? 0.0 : 1.0}
         />
       </mesh>
     </>

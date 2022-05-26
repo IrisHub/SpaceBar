@@ -19,6 +19,9 @@ interface CustomSphere extends SphereProps {
  * @returns <Sphere>
  */
 const Sphere = (props: CustomSphere) => {
+  const { mass, position, type, onCollide, dimensions, color, transparent } =
+    props;
+
   let collisionRef = createRef();
   const meshProps = {
     ref: props.collision ? collisionRef : undefined,
@@ -27,11 +30,11 @@ const Sphere = (props: CustomSphere) => {
 
   if (props.collision) {
     [collisionRef] = useSphere(() => ({
-      args: props.dimensions,
-      mass: props.mass,
-      position: props.position,
+      args: dimensions,
+      mass: mass,
+      position: position,
       type: type,
-      onCollide: props.onCollide,
+      onCollide: onCollide,
       ...props,
     }));
   }
@@ -39,11 +42,11 @@ const Sphere = (props: CustomSphere) => {
   return (
     <>
       <mesh {...meshProps}>
-        <sphereBufferGeometry args={props.dimensions} />
+        <sphereBufferGeometry args={dimensions} />
         <meshPhongMaterial
-          color={props.color}
-          transparent={props.transparent}
-          opacity={props.transparent ? 0.0 : 1.0}
+          color={color}
+          transparent={transparent}
+          opacity={transparent ? 0.0 : 1.0}
         />
       </mesh>
     </>
