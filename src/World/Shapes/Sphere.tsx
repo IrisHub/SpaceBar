@@ -1,5 +1,6 @@
-import React, { createRef } from 'react';
+import React, { useRef } from 'react';
 import { SphereProps, useSphere } from '@react-three/cannon';
+import { Event, Object3D } from 'three';
 
 /**
  * CustomSphere extends props
@@ -22,7 +23,8 @@ const Sphere = (props: CustomSphere) => {
   const { mass, position, type, onCollide, dimensions, color, transparent } =
     props;
 
-  let collisionRef = createRef();
+  let collisionRef = useRef<Object3D<Event>>(null);
+
   const meshProps = {
     ref: props.collision ? collisionRef : undefined,
     position: props.position,

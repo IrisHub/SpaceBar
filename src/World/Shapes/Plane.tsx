@@ -1,6 +1,7 @@
-import React, { createRef } from 'react';
+import React, { useRef } from 'react';
 import { PlaneProps, usePlane } from '@react-three/cannon';
 import { DoubleSide } from 'three';
+import { Event, Object3D } from 'three';
 
 /**
  * CustomPlane extends props
@@ -20,7 +21,8 @@ interface CustomPlane extends PlaneProps {
  * @returns Plane component
  */
 export default function Plane({ type = 'Static', ...props }: CustomPlane) {
-  let collisionRef = createRef();
+  let collisionRef = useRef<Object3D<Event>>(null);
+
   let meshProps = {
     ref: props.collision ? collisionRef : undefined,
     rotation: props.rotation,

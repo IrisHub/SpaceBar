@@ -1,5 +1,6 @@
-import React, { createRef } from 'react';
+import React, { useRef } from 'react';
 import { BoxProps, useBox } from '@react-three/cannon';
+import { Object3D, Event } from 'three';
 
 /**
  * CustomBox extends props
@@ -22,7 +23,7 @@ const Box = (props: CustomBox) => {
   const { mass, dimensions, position, type, onCollide, transparent, color } =
     props;
 
-  let collisionRef = createRef();
+  let collisionRef = useRef<Object3D<Event>>(null);
 
   const meshProps = {
     ref: props.collision ? collisionRef : undefined,
