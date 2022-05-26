@@ -3,13 +3,17 @@ import { WorldBoxProps } from '../allTypes';
 
 import { Plane } from '../Shapes';
 import { Colors, Dims } from '../constants';
+import { usePlane } from '@react-three/cannon';
 
 /**
  * Defines a basic floor component as a flat plane rotated 90 degrees
- * This floor comes with gridlines to
+ * This floor is partially transparent and will come with gridlines to
  * calibrate movement.
  */
-export default function Floor(props: WorldBoxProps) {
+const Floor = ((props: WorldBoxProps) => {
+  // const [ref] = usePlane() => ({
+  //   rotation: [-Math.PI / 2, 0, 0],
+  // }));
   return (
     <>
       <Plane
@@ -25,4 +29,6 @@ export default function Floor(props: WorldBoxProps) {
       )}
     </>
   );
-}
+};
+
+export default Floor;

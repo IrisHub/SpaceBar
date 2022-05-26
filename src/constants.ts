@@ -42,6 +42,14 @@ export abstract class Colors {
   static readonly green = '#008000';
 
   static readonly debugYellow = '#FFD702';
+  
+  static readonly white = '##FFFFFF';
+
+  static readonly dialogBlue = '#8BD9FF';
+
+  static readonly warningRed = '#ed4650';
+
+  static readonly bgGrey = 'rgb(220, 220, 220, 0.5)';
 }
 
 export abstract class Dims {
@@ -76,6 +84,14 @@ export abstract class PlayerConstants {
   static readonly speed = 10;
 
   static readonly jumpVelocity = 15;
+
+  static readonly mass = 15;
+}
+
+export abstract class DisplayConstants {
+  static readonly VideoPlayerHeight = 112;
+
+  static readonly VideoPlayerWidth = 149;
 
   static readonly mass = 15;
 }

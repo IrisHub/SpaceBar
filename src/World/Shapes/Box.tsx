@@ -1,32 +1,33 @@
 import React, { createRef } from 'react';
-import { SphereProps, useSphere } from '@react-three/cannon';
+import { BoxProps, useBox } from '@react-three/cannon';
 
 /**
- * CustomSphere extends props
- * for useSphere hook used to render a sphere in Cannon.JS's physics engine
+ * CustomBox extends props
+ * for useBox hook used to render a box in Cannon.JS's physics engine
  */
-interface CustomSphere extends SphereProps {
+interface CustomBox extends BoxProps {
   color?: string;
   transparent?: boolean;
-  dimensions: [number];
+  dimensions: [number, number, number];
   collision?: boolean;
 }
 /**
- * Sphere component renders a sphere with collision detection.
+ * Box component renders a box with collision detection.
  * This component accepts props that determine its size, position, type, and mass,
  * and a callback to be called upon a collision.
- * @param props CustomSphere
- * @returns
+ * @param props customBox
+ * @returns <Box>
  */
-export default function Sphere({ type = 'Static', ...props }: CustomSphere) {
+const Box = (props: CustomBox) => {
   let collisionRef = createRef();
+
   const meshProps = {
     ref: props.collision ? collisionRef : undefined,
     position: props.position,
   };
 
   if (props.collision) {
-    [collisionRef] = useSphere(() => ({
+    [collisionRef] = useBox(() => ({
       args: props.dimensions,
       mass: props.mass,
       position: props.position,
@@ -35,11 +36,10 @@ export default function Sphere({ type = 'Static', ...props }: CustomSphere) {
       ...props,
     }));
   }
-
   return (
     <>
       <mesh {...meshProps}>
-        <sphereBufferGeometry args={props.dimensions} />
+        <boxBufferGeometry args={props.dimensions} />
         <meshPhongMaterial
           color={props.color}
           transparent={props.transparent}
@@ -48,4 +48,6 @@ export default function Sphere({ type = 'Static', ...props }: CustomSphere) {
       </mesh>
     </>
   );
-}
+};
+
+export default Box;

@@ -3,19 +3,26 @@ import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/cannon';
 
 import Player from '../Player/Player';
-import PlayerCameraControls from '../Player/playerCameraControls';
+import PlayerCameraControls from '../Player/PlayerCameraControls';
 import Skybox from './Skybox';
 import WorldBox from './WorldBox';
 
 import { Box, Cylinder, Sphere, GLTFModel } from '../Shapes';
 
-import { PhysicsConstants, Plants, Objects, Colors, Mass } from '../constants';
+import {
+  PhysicsConstants,
+  Plants,
+  Objects,
+  Colors,
+  Mass,
+} from '../../constants';
 
-export default function Scene() {
-  /**
-   * A "Scene" component that gathers all elements of the scene into
-   * a single element that can then be rendered in App.tsx
-   */
+/**
+ * A "Scene" component that gathers all elements of the scene into
+ * a single element that can then be rendered in App.tsx
+ */
+const Scene = () => {
+  // export default function Scene() {
   return (
     <div style={{ height: window.innerHeight }}>
       <Canvas>
@@ -108,4 +115,5 @@ export default function Scene() {
       </Canvas>
     </div>
   );
-}
+};
+export default Scene;
