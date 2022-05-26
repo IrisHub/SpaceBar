@@ -1,19 +1,19 @@
 import { SphereProps, useSphere } from '@react-three/cannon';
 import { useFrame, useThree } from '@react-three/fiber';
 import React, { useEffect, useRef } from 'react';
-import { playerMovementControls } from './playerMovementControls';
+import PlayerMovementControls from './PlayerMovementControls';
 import playerMovementEmitter from './playerMovementEmitter';
 import { roundEntriesInVector3, round } from './playerMovementUtils';
 import { Vector3 } from 'three';
-import { PlayerConstants, MathConstants } from '../constants';
+import { PlayerConstants, MathConstants } from '../../constants';
 
-export default function Player(props: SphereProps) {
-  /**
-   * Defines a custom player object (a default Cannon.js sphere and handles player movement)
-   * Movement works by examining keypresses and updating the player's velocity (handled by Cannon.js)
-   * according to keypress logic defined in ./playerMovementControls.ts.
-   */
-  const { forward, backward, left, right, jump } = playerMovementControls();
+/**
+ * Defines a custom player object (a default Cannon.js sphere) and handles player movement
+ * Movement works by examining keypresses and updating the player's velocity (handled by Cannon.js)
+ * according to keypress logic defined in ./playerMovementControls.ts.
+ */
+const Player = (props: SphereProps) => {
+  const { forward, backward, left, right, jump } = PlayerMovementControls();
   const { camera } = useThree();
   const [playerRef, setPlayerRef] = useSphere(() => ({
     mass: PlayerConstants.mass,
@@ -95,4 +95,6 @@ export default function Player(props: SphereProps) {
       <mesh ref={playerRef} />
     </>
   );
-}
+};
+
+export default Player;

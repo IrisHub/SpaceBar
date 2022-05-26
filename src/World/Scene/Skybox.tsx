@@ -1,6 +1,6 @@
 import { useThree } from '@react-three/fiber';
 import { CubeTextureLoader } from 'three';
-import { SkyboxImages } from '../constants';
+import { SkyboxImages } from '../../constants';
 
 /**
  * Applies a textured skybox.
@@ -8,7 +8,7 @@ import { SkyboxImages } from '../constants';
  * https://creativecommons.org/licenses/by/3.0/
  * https://www.humus.name/index.php?page=Textures&ID=126
  */
-export default function Skybox() {
+const Skybox = () => {
   const { scene } = useThree();
   const loader = new CubeTextureLoader();
   loader.setCrossOrigin('anonymous');
@@ -26,4 +26,6 @@ export default function Skybox() {
   scene.background = texture;
 
   return null;
-}
+};
+
+export default Skybox;

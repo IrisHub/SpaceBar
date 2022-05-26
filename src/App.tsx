@@ -1,10 +1,7 @@
 import React from 'react';
-import Scene from './Scene/Scene';
-
-function App() {
-  return (
-    <Scene/>
-  );
-}
+import World from './World';
+const App = () => {
+  return <World />;
+};
 
 export default App;

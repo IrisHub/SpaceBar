@@ -23,9 +23,10 @@ interface CustomGLTF extends BoxProps {
  * in order to be able to load multiple instances of the same GLTF, then scales the model and bounding box
  * to the provided props.  The scaled bounding box hooks into the Cannon physics engine with the useBox hook and returned collisionRef.
  * @param props customGLTF
- * @returns
+ * @returns <GLTFModel>
  */
-export default function GLTFModel(props: CustomGLTF) {
+const GLTFModel = (props: CustomGLTF) => {
+  const { mass, position, type, onCollide, bboxScaleFactor, collision } = props;
   const { scene } = useLoader(GLTFLoader, props.modelPath);
   // Must use Skeleton utils to support copies of skinned meshes https://github.com/mrdoob/three.js/issues/11573
   let copiedScene = useMemo(() => SkeletonUtils.clone(scene), [scene]);
@@ -38,32 +39,30 @@ export default function GLTFModel(props: CustomGLTF) {
       [copiedScene]
     );
     const bboxSize = bbox.getSize(new Vector3());
-    const scaledBbox = bboxSize.multiplyScalar(props.bboxScaleFactor).toArray();
+    const scaledBbox = bboxSize.multiplyScalar(bboxScaleFactor).toArray();
     [collisionRef] = useBox(() => ({
       args: scaledBbox, //Must accept array and not vector3
-      mass: props.mass,
-      position: props.position,
-      type: props.type,
-      onCollide: props.onCollide,
+      mass: mass,
+      position: position,
+      type: type,
+      onCollide: onCollide,
     }));
   }
 
   return (
     <>
-      {props.collision ? (
+      {collision ? (
         <primitive
           ref={collisionRef}
-          position={props.position}
+          position={position}
           object={copiedScene}
           dispose={null}
         />
       ) : (
-        <primitive
-          position={props.position}
-          object={copiedScene}
-          dispose={null}
-        />
+        <primitive position={position} object={copiedScene} dispose={null} />
       )}
     </>
   );
-}
+};
+
+export default GLTFModel;

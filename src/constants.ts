@@ -40,16 +40,30 @@ export abstract class Colors {
   static readonly grey = '#808080';
 
   static readonly green = '#008000';
+
+  static readonly debugYellow = '#FFD702';
+  
+  static readonly white = '##FFFFFF';
+
+  static readonly dialogBlue = '#8BD9FF';
+
+  static readonly warningRed = '#ed4650';
+
+  static readonly bgGrey = 'rgb(220, 220, 220, 0.5)';
 }
 
 export abstract class Dims {
-  static readonly floorX = 1000;
+  static readonly floorX = 100;
 
-  static readonly floorZ = 1000;
+  static readonly floorZ = 100;
 }
 
 export abstract class Mass {
   static readonly heavyObject = 10;
+}
+
+export abstract class Boundary {
+  static readonly visiblePlaneHeight = 10;
 }
 
 export abstract class SkyboxImages {
@@ -70,6 +84,14 @@ export abstract class PlayerConstants {
   static readonly speed = 10;
 
   static readonly jumpVelocity = 15;
+
+  static readonly mass = 15;
+}
+
+export abstract class DisplayConstants {
+  static readonly VideoPlayerHeight = 112;
+
+  static readonly VideoPlayerWidth = 149;
 
   static readonly mass = 15;
 }
