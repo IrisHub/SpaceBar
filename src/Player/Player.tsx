@@ -30,7 +30,6 @@ export default function Player(props: SphereProps) {
   const currentVelocityVector = useRef(new Vector3());
   useEffect(() => {
     setPlayerRef.velocity.subscribe((playerVelocity) => {
-      // currentVelocityVector.current = roundEntriesInVector3(playerVelocity,MathConstants.roundingPrecision);
       currentVelocityVector.current.x = round(
         playerVelocity[0],
         MathConstants.roundingPrecision
