@@ -27,8 +27,6 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "lint": "eslint ./",
-    "lint-fix": "eslint ./ --fix",
     "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
     "test": "react-scripts test",
     "eject": "react-scripts ejecti",
@@ -54,15 +52,15 @@
   },
   "devDependencies": {
     "@types/three": "^0.137.0",
-    "@typescript-eslint/eslint-plugin": "^5.12.1",
-    "@typescript-eslint/parser": "^5.12.1",
-    "eslint": "^8.10.0",
+    "@typescript-eslint/eslint-plugin": "^5.25.0",
+    "@typescript-eslint/parser": "^5.25.0",
+    "eslint": "^8.16.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^16.1.0",
-    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-react": "^7.29.1",
-    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-react": "^7.30.0",
+    "eslint-plugin-react-hooks": "^4.5.0",
     "husky": "^7.0.4",
     "import-sort-cli": "^6.0.0",
     "import-sort-parser-typescript": "^6.0.0",
@@ -79,7 +77,6 @@
     "singleQuote": true,
     "trailingComma": "all",
     "bracketSpacing": true,
-    "jsxBracketSameLine": true,
     "arrowParens": "always"
   },
   "importSort": {
@@ -90,10 +87,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --write",
-      "pretty-quick --staged",
-      "import-sort --write=true"
+      "eslint --debug",
+      "pretty-quick --staged --verbose --check"
     ]
   }
 }
