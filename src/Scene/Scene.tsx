@@ -1,4 +1,7 @@
-import { Box, Cylinder, GLTFModel, Sphere } from '../Shapes';
+import { Physics } from '@react-three/cannon';
+import { Canvas } from '@react-three/fiber';
+import React from 'react';
+
 import {
   Colors,
   Dims,
@@ -7,13 +10,10 @@ import {
   PhysicsConstants,
   Plants,
 } from '../constants';
-
-import { Canvas } from '@react-three/fiber';
-import Floor from './Floor';
-import { Physics } from '@react-three/cannon';
 import Player from '../Player/Player';
 import PlayerCameraControls from '../Player/playerCameraControls';
-import React from 'react';
+import { Box, Cylinder, GLTFModel, Sphere } from '../Shapes';
+import Floor from './Floor';
 import Skybox from './Skybox';
 
 export default function Scene() {

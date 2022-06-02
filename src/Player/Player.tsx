@@ -1,12 +1,13 @@
 import { SphereProps, useSphere } from '@react-three/cannon';
 import { useFrame, useThree } from '@react-three/fiber';
 import React, { useEffect, useRef } from 'react';
+import { Vector3 } from 'three';
+
+import { PlayerPosition, PlayerVelocity } from '../allTypes';
+import { MathConstants, PlayerConstants } from '../constants';
 import { playerMovementControls } from './playerMovementControls';
 import playerMovementEmitter from './playerMovementEmitter';
-import { PlayerPosition, PlayerVelocity } from '../allTypes';
-import { roundEntriesInVector, round } from './playerMovementUtils';
-import { Vector3 } from 'three';
-import { PlayerConstants, MathConstants } from '../constants';
+import { round, roundEntriesInVector } from './playerMovementUtils';
 
 export default function Player(props: SphereProps) {
   /**
@@ -30,18 +31,18 @@ export default function Player(props: SphereProps) {
 
   const currentVelocityVector = useRef<PlayerVelocity>({ x: 0, y: 0, z: 0 });
   useEffect(() => {
-    setPlayerRef.velocity.subscribe(playerVelocity => {
+    setPlayerRef.velocity.subscribe((playerVelocity) => {
       currentVelocityVector.current.x = round(
         playerVelocity[0],
-        MathConstants.roundingPrecision
+        MathConstants.roundingPrecision,
       );
       currentVelocityVector.current.y = round(
         playerVelocity[1],
-        MathConstants.roundingPrecision
+        MathConstants.roundingPrecision,
       );
       currentVelocityVector.current.z = round(
         playerVelocity[2],
-        MathConstants.roundingPrecision
+        MathConstants.roundingPrecision,
       );
     });
   }, [setPlayerRef.velocity]);
@@ -68,11 +69,11 @@ export default function Player(props: SphereProps) {
     setPlayerRef.velocity.set(
       newVelocityVector.x,
       currentVelocityVector.current.y,
-      newVelocityVector.z
+      newVelocityVector.z,
     );
     playerCurrentPosition = roundEntriesInVector(
       playerCurrentPosition,
-      MathConstants.roundingPrecision
+      MathConstants.roundingPrecision,
     );
 
     const canJump: boolean =
@@ -83,7 +84,7 @@ export default function Player(props: SphereProps) {
       setPlayerRef.velocity.set(
         currentVelocityVector.current.x,
         PlayerConstants.jumpVelocity,
-        currentVelocityVector.current.z
+        currentVelocityVector.current.z,
       );
     }
     pastVelocity.y = currentVelocityVector.current.y;

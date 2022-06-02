@@ -13,7 +13,7 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react", "import", "@typescript-eslint"],
+  "plugins": ["react", "import", "@typescript-eslint", "simple-import-sort"],
   "rules": {
     "react/jsx-filename-extension": [
       1,
@@ -31,7 +31,8 @@
         "tsx": "never"
       }
     ],
-    "sort-imports": "error",
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
     "comma-dangle": 0,
     "@typescript-eslint/comma-dangle": 0
   },

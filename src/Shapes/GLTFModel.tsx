@@ -1,9 +1,9 @@
-import React, { createRef, useMemo } from 'react';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { useLoader } from '@react-three/fiber';
-import { Box3 } from 'three';
 import { BoxProps, useBox } from '@react-three/cannon';
+import { useLoader } from '@react-three/fiber';
+import React, { createRef, useMemo } from 'react';
+import { Box3 } from 'three';
 import { Vector3 } from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { SkeletonUtils } from 'three-stdlib';
 
 interface CustomGLTF extends BoxProps {
@@ -34,7 +34,7 @@ export default function GLTFModel(props: CustomGLTF) {
   if (props.collision) {
     let bbox = useMemo(
       () => new Box3().setFromObject(copiedScene),
-      [copiedScene]
+      [copiedScene],
     );
     const bboxSize = bbox.getSize(new Vector3());
     const scaledBbox = bboxSize.multiplyScalar(props.bboxScaleFactor).toArray();

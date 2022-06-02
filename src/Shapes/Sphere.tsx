@@ -1,5 +1,5 @@
-import React, { createRef } from 'react';
 import { SphereProps, useSphere } from '@react-three/cannon';
+import React, { createRef } from 'react';
 
 /**
  * CustomSphere extends props

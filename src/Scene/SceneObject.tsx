@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import React, { useRef } from 'react';
 import { Object3D } from 'three';
 
 const dummy = new Object3D();

@@ -1,5 +1,5 @@
-import React, { createRef } from 'react';
 import { BoxProps, useBox } from '@react-three/cannon';
+import React, { createRef } from 'react';
 
 /**
  * CustomBox extends props

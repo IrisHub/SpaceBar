@@ -1,5 +1,5 @@
-import React, { createRef } from 'react';
 import { CylinderProps, useCylinder } from '@react-three/cannon';
+import React, { createRef } from 'react';
 
 /**
  * CustomCylinder extends props

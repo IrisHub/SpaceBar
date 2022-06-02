@@ -61,6 +61,8 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.30.0",
     "eslint-plugin-react-hooks": "^4.5.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
     "husky": "^7.0.4",
     "import-sort-cli": "^6.0.0",
     "import-sort-parser-typescript": "^6.0.0",
@@ -78,12 +80,6 @@
     "trailingComma": "all",
     "bracketSpacing": true,
     "arrowParens": "always"
-  },
-  "importSort": {
-    ".ts, .tsx": {
-      "parser": "import-sort-parser-typescript",
-      "style": "eslint"
-    }
   },
   "lint-staged": {
     "*.{ts,tsx}": [
