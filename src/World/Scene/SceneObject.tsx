@@ -4,13 +4,13 @@ import { Object3D } from 'three';
 
 const dummy = new Object3D();
 
-export default function SceneObject() {
-  /**
-   * This file serves several purposes. It renders an animated
-   * object into the scene to a) calibrate walking speed/jumping height
-   * b) Benchmark performance issues
-   * Base taken from https://codesandbox.io/s/4rubo?file=/src/App.js
-   */
+/**
+ * This file serves several purposes. It renders an animated
+ * object into the scene to a) calibrate walking speed/jumping height
+ * b) Benchmark performance issues
+ * Base taken from https://codesandbox.io/s/4rubo?file=/src/App.js
+ */
+const SceneObject = () => {
   const meshRef = useRef<{
     rotation: { x: number; y: number };
     instanceMatrix: any;
@@ -55,4 +55,6 @@ export default function SceneObject() {
       <meshPhongMaterial color="lightgreen" />
     </instancedMesh>
   );
-}
+};
+
+export default SceneObject;

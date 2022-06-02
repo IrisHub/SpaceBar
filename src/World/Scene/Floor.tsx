@@ -1,13 +1,13 @@
 import { usePlane } from '@react-three/cannon';
 import React from 'react';
-import { Colors } from '../constants';
+import { Colors } from '../../constants';
 
-export default function Floor() {
-  /**
-   * Defines a basic floor component as a flat plane rotated 90 degrees
-   * This floor is partially transparent and will come with gridlines to
-   * calibrate movement.
-   */
+/**
+ * Defines a basic floor component as a flat plane rotated 90 degrees
+ * This floor is partially transparent and will come with gridlines to
+ * calibrate movement.
+ */
+const Floor = () => {
   const [ref] = usePlane(() => ({
     rotation: [-Math.PI / 2, 0, 0],
   }));
@@ -22,4 +22,6 @@ export default function Floor() {
       />
     </mesh>
   );
-}
+};
+
+export default Floor;

@@ -1,26 +1,26 @@
 import React, { createRef } from 'react';
-import { CylinderProps, useCylinder } from '@react-three/cannon';
+import { BoxProps, useBox } from '@react-three/cannon';
 
 /**
- * CustomCylinder extends props
- * for useCylinder hook used to render a cylinder in Cannon.JS's physics engine
+ * CustomBox extends props
+ * for useBox hook used to render a box in Cannon.JS's physics engine
  */
-interface CustomCylinder extends CylinderProps {
+interface CustomBox extends BoxProps {
   color: string;
   dimensions: [number, number, number];
   collision: boolean;
 }
 /**
- * Cylinder component renders a cylinder with collision detection.
+ * Box component renders a box with collision detection.
  * This component accepts props that determine its size, position, type, and mass,
  * and a callback to be called upon a collision.
- * @param props customCylinder
- * @returns
+ * @param props customBox
+ * @returns <Box>
  */
-export default function Cylinder(props: CustomCylinder) {
+const Box = (props: CustomBox) => {
   let collisionRef = createRef();
   if (props.collision) {
-    [collisionRef] = useCylinder(() => ({
+    [collisionRef] = useBox(() => ({
       args: props.dimensions,
       mass: props.mass,
       position: props.position,
@@ -34,17 +34,19 @@ export default function Cylinder(props: CustomCylinder) {
     <>
       {props.collision && (
         <mesh ref={collisionRef}>
-          <cylinderBufferGeometry args={props.dimensions} />
+          <boxBufferGeometry args={props.dimensions} />
           <meshPhongMaterial color={props.color} />
         </mesh>
       )}
 
       {!props.collision && (
         <mesh position={props.position}>
-          <cylinderBufferGeometry args={props.dimensions} />
+          <boxBufferGeometry args={props.dimensions} />
           <meshPhongMaterial color={props.color} />
         </mesh>
       )}
     </>
   );
-}
+};
+
+export default Box;

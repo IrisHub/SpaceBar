@@ -1,26 +1,26 @@
 import React, { createRef } from 'react';
-import { SphereProps, useSphere } from '@react-three/cannon';
+import { CylinderProps, useCylinder } from '@react-three/cannon';
 
 /**
- * CustomSphere extends props
- * for useSphere hook used to render a sphere in Cannon.JS's physics engine
+ * CustomCylinder extends props
+ * for useCylinder hook used to render a cylinder in Cannon.JS's physics engine
  */
-interface CustomSphere extends SphereProps {
+interface CustomCylinder extends CylinderProps {
   color: string;
-  dimensions: [number];
+  dimensions: [number, number, number];
   collision: boolean;
 }
 /**
- * Sphere component renders a sphere with collision detection.
+ * Cylinder component renders a cylinder with collision detection.
  * This component accepts props that determine its size, position, type, and mass,
  * and a callback to be called upon a collision.
- * @param props CustomSphere
- * @returns
+ * @param props customCylinder
+ * @returns <Cylinder>
  */
-export default function Sphere(props: CustomSphere) {
+const Cylinder = (props: CustomCylinder) => {
   let collisionRef = createRef();
   if (props.collision) {
-    [collisionRef] = useSphere(() => ({
+    [collisionRef] = useCylinder(() => ({
       args: props.dimensions,
       mass: props.mass,
       position: props.position,
@@ -34,17 +34,19 @@ export default function Sphere(props: CustomSphere) {
     <>
       {props.collision && (
         <mesh ref={collisionRef}>
-          <sphereBufferGeometry args={props.dimensions} />
+          <cylinderBufferGeometry args={props.dimensions} />
           <meshPhongMaterial color={props.color} />
         </mesh>
       )}
 
       {!props.collision && (
         <mesh position={props.position}>
-          <sphereBufferGeometry args={props.dimensions} />
+          <cylinderBufferGeometry args={props.dimensions} />
           <meshPhongMaterial color={props.color} />
         </mesh>
       )}
     </>
   );
-}
+};
+
+export default Cylinder;
