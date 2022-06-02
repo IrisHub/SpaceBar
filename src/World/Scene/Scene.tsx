@@ -9,18 +9,19 @@ import {
   Objects,
   PhysicsConstants,
   Plants,
-} from '../constants';
+} from '../../constants';
 import Player from '../Player/Player';
-import PlayerCameraControls from '../Player/playerCameraControls';
+import PlayerCameraControls from '../Player/PlayerCameraControls';
 import { Box, Cylinder, GLTFModel, Sphere } from '../Shapes';
 import Floor from './Floor';
 import Skybox from './Skybox';
 
-export default function Scene() {
-  /**
-   * A "Scene" component that gathers all elements of the scene into
-   * a single element that can then be rendered in App.tsx
-   */
+/**
+ * A "Scene" component that gathers all elements of the scene into
+ * a single element that can then be rendered in App.tsx
+ */
+const Scene = () => {
+  // export default function Scene() {
   return (
     <div style={{ height: window.innerHeight }}>
       <Canvas>
@@ -125,4 +126,5 @@ export default function Scene() {
       </Canvas>
     </div>
   );
-}
+};
+export default Scene;

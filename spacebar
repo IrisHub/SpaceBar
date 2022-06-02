@@ -74,10 +74,10 @@ case $main_param in
     lint)
         if [[ "$fix_flag" -eq 1 ]]; then
             npx eslint --fix src/**/*.{ts,tsx} --debug
-            npx pretty-quick src/**/*.{ts,tsx} --verbose
+            npx prettier src/**/*.{ts,tsx} --verbose --write
         else
             npx eslint --ext src/**/*.{ts,tsx} --debug
-            npx pretty-quick --check --verbose src/**/*.{ts,tsx}
+            npx prettier src/**/*.{ts,tsx} --check --verbose
         fi
         ;;
 esac

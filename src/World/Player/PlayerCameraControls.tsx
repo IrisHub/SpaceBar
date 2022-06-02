@@ -2,11 +2,11 @@ import { PointerLockControls } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import React, { useEffect } from 'react';
 
-export default function PlayerCameraControls() {
-  /**
-   * Defines player camera controls, and allows for more custom manipulation
-   * of the default Three/drei PointerLockControls component.
-   */
+/**
+ * Defines player camera controls, and allows for more custom manipulation
+ * of the default Three/drei PointerLockControls component.
+ */
+const PlayerCameraControls = () => {
   const { controls } = useThree();
 
   useEffect(() => {
@@ -45,4 +45,5 @@ export default function PlayerCameraControls() {
       dispatchEvent={undefined}
     />
   );
-}
+};
+export default PlayerCameraControls;

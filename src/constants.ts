@@ -13,24 +13,24 @@ export abstract class MathConstants {
 export abstract class Plants {
   static readonly smallBluePlantPath: string = resolveS3Path(
     'smallBluePlant/scene.gltf',
-    'model'
+    'model',
   );
 
   static readonly mushroomTreePath: string = resolveS3Path(
     'mushroomTree/scene.gltf',
-    'model'
+    'model',
   );
 
   static readonly smallBluePlantPotPath: string = resolveS3Path(
     'smallBluePlantPot/scene.gltf',
-    'model'
+    'model',
   );
 }
 
 export abstract class Objects {
   static readonly gunshipPath: string = resolveS3Path(
     'gunship/scene.gltf',
-    'model'
+    'model',
   );
 }
 
@@ -40,6 +40,14 @@ export abstract class Colors {
   static readonly grey = '#808080';
 
   static readonly green = '#008000';
+
+  static readonly white = '##FFFFFF';
+
+  static readonly dialogBlue = '#8BD9FF';
+
+  static readonly warningRed = '#ed4650';
+
+  static readonly bgGrey = 'rgb(220, 220, 220, 0.5)';
 }
 
 export abstract class Dims {
@@ -70,6 +78,14 @@ export abstract class PlayerConstants {
   static readonly speed = 10;
 
   static readonly jumpVelocity = 15;
+
+  static readonly mass = 15;
+}
+
+export abstract class DisplayConstants {
+  static readonly VideoPlayerHeight = 112;
+
+  static readonly VideoPlayerWidth = 149;
 
   static readonly mass = 15;
 }

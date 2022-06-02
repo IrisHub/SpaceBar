@@ -23,9 +23,9 @@ interface CustomGLTF extends BoxProps {
  * in order to be able to load multiple instances of the same GLTF, then scales the model and bounding box
  * to the provided props.  The scaled bounding box hooks into the Cannon physics engine with the useBox hook and returned collisionRef.
  * @param props customGLTF
- * @returns
+ * @returns <GLTFModel>
  */
-export default function GLTFModel(props: CustomGLTF) {
+const GLTFModel = (props: CustomGLTF) => {
   const { scene } = useLoader(GLTFLoader, props.modelPath);
   // Must use Skeleton utils to support copies of skinned meshes https://github.com/mrdoob/three.js/issues/11573
   let copiedScene = useMemo(() => SkeletonUtils.clone(scene), [scene]);
@@ -65,4 +65,6 @@ export default function GLTFModel(props: CustomGLTF) {
       )}
     </>
   );
-}
+};
+
+export default GLTFModel;
