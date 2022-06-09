@@ -2,7 +2,6 @@ export enum PayloadType {
     SIGNAL,
     CANDIDATE,
     DATA,
-    HANDSHAKE,
     NEW_PEER
 }
 

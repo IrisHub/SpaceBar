@@ -1,4 +1,4 @@
-import SimpleSignaler from './network/simple-signaler'
+import SimpleSignaler from './network/signaler'
 import React from 'react';
 import Peer from "./Peer";
 

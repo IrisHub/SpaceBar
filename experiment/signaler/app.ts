@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import ws from 'ws';
 import express from 'express';
-import { SignalingServer } from './receiver';
+import { SignalingServer } from './server';
 
 const app = express();
 const port = 3400;
@@ -22,14 +22,11 @@ app.get('/', (req, res) => {
 // Set up a headless websocket server that prints any
 // events that come in.
 wss.on('open', (ws, request) => {
-  var wsID: string = uuid().toString();
-  console.log(`ID of Client: ${wsID}`);
-  signalingServer.id = wsID;
-  signalingServer.connections[wsID] = ws;
-  signalingServer.ws = ws; // Pass the actual websocket to the receiver.
-  const message = { id: wsID, }
-  
-  ws.send(JSON.stringify({ id: wsID }));
+  // var wsID: string = uuid().toString();
+  // console.log(`ID of Client: ${wsID}`);
+  // signalingServer.id = wsID;
+  // signalingServer.connections[wsID] = ws;
+  signalingServer.createNewPeer(ws); // Pass the actual websocket to the receiver.
   ws.on('message', (data) => signalingServer.handleReceive(data));
 });
 

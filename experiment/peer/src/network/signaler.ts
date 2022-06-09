@@ -1,41 +1,14 @@
 import SimplePeer from "simple-peer";
-import { json } from "stream/consumers";
-import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
+import { parse, PayloadType, createPayload } from "./utils";
 
-// TODO(SHALIN): Move shared types to a shared folder in parent directory.
-enum PayloadType {
-    SIGNAL,
-    CANDIDATE,
-    DATA
-}
-
-interface Payload {
-    id?: string;
-    type: string;
-    data: string;
-}
-
-/**
- * Creates a payload object to send to the signaling server.
- * @param type PayloadType, which gives the payload a type. 
- * @param data The data to be sent, which can be any type since it will be serialized to JSON.
- * @returns A serialized JSON string.
- */
- function createPayload(type: PayloadType, data: any, id?: string) {
-    const payload: Payload = {
-        id: id,
-        type: PayloadType[type],
-        data: JSON.stringify(data),
-    };
-    return JSON.stringify(payload);
-}
-
-class SimpleSignaler {
-    private peer?: SimplePeer.Instance;
+class Signaler {
     private id?: string;
+    private roomID?: string;
     private ws: WebSocket;
-    
-    constructor(initiator: boolean, socket_url: string, port: number) {
+    private initiator?: boolean;
+    private peer?: SimplePeer.Instance;
+
+    constructor(socket_url: string, port: number) {
         // Create a new UUID for this peer, that we use in every message we send.
         // TODO(SHALIN): Make sure this is only generated once per peer, then cached.
         // If we close the tab and reopen, the behavior should be defined.
@@ -44,28 +17,58 @@ class SimpleSignaler {
         this.ws = new WebSocket(`ws://${socket_url}:${port}`);
         this.ws.onopen = (event) => {
             console.log("Websocket Connection Opened", event);
+            // const payload = createPayload(PayloadType.NEW_PEER, {});
+            // this.ws.send(payload);
         };
 
         this.ws.onmessage = (event => { 
-            // this._handleData(event);
 
             // Check if the data received was the generated ID that identifies us as the user.
-            const receivedID = parse(event.data).id;
-            if (!this.id && receivedID) { // Our Id was not set and we just received one from the server.
-                this.id = receivedID;
-                console.log(`We just received our id! ${this.id}`)
+            const receivedMetadata = parse(event.data);
+            const type = receivedMetadata.type;
 
-                // If it's indeed the correct ID, then start simple peer since now we have an ID.
-                const Peer = (window as any)["SimplePeer"]; // Grab the SimplePeer class from the window object.
-                this.peer = new Peer({
-                    initiator: initiator, 
-                    trickle: true,
-                });
-                this.createPeerConnection();
-            } else {
-                this._handleMessageFromWebsocket(event);
+            switch (type) {
+                case "NEW_PEER":
+                    const peer = parse(receivedMetadata.data);
+                    this.id = peer.id;
+                    this.roomID = peer.roomID;
+                    this.initiator = peer.initiator;
+                    console.log(`We just received our id! ${this.id} and we are ${this.initiator ? "initiator" : "responder"}`);
+                    break
+                case "HANDSHAKE":
+                    const Peer = (window as any)["SimplePeer"]; // Grab the SimplePeer class from the window object.
+                    this.peer = new Peer({
+                        initiator: this.initiator, 
+                        trickle: true,
+                    });
+                    this.createPeerConnection();
+                    break
+                case "SIGNAL":
+                    this._handleMessageFromWebsocket(receivedMetadata);
+                    break
+                case "DATA":
+                    break
             }
-        });
+            
+            // const receivedID = receivedMetadata.id;
+            // const receivedInitiator = receivedMetadata.initiator;
+            // console.log("Is this peer the initiator?", receivedInitiator);
+            // if (!this.id && receivedID) { // Our Id was not set and we just received one from the server.
+            //     this.id = receivedID;
+            //     this.initiator = receivedInitiator;
+                // console.log(`We just received our id! ${this.id} and we are ${this.initiator ? "initiator" : "responder"}`);
+
+            //     // If it's indeed the correct ID, then start simple peer since now we have an ID.
+            //     const Peer = (window as any)["SimplePeer"]; // Grab the SimplePeer class from the window object.
+            //     this.peer = new Peer({
+            //         initiator: this.initiator, 
+            //         trickle: true,
+            //     });
+            //     this.createPeerConnection();
+            // } else {
+            //     this._handleMessageFromWebsocket(event);
+            // }
+        }); 
     }
     
     createPeerConnection() {
@@ -90,9 +93,10 @@ class SimpleSignaler {
 
 
     // Functions that handle messages from the signaling server.
-    _handleMessageFromWebsocket(event: MessageEvent<any>) {
+    _handleMessageFromWebsocket(event: any) {
         // just handle messages that we get from the websocket server.
         const data = parse(event.data);
+        console.log(data);
         if (data.type === 'offer') {
             this.peer?.signal(data);
             console.log("we got an offer!", data);
@@ -152,10 +156,4 @@ class SimpleSignaler {
     }
 }
 
-// TODO(SHALIN): Move to some kind of utils file.
-function parse(byteArray: any)  {
-    return JSON.parse(byteArray.toString());
-}
-
-
-export default SimpleSignaler;
+export default Signaler;
