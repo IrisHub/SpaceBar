@@ -8,19 +8,19 @@ export interface Peer {
     roomID: string; 
     id: string;
     initiator: boolean;
+    // ping: () => void;
 }
 
 export class SignalingServer {
     wss: WebSocket.Server<WebSocket.WebSocket>;
-    id: string;
     connections = {}; // Store all the websockets.
 
     // Store the room and the peers that join.
     roomID: string;
-    peers: [Peer?];
+    peers: Peer[];
 
-    constructor(ws: WebSocket.Server) {
-        this.wss = ws;
+    constructor(wss: WebSocket.Server) {
+        this.wss = wss;
         this.roomID = uuid().toString();
         this.peers = [];
     }
@@ -42,13 +42,25 @@ export class SignalingServer {
             case "DATA":
                 this._handleMessage(data);
                 break
+            case "CLOSE":
+                this._handleDisconnect(data);
+                break
         }
+    }
+
+    ping() {
+        // Send a pulse to all the clients.
+    }
+
+    pong() {
+        // Check off the clients that are still connected.
     }
 
     // Creates a new peer.
     _createPeer(initiator: boolean) {
         const id = uuid().toString();
         const peer: Peer = { roomID: this.roomID, id: id, initiator: initiator };
+        // setInterval(ping, 30000);
         return peer
     }
 
@@ -63,6 +75,7 @@ export class SignalingServer {
             const peerInfo = createPayload(PayloadType.NEW_PEER, peer, peer.id);
             console.log("First peer!", peerInfo);
             ws.send(peerInfo);
+            setInterval(this.checkStatus, 1000);
         } else {
             console.log("Second peer!");
             // If it's not the first peer, first send the peer the created information
@@ -81,7 +94,34 @@ export class SignalingServer {
                     client.send(handshake);
                 }
             });
+            setInterval(this.checkStatus, 1000);
         }
+    }
+
+    checkStatus() {
+        // Check if any of the clients are disconnected.
+        // this.peers.forEach(peer => {
+        //     if (this.connections[peer.id].readyState === WebSocket.CLOSED) {
+        //         this.peers.splice(this.peers.indexOf(peer), 1);
+        //         delete this.connections[peer.id];
+        //     }
+        // });
+
+        this.peers.forEach(peer => {
+            const key = peer.id;
+            const ws = this.connections[key];
+            if (ws.readyState === WebSocket.CLOSED) {
+                console.log("Client disconnected!");
+            }
+        });
+        console.log("checkStatus");
+    }
+
+    removePeer(peer: WebSocket) {
+        const key = Object.keys(this.connections).find(key => this.connections[key] === peer);
+        delete this.connections[key];
+        this.peers = this.peers.filter(p => p.id !== key);
+        console.log("removePeer", peer);
     }
     
     _handleSendSignal(clientID: string, message: WebSocket.RawData) { 
@@ -104,8 +144,12 @@ export class SignalingServer {
     }
     
     _handleDisconnect(message: WebSocket.RawData) {
+        const parsedMessage = parse(message);
+        const key = parsedMessage.id;
+        delete this.connections[key];
+        this.peers = this.peers.filter(p => p.id !== key);
         console.log("handleDisconnect", parse(message));
-    } 
+    }
 }
 
 

@@ -3,7 +3,9 @@ export enum PayloadType {
     CANDIDATE,
     DATA,
     HANDSHAKE,
-    NEW_PEER
+    NEW_PEER,
+    CLOSE,
+    HEARTBEAT,
 }
 
 export interface Payload {

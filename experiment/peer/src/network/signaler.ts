@@ -1,4 +1,5 @@
 import SimplePeer from "simple-peer";
+import { parseConfigFileTextToJson } from "typescript";
 import { parse, PayloadType, createPayload } from "./utils";
 
 class Signaler {
@@ -49,28 +50,13 @@ class Signaler {
                 case "DATA":
                     break
             }
-            
-            // const receivedID = receivedMetadata.id;
-            // const receivedInitiator = receivedMetadata.initiator;
-            // console.log("Is this peer the initiator?", receivedInitiator);
-            // if (!this.id && receivedID) { // Our Id was not set and we just received one from the server.
-            //     this.id = receivedID;
-            //     this.initiator = receivedInitiator;
-                // console.log(`We just received our id! ${this.id} and we are ${this.initiator ? "initiator" : "responder"}`);
-
-            //     // If it's indeed the correct ID, then start simple peer since now we have an ID.
-            //     const Peer = (window as any)["SimplePeer"]; // Grab the SimplePeer class from the window object.
-            //     this.peer = new Peer({
-            //         initiator: this.initiator, 
-            //         trickle: true,
-            //     });
-            //     this.createPeerConnection();
-            // } else {
-            //     this._handleMessageFromWebsocket(event);
-            // }
         }); 
+
+        this.ws.onclose = (event) => {
+            console.log("Websocket Connection Closed", event);
+        }
     }
-    
+
     createPeerConnection() {
         this.peer?.on('signal', (data) => this._handlePeerSignal(data));
         this.peer?.on('connect', () => this._handlePeerConnection());
@@ -152,8 +138,11 @@ class Signaler {
     }
 
     _handleClose() {
+        const payload = createPayload(PayloadType.SIGNAL, {}, this.id);
+        this.peer?.send(payload)
         console.log("_handleClose");
     }
 }
+
 
 export default Signaler;
