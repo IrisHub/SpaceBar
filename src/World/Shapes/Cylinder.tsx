@@ -6,9 +6,10 @@ import { CylinderProps, useCylinder } from '@react-three/cannon';
  * for useCylinder hook used to render a cylinder in Cannon.JS's physics engine
  */
 interface CustomCylinder extends CylinderProps {
-  color: string;
+  color?: string;
+  transparent?: boolean;
   dimensions: [number, number, number];
-  collision: boolean;
+  collision?: boolean;
 }
 /**
  * Cylinder component renders a cylinder with collision detection.
@@ -18,33 +19,36 @@ interface CustomCylinder extends CylinderProps {
  * @returns <Cylinder>
  */
 const Cylinder = (props: CustomCylinder) => {
+  const { mass, dimensions, position, type, onCollide, transparent, color } =
+    props;
   let collisionRef = createRef();
+
+  const meshProps = {
+    ref: props.collision ? collisionRef : undefined,
+    position: props.position,
+  };
+
   if (props.collision) {
     [collisionRef] = useCylinder(() => ({
-      args: props.dimensions,
-      mass: props.mass,
-      position: props.position,
-      type: props.type,
-      onCollide: props.onCollide,
+      args: dimensions,
+      mass: mass,
+      position: position,
+      type: type,
+      onCollide: onCollide,
       ...props,
     }));
   }
 
   return (
     <>
-      {props.collision && (
-        <mesh ref={collisionRef}>
-          <cylinderBufferGeometry args={props.dimensions} />
-          <meshPhongMaterial color={props.color} />
-        </mesh>
-      )}
-
-      {!props.collision && (
-        <mesh position={props.position}>
-          <cylinderBufferGeometry args={props.dimensions} />
-          <meshPhongMaterial color={props.color} />
-        </mesh>
-      )}
+      <mesh {...meshProps}>
+        <cylinderBufferGeometry args={dimensions} />
+        <meshPhongMaterial
+          color={color}
+          transparent={transparent}
+          opacity={transparent ? 0.0 : 1.0}
+        />
+      </mesh>
     </>
   );
 };

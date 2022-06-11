@@ -6,9 +6,10 @@ import { BoxProps, useBox } from '@react-three/cannon';
  * for useBox hook used to render a box in Cannon.JS's physics engine
  */
 interface CustomBox extends BoxProps {
-  color: string;
+  color?: string;
+  transparent?: boolean;
   dimensions: [number, number, number];
-  collision: boolean;
+  collision?: boolean;
 }
 /**
  * Box component renders a box with collision detection.
@@ -18,33 +19,36 @@ interface CustomBox extends BoxProps {
  * @returns <Box>
  */
 const Box = (props: CustomBox) => {
+  const { mass, dimensions, position, type, onCollide, transparent, color } =
+    props;
+
   let collisionRef = createRef();
+
+  const meshProps = {
+    ref: props.collision ? collisionRef : undefined,
+    position: props.position,
+  };
+
   if (props.collision) {
     [collisionRef] = useBox(() => ({
-      args: props.dimensions,
-      mass: props.mass,
-      position: props.position,
-      type: props.type,
-      onCollide: props.onCollide,
+      args: dimensions,
+      mass: mass,
+      position: position,
+      type: type,
+      onCollide: onCollide,
       ...props,
     }));
   }
-
   return (
     <>
-      {props.collision && (
-        <mesh ref={collisionRef}>
-          <boxBufferGeometry args={props.dimensions} />
-          <meshPhongMaterial color={props.color} />
-        </mesh>
-      )}
-
-      {!props.collision && (
-        <mesh position={props.position}>
-          <boxBufferGeometry args={props.dimensions} />
-          <meshPhongMaterial color={props.color} />
-        </mesh>
-      )}
+      <mesh {...meshProps}>
+        <boxBufferGeometry args={dimensions} />
+        <meshPhongMaterial
+          color={color}
+          transparent={transparent}
+          opacity={transparent ? 0.0 : 1.0}
+        />
+      </mesh>
     </>
   );
 };
