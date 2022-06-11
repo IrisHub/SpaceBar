@@ -1,5 +1,6 @@
-import React, { createRef } from 'react';
+import React, { useRef } from 'react';
 import { CylinderProps, useCylinder } from '@react-three/cannon';
+import { Event, Object3D } from 'three';
 
 /**
  * CustomCylinder extends props
@@ -21,7 +22,7 @@ interface CustomCylinder extends CylinderProps {
 const Cylinder = (props: CustomCylinder) => {
   const { mass, dimensions, position, type, onCollide, transparent, color } =
     props;
-  let collisionRef = createRef();
+  let collisionRef = useRef<Object3D<Event>>(null);
 
   const meshProps = {
     ref: props.collision ? collisionRef : undefined,
