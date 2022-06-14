@@ -1,27 +1,29 @@
-import { usePlane } from '@react-three/cannon';
 import React from 'react';
-
-import { Colors } from '../../constants';
+import { Plane } from '../Shapes';
+// import { usePlane } from '@react-three/cannon';
+import { WorldBoundariesProps } from '../../allTypes';
+import { Colors, Dims } from '../../constants';
 
 /**
  * Defines a basic floor component as a flat plane rotated 90 degrees
  * This floor is partially transparent and will come with gridlines to
  * calibrate movement.
  */
-const Floor = () => {
-  const [ref] = usePlane(() => ({
-    rotation: [-Math.PI / 2, 0, 0],
-  }));
+const Floor = (props: WorldBoundariesProps) => {
   return (
-    <mesh ref={ref} rotation={[-Math.PI / 2, 0, 0]}>
-      <planeBufferGeometry attach="geometry" args={[100, 100]} />
-      <meshBasicMaterial
-        attach="material"
+    <>
+      <Plane
         color={Colors.black}
-        transparent="true"
-        opacity={0.25}
+        dimensions={[Dims.floorX * 2, Dims.floorZ * 2]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        collision={true}
       />
-    </mesh>
+      {props.debug && (
+        <gridHelper
+          args={[Dims.floorX * 2, Dims.floorZ * 2, Colors.black, Colors.grey]}
+        />
+      )}
+    </>
   );
 };
 

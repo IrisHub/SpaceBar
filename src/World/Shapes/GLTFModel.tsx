@@ -1,9 +1,9 @@
-import { BoxProps, useBox } from '@react-three/cannon';
-import { useLoader } from '@react-three/fiber';
-import React, { createRef, useMemo } from 'react';
-import { Box3 } from 'three';
-import { Vector3 } from 'three';
+import React, { useRef, useMemo } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { useLoader } from '@react-three/fiber';
+import { Box3, Event, Object3D } from 'three';
+import { BoxProps, useBox } from '@react-three/cannon';
+import { Vector3 } from 'three';
 import { SkeletonUtils } from 'three-stdlib';
 
 interface CustomGLTF extends BoxProps {
@@ -26,42 +26,40 @@ interface CustomGLTF extends BoxProps {
  * @returns <GLTFModel>
  */
 const GLTFModel = (props: CustomGLTF) => {
+  const { mass, position, type, onCollide, bboxScaleFactor, collision } = props;
   const { scene } = useLoader(GLTFLoader, props.modelPath);
   // Must use Skeleton utils to support copies of skinned meshes https://github.com/mrdoob/three.js/issues/11573
   let copiedScene = useMemo(() => SkeletonUtils.clone(scene), [scene]);
   copiedScene.scale.multiplyScalar(props.modelScaleFactor);
-  let collisionRef = createRef();
+  let collisionRef = useRef<Object3D<Event>>(null);
+
   if (props.collision) {
     let bbox = useMemo(
       () => new Box3().setFromObject(copiedScene),
       [copiedScene],
     );
     const bboxSize = bbox.getSize(new Vector3());
-    const scaledBbox = bboxSize.multiplyScalar(props.bboxScaleFactor).toArray();
+    const scaledBbox = bboxSize.multiplyScalar(bboxScaleFactor).toArray();
     [collisionRef] = useBox(() => ({
       args: scaledBbox, //Must accept array and not vector3
-      mass: props.mass,
-      position: props.position,
-      type: props.type,
-      onCollide: props.onCollide,
+      mass: mass,
+      position: position,
+      type: type,
+      onCollide: onCollide,
     }));
   }
 
   return (
     <>
-      {props.collision ? (
+      {collision ? (
         <primitive
           ref={collisionRef}
-          position={props.position}
+          position={position}
           object={copiedScene}
           dispose={null}
         />
       ) : (
-        <primitive
-          position={props.position}
-          object={copiedScene}
-          dispose={null}
-        />
+        <primitive position={position} object={copiedScene} dispose={null} />
       )}
     </>
   );

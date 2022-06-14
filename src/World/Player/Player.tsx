@@ -3,11 +3,10 @@ import { useFrame, useThree } from '@react-three/fiber';
 import React, { useEffect, useRef } from 'react';
 import { Vector3 } from 'three';
 
-import { PlayerPosition, PlayerVelocity } from '../../allTypes';
 import { MathConstants, PlayerConstants } from '../../constants';
 import PlayerMovementControls from './PlayerMovementControls';
 import playerMovementEmitter from './playerMovementEmitter';
-import { round, roundEntriesInVector } from './playerMovementUtils';
+import { roundEntriesInVector3, round } from './playerMovementUtils';
 
 /**
  * Defines a custom player object (a default Cannon.js sphere) and handles player movement
@@ -29,7 +28,7 @@ const Player = (props: SphereProps) => {
   let pastPosition = new Vector3();
   let pastVelocity = new Vector3();
 
-  const currentVelocityVector = useRef<PlayerVelocity>({ x: 0, y: 0, z: 0 });
+  const currentVelocityVector = useRef(new Vector3());
   useEffect(() => {
     setPlayerRef.velocity.subscribe((playerVelocity) => {
       currentVelocityVector.current.x = round(
@@ -47,16 +46,18 @@ const Player = (props: SphereProps) => {
     });
   }, [setPlayerRef.velocity]);
 
-  useFrame(() => {
-    let playerCurrentPosition: PlayerPosition = camera.position;
-    if (playerRef.current != null) {
-      playerRef.current.getWorldPosition(playerCurrentPosition); //Position of player copied to camera position
-      playerCurrentPosition = roundEntriesInVector(playerCurrentPosition, 3);
+  let playerCurrentPosition = camera.position;
 
-      if (pastPosition !== playerCurrentPosition) {
-        playerMovementEmitter.emit('sendCoords', playerCurrentPosition);
-        pastPosition = playerCurrentPosition;
-      }
+  useFrame(() => {
+    playerRef.current?.getWorldPosition(playerCurrentPosition); //Position of player copied to camera position
+    playerCurrentPosition = roundEntriesInVector3(
+      playerCurrentPosition,
+      MathConstants.roundingPrecision,
+    );
+
+    if (pastPosition !== playerCurrentPosition) {
+      playerMovementEmitter.emit('sendCoords', playerCurrentPosition);
+      pastPosition = playerCurrentPosition;
     }
 
     zVector.set(0, 0, Number(forward) - Number(backward));
@@ -71,12 +72,12 @@ const Player = (props: SphereProps) => {
       currentVelocityVector.current.y,
       newVelocityVector.z,
     );
-    playerCurrentPosition = roundEntriesInVector(
+    playerCurrentPosition = roundEntriesInVector3(
       playerCurrentPosition,
       MathConstants.roundingPrecision,
     );
 
-    const canJump: boolean =
+    const canJump =
       jump &&
       Math.abs(currentVelocityVector.current.y) < 0.05 &&
       pastVelocity.y === currentVelocityVector.current.y; //Prevent infinite jumping
@@ -91,9 +92,9 @@ const Player = (props: SphereProps) => {
   });
 
   return (
-    <React.Fragment>
+    <>
       <mesh ref={playerRef} />
-    </React.Fragment>
+    </>
   );
 };
 

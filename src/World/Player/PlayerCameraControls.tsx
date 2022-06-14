@@ -1,49 +1,23 @@
-import { PointerLockControls } from '@react-three/drei';
-import { useThree } from '@react-three/fiber';
-import React, { useEffect } from 'react';
+import {
+  PointerLockControls,
+  PointerLockControlsProps,
+} from '@react-three/drei';
+import React, { useEffect, useRef } from 'react';
 
-/**
- * Defines player camera controls, and allows for more custom manipulation
- * of the default Three/drei PointerLockControls component.
- */
-const PlayerCameraControls = () => {
-  const { controls } = useThree();
+export default function PlayerCameraControls() {
+  /**
+   * Defines player camera controls, and allows for more custom manipulation
+   * of the default Three/drei PointerLockControls component.
+   */
+  let controlsRef = useRef<PointerLockControlsProps>(null);
 
   useEffect(() => {
-    if (controls && controls.current) {
-      document.addEventListener('click', () => {
-        controls?.current?.lock();
-      });
-    }
-  }, [controls]);
+    document.addEventListener('click', () => {
+      controlsRef?.current?.lock?.();
+    });
+  }, [controlsRef]);
 
-  return (
-    <PointerLockControls
-      ref={controls}
-      key={undefined}
-      attach={undefined}
-      attachArray={undefined}
-      attachObject={undefined}
-      args={undefined}
-      // eslint-disable-next-line react/no-children-prop
-      children={undefined}
-      onUpdate={undefined}
-      domElement={undefined}
-      isLocked={undefined}
-      minPolarAngle={undefined}
-      maxPolarAngle={undefined}
-      connect={undefined}
-      disconnect={undefined}
-      getDirection={undefined}
-      moveForward={undefined}
-      moveRight={undefined}
-      lock={undefined}
-      unlock={undefined}
-      addEventListener={undefined}
-      hasEventListener={undefined}
-      removeEventListener={undefined}
-      dispatchEvent={undefined}
-    />
-  );
-};
-export default PlayerCameraControls;
+  // @ts-expect-error
+  // Supressing known typing error with Drei: https://github.com/pmndrs/drei/issues/687
+  return <PointerLockControls ref={controlsRef} />;
+}

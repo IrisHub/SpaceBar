@@ -1,7 +1,6 @@
 import { useFrame } from '@react-three/fiber';
 import React, { useRef } from 'react';
 import { Object3D } from 'three';
-
 const dummy = new Object3D();
 
 /**
@@ -50,7 +49,11 @@ const SceneObject = () => {
   });
 
   return (
-    <instancedMesh ref={meshRef} args={[null, null, 1]} position={[0, 5, 0]}>
+    <instancedMesh
+      ref={meshRef}
+      args={[undefined, undefined, 1]}
+      position={[0, 5, 0]}
+    >
       <boxGeometry args={[10, 10, 10, 32]}></boxGeometry>
       <meshPhongMaterial color="lightgreen" />
     </instancedMesh>
