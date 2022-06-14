@@ -24,14 +24,12 @@ Options:
     -h --help       Show the help menu.
     -v --verbose    Print bash trace.
     lint            Run linters on all files. Run with --fix to fix.
-    deploy          [TODO]
-    build           [TODO]
 EOF
 exit 0
 }
 
 main_param=''
-positionals=()
+positional_args=()
 fix_flag=0
 
 if [[ "$#" -eq 0 ]]; then usage; fi
@@ -52,13 +50,13 @@ while [[ "$#" -gt 0 ]]; do
             shift
             ;;
         *) 
-            positionals+=("$1")
+            positional_args+=("$1")
             shift
             ;;
     esac
 done
 
-set -- ${positionals[@]}
+set -- ${positional_args[@]}
 
 # Extract main positional arg
 if [[ "$#" -eq 0 ]]; then
