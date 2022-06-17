@@ -36,7 +36,7 @@ const GLTFModel = (props: CustomGLTF) => {
   if (props.collision) {
     let bbox = useMemo(
       () => new Box3().setFromObject(copiedScene),
-      [copiedScene]
+      [copiedScene],
     );
     const bboxSize = bbox.getSize(new Vector3());
     const scaledBbox = bboxSize.multiplyScalar(bboxScaleFactor).toArray();

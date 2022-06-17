@@ -1,0 +1,81 @@
+#!/bin/bash
+
+set -euo pipefail
+trap cleanup SIGINT SIGTERM ERR EXIT
+
+cleanup () {
+    trap - SIGINT SIGTERM ERR EXIT
+}
+
+function die () {
+    echo 2>&1 Error: "$*"
+    echo "Use the flag -h/--help for more information."
+    exit 1;
+}
+
+function usage () {
+cat<<"EOF"
+SpaceBar Shell Utility
+Usage:
+    ./spacebar lint [--fix|-f]
+    ./spacebar --help | -h
+
+Options:
+    -h --help       Show the help menu.
+    -v --verbose    Print bash trace.
+    lint            Run linters on all files. Run with --fix to fix.
+EOF
+exit 0
+}
+
+main_param=''
+positional_args=()
+fix_flag=0
+
+if [[ "$#" -eq 0 ]]; then usage; fi
+
+# Set flags and extract filenames
+while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+        -f|--fix)
+            fix_flag=1
+            shift
+            ;;
+        -v|--verbose)
+            set -x
+            shift
+            ;;
+        -h|--help)
+            usage
+            shift
+            ;;
+        *) 
+            positional_args+=("$1")
+            shift
+            ;;
+    esac
+done
+
+set -- ${positional_args[@]}
+
+# Extract main positional arg
+if [[ "$#" -eq 0 ]]; then
+   die "Must supply one of [lint] if help flag not set. " 
+elif [[ "$1" =~ ^(lint)$ ]]; then
+    main_param="$1"
+    shift
+else
+    die "Invalid parameter $1. Must be one of [lint]. "
+fi
+
+case $main_param in
+    lint)
+        if [[ "$fix_flag" -eq 1 ]]; then
+            npx eslint --fix "**/*.{ts,tsx}" --debug
+            npx prettier "src/**/*.{ts,tsx}" --write
+        else
+            npx eslint "**/*.{ts,tsx}" --debug
+            npx prettier "src/**/*.{ts,tsx}" --check --verbose
+        fi
+        ;;
+esac

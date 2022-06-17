@@ -1,60 +1,42 @@
 {
-    "env": {
-        "browser": true,
-        "es2021": true
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["plugin:react/recommended", "airbnb-typescript"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "tsx": true
     },
-    "extends": [
-        "plugin:react/recommended",
-        "airbnb-typescript"
+    "project": ["tsconfig.json"],
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["react", "import", "@typescript-eslint", "simple-import-sort"],
+  "rules": {
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
     ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaFeatures": {
-            "tsx": true
-        },
-        "project": [
-            "tsconfig.json"
-        ],
-        "ecmaVersion": "latest",
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react",
-        "import",
-        "@typescript-eslint"
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
     ],
-    "rules": {
-        "react/jsx-filename-extension": [
-            1,
-            {
-                "extensions": [
-                    ".js",
-                    ".jsx",
-                    ".ts",
-                    ".tsx"
-                ]
-            }
-        ],
-        "import/extensions": [
-            "error",
-            "ignorePackages",
-            {
-                "js": "never",
-                "jsx": "never",
-                "ts": "never",
-                "tsx": "never"
-            }
-        ],
-        "comma-dangle": 0,
-        "@typescript-eslint/comma-dangle": 0
-    },
-    "settings": {
-        "import/extensions": [
-            ".js",
-            ".mjs",
-            ".jsx",
-            ".ts",
-            ".tsx"
-        ]
-    }
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "comma-dangle": 0,
+    "@typescript-eslint/comma-dangle": 0
+  },
+  "settings": {
+    "import/extensions": [".js", ".mjs", ".jsx", ".ts", ".tsx"]
+  }
 }

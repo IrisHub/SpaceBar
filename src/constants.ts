@@ -13,24 +13,24 @@ export abstract class MathConstants {
 export abstract class Plants {
   static readonly smallBluePlantPath: string = resolveS3Path(
     'smallBluePlant/scene.gltf',
-    'model'
+    'model',
   );
 
   static readonly mushroomTreePath: string = resolveS3Path(
     'mushroomTree/scene.gltf',
-    'model'
+    'model',
   );
 
   static readonly smallBluePlantPotPath: string = resolveS3Path(
     'smallBluePlantPot/scene.gltf',
-    'model'
+    'model',
   );
 }
 
 export abstract class Objects {
   static readonly gunshipPath: string = resolveS3Path(
     'gunship/scene.gltf',
-    'model'
+    'model',
   );
 }
 
@@ -42,7 +42,7 @@ export abstract class Colors {
   static readonly green = '#008000';
 
   static readonly debugYellow = '#FFD702';
-  
+
   static readonly white = '##FFFFFF';
 
   static readonly dialogBlue = '#8BD9FF';

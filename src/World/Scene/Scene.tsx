@@ -1,6 +1,6 @@
-import React from 'react';
-import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/cannon';
+import { Canvas } from '@react-three/fiber';
+import React from 'react';
 
 import Player from '../Player/Player';
 import PlayerCameraControls from '../Player/PlayerCameraControls';
@@ -8,11 +8,11 @@ import Skybox from './Skybox';
 import { Box, Cylinder, Sphere, GLTFModel } from '../Shapes';
 
 import {
-  PhysicsConstants,
-  Plants,
-  Objects,
   Colors,
   Mass,
+  Objects,
+  PhysicsConstants,
+  Plants,
 } from '../../constants';
 import WorldBoundaries from '../../Scene/WorldBoundaries';
 
