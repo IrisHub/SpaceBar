@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Colors } from '../../constants';
+import { Colors } from '../../common/constants';
 
 export const DialogContainer = styled.div`
   position: absolute;

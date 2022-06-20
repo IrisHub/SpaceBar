@@ -1,18 +1,21 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { PlaneProps, usePlane } from '@react-three/cannon';
-import { DoubleSide } from 'three';
+import { DoubleSide, PlaneBufferGeometry } from 'three';
 import { Event, Object3D } from 'three';
+import { terrainMapGenerator } from '../../common/terrain';
+import { Dims } from '../../common/constants';
 
 /**
  * CustomPlane extends props
  * for usePlane hook used to render a plane in Cannon.JS's physics engine
  */
 interface CustomPlane extends PlaneProps {
-  dimensions: [number, number];
+  dimensions: [number, number, number, number];
   color?: string;
   transparent?: boolean;
   rotation?: [number, number, number];
   collision?: boolean;
+  terrain?: boolean;
 }
 
 /**
@@ -21,6 +24,21 @@ interface CustomPlane extends PlaneProps {
  * @returns Plane component
  */
 export default function Plane({ type = 'Static', ...props }: CustomPlane) {
+  const ref = useRef<PlaneBufferGeometry>();
+  useEffect(()=> {
+    const vertices = terrainMapGenerator(50, 0.6);
+    if (ref.current) {
+      const { position } = ref.current.attributes;
+      for (let z = 0; z < Dims.floorZ + 1; z++ ){
+        for (let x = 0; x < Dims.floorX + 1; x++) {
+          const index = (x * Dims.floorX + z);
+          position.setZ(index + 1, vertices[z][x] + 50);
+        }
+      }
+      position.needsUpdate = true;
+      ref.current.computeVertexNormals();
+    }
+  });
   let collisionRef = useRef<Object3D<Event>>(null);
 
   let meshProps = {
@@ -44,12 +62,13 @@ export default function Plane({ type = 'Static', ...props }: CustomPlane) {
   return (
     <>
       <mesh {...meshProps}>
-        <planeBufferGeometry args={props.dimensions} />
-        <meshBasicMaterial
+        <planeBufferGeometry args={props.dimensions} ref={props.terrain ? ref : null}/>
+        <meshStandardMaterial
           color={props.color}
           transparent={props.transparent}
-          opacity={props.transparent ? 0.0 : 1.0}
+          opacity={props.transparent ? 1.0 : 0.0}
           side={DoubleSide}
+          roughness={1.0}
         />
       </mesh>
     </>

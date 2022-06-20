@@ -1,7 +1,6 @@
 import { useThree } from '@react-three/fiber';
 import { CubeTextureLoader } from 'three';
-
-import { SkyboxImages } from '../../constants';
+import { SkyboxImages } from '../../common/constants';
 
 /**
  * Applies a textured skybox.

@@ -13,7 +13,7 @@ import {
   Objects,
   PhysicsConstants,
   Plants,
-} from '../../constants';
+} from '../../common/constants';
 import WorldBoundaries from '../../Scene/WorldBoundaries';
 
 /**

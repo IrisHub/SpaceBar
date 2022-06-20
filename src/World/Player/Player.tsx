@@ -7,6 +7,11 @@ import { MathConstants, PlayerConstants } from '../../constants';
 import PlayerMovementControls from './PlayerMovementControls';
 import playerMovementEmitter from './playerMovementEmitter';
 import { roundEntriesInVector3, round } from './playerMovementUtils';
+<<<<<<< HEAD
+=======
+import { Vector3 } from 'three';
+import { PlayerConstants, MathConstants } from '../../common/constants';
+>>>>>>> 2db3463 (terrain: reorganize files and implement Gaussian terrain generation)
 
 /**
  * Defines a custom player object (a default Cannon.js sphere) and handles player movement
@@ -52,7 +57,11 @@ const Player = (props: SphereProps) => {
     playerRef.current?.getWorldPosition(playerCurrentPosition); //Position of player copied to camera position
     playerCurrentPosition = roundEntriesInVector3(
       playerCurrentPosition,
+<<<<<<< HEAD
       MathConstants.roundingPrecision,
+=======
+      MathConstants.roundingPrecision
+>>>>>>> 2db3463 (terrain: reorganize files and implement Gaussian terrain generation)
     );
 
     if (pastPosition !== playerCurrentPosition) {

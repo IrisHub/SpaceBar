@@ -1,5 +1,6 @@
 import { resolveS3Path } from './utils';
 
+
 export abstract class PhysicsConstants {
   static readonly gravity: [number, number, number] = [0, -30, 0];
 
@@ -15,7 +16,7 @@ export abstract class Plants {
     'smallBluePlant/scene.gltf',
     'model',
   );
-
+    
   static readonly mushroomTreePath: string = resolveS3Path(
     'mushroomTree/scene.gltf',
     'model',
@@ -53,9 +54,9 @@ export abstract class Colors {
 }
 
 export abstract class Dims {
-  static readonly floorX = 100;
+  static readonly floorX = 1024;
 
-  static readonly floorZ = 100;
+  static readonly floorZ = 1024;
 }
 
 export abstract class Mass {

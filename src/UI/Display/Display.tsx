@@ -1,5 +1,5 @@
 import React from 'react';
-import { DisplayConstants } from '../../constants';
+import { DisplayConstants } from '../../common/constants';
 import VideoPlayer from '../Video/VideoPlayer';
 
 const Display = () => {
