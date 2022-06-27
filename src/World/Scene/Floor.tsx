@@ -2,7 +2,7 @@ import React from 'react';
 import { Plane } from '../Shapes';
 // import { usePlane } from '@react-three/cannon';
 import { WorldBoundariesProps } from '../../allTypes';
-import { Colors, Dims } from '../../constants';
+import { Colors, Dims } from '../../common/constants';
 
 /**
  * Defines a basic floor component as a flat plane rotated 90 degrees
@@ -13,10 +13,12 @@ const Floor = (props: WorldBoundariesProps) => {
   return (
     <>
       <Plane
-        color={Colors.black}
-        dimensions={[Dims.floorX * 2, Dims.floorZ * 2]}
+        color={Colors.grey}
+        dimensions={[Dims.floorX, Dims.floorZ, Dims.floorX, Dims.floorZ]}
         rotation={[-Math.PI / 2, 0, 0]}
         collision={true}
+        terrain={true}
+        transparent={true}
       />
       {props.debug && (
         <gridHelper

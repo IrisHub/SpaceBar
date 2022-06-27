@@ -1,5 +1,5 @@
 import { Vector3 } from 'three';
-import { SimpleVector3 } from '../types';
+import { SimpleVector3 } from '../common/types';
 
 /**
  * serialize is a helper function that is a light wrapper around stringifying a JSON object.

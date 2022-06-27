@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Colors, DisplayConstants } from '../../constants';
+import { Colors, DisplayConstants } from '../../common/constants';
 
 export const VideoContainer = styled.div`
   position: absolute;

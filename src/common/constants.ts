@@ -53,9 +53,9 @@ export abstract class Colors {
 }
 
 export abstract class Dims {
-  static readonly floorX = 100;
+  static readonly floorX = 1024;
 
-  static readonly floorZ = 100;
+  static readonly floorZ = 1024;
 }
 
 export abstract class Mass {

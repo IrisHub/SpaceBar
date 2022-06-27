@@ -3,10 +3,10 @@ import { useFrame, useThree } from '@react-three/fiber';
 import React, { useEffect, useRef } from 'react';
 import { Vector3 } from 'three';
 
-import { MathConstants, PlayerConstants } from '../../constants';
 import PlayerMovementControls from './PlayerMovementControls';
 import playerMovementEmitter from './playerMovementEmitter';
 import { roundEntriesInVector3, round } from './playerMovementUtils';
+import { PlayerConstants, MathConstants } from '../../common/constants';
 
 /**
  * Defines a custom player object (a default Cannon.js sphere) and handles player movement

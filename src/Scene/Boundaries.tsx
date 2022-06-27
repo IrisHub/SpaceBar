@@ -1,7 +1,7 @@
 import React from 'react';
-import { Boundary, Colors, Dims } from '../constants';
 import Plane from '../World/Shapes/Plane';
 import { WorldBoundariesProps } from '../allTypes';
+import { Boundary, Colors, Dims } from '../common/constants';
 
 /**
  * Renders a boundary of 4 impassible Planes that define the edges of the world.
@@ -21,7 +21,7 @@ function Boundaries(props: WorldBoundariesProps) {
     <>
       <Plane // North
         position={[0, 0, -Dims.floorZ]}
-        dimensions={[Dims.floorX * 2, Boundary.visiblePlaneHeight]}
+        dimensions={[Dims.floorX, Boundary.visiblePlaneHeight, 1, 1]}
         collision={true}
         rotation={[0, 0, 0]}
         {...boundaryColorConfig}
@@ -29,7 +29,7 @@ function Boundaries(props: WorldBoundariesProps) {
 
       <Plane // South
         position={[0, 0, Dims.floorZ]}
-        dimensions={[Dims.floorX * 2, Boundary.visiblePlaneHeight]}
+        dimensions={[Dims.floorX * 2, Boundary.visiblePlaneHeight, 1, 1]}
         collision={true}
         rotation={[0, Math.PI, 0]}
         {...boundaryColorConfig}
@@ -37,7 +37,7 @@ function Boundaries(props: WorldBoundariesProps) {
 
       <Plane // West
         position={[-Dims.floorX, 0, 0]}
-        dimensions={[Dims.floorZ * 2, Boundary.visiblePlaneHeight]}
+        dimensions={[Dims.floorZ * 2, Boundary.visiblePlaneHeight, 1, 1]}
         collision={true}
         rotation={[0, Math.PI / 2, 0]}
         {...boundaryColorConfig}
@@ -45,7 +45,7 @@ function Boundaries(props: WorldBoundariesProps) {
 
       <Plane // East
         position={[Dims.floorX, 0, 0]}
-        dimensions={[Dims.floorZ * 2, Boundary.visiblePlaneHeight]}
+        dimensions={[Dims.floorZ * 2, Boundary.visiblePlaneHeight, 1, 1]}
         collision={true}
         rotation={[0, -Math.PI / 2, 0]}
         {...boundaryColorConfig}

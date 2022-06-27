@@ -12,8 +12,8 @@ import {
   faVideo,
   faVideoSlash,
 } from '@fortawesome/free-solid-svg-icons';
-import { Colors } from '../../constants';
 import Dialog from '../Dialog/Dialog';
+import { Colors } from '../../common/constants';
 
 interface VideoProps {
   height?: number;
