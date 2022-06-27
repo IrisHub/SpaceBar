@@ -25,14 +25,16 @@ interface CustomPlane extends PlaneProps {
  */
 export default function Plane({ type = 'Static', ...props }: CustomPlane) {
   const ref = useRef<PlaneBufferGeometry>();
-  useEffect(()=> {
-    const vertices = terrainMapGenerator(50, 0.6);
+  useEffect(() => {
+    // TODO: make sure you don't commit magic numbers lmao
+    const vertices = terrainMapGenerator(50, 0.6).flat();
     if (ref.current) {
-      const { position } = ref.current.attributes;
-      for (let z = 0; z < Dims.floorZ + 1; z++ ){
-        for (let x = 0; x < Dims.floorX + 1; x++) {
-          const index = (x * Dims.floorX + z);
-          position.setZ(index + 1, vertices[z][x] + 50);
+      const { position } = ref.current?.attributes;
+      for (let z = 0; z < Dims.floorZ; z++) {
+        for (let x = 0; x < Dims.floorX; x++) {
+          const index = z * Dims.floorZ + x;
+          console.log(index);
+          position.setZ(index, vertices[index] - 75);
         }
       }
       position.needsUpdate = true;
@@ -62,7 +64,10 @@ export default function Plane({ type = 'Static', ...props }: CustomPlane) {
   return (
     <>
       <mesh {...meshProps}>
-        <planeBufferGeometry args={props.dimensions} ref={props.terrain ? ref : null}/>
+        <planeBufferGeometry
+          args={props.dimensions}
+          ref={props.terrain ? ref : null}
+        />
         <meshStandardMaterial
           color={props.color}
           transparent={props.transparent}
