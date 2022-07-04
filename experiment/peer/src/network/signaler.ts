@@ -76,7 +76,7 @@ class Signaler {
         // peer.on('track', (track, stream) =>
         //   this._handleTrack(track, stream),
         // );
-        this.peer?.on('close', () => this._handleClose());
+        // this.peer?.on('close', () => this._handleClose());
     }
 
     // Functions that handle messages from the client and send to the signaling server.

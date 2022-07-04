@@ -1,11 +1,10 @@
 export enum PayloadType {
+    JOIN_ROOM,
     SIGNAL,
     CANDIDATE,
     DATA,
     HANDSHAKE,
     NEW_PEER,
-    CLOSE,
-    HEARTBEAT,
 }
 
 export interface Payload {

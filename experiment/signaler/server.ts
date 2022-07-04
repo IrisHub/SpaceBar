@@ -14,15 +14,22 @@ export interface Room {
     peers: Peer[];
 }
 
+export interface Connection {
+    peer: Peer;
+    ws: WebSocket;
+}
+
 export class SignalingServer {
     wss: WebSocket.Server<WebSocket.WebSocket>;
 
     // Keep track of the peers that join.
     rooms: Room[];
+    connections: Connection[];
 
     constructor(wss: WebSocket.Server) {
         this.wss = wss;
         this.rooms = [];
+        this.connections = [];
     }
 
     // TODO(SHALIN): Make sure the caller scopes the `this` properly, or change the way these functions are called.
@@ -46,18 +53,7 @@ export class SignalingServer {
             case "DATA":
                 this._handleMessage(data);
                 break
-            case "CLOSE":
-                // this._handleDisconnect(data);
-                break
         }
-    }
-
-    ping() {
-        // Send a pulse to all the clients.
-    }
-
-    pong() {
-        // Check off the clients that are still connected.
     }
 
     // This is the first function called. It's when a new peer first tries to join a room.
@@ -76,27 +72,16 @@ export class SignalingServer {
 
     // Creates a new peer.
     _createPeer(ws: WebSocket, roomID: string, initiator: boolean, id?: string) {
-        console.log("Peer ID we got is", id);
-
-        if (id) {
-            const peersInRoom = this.rooms[roomID].peers;
-            const currentPeer = peersInRoom.find(peer => peer.id === id);
-            if (peersInRoom.length !== 0 && currentPeer) {
-                return currentPeer;
-            }
-        }
-
-        const peer: Peer = { roomID: roomID, id: uuid().toString(), initiator: initiator, ws: ws };
+        const peer: Peer = { roomID: roomID, id: id ? id : uuid().toString(), initiator: initiator, ws: ws };
         return peer
     }
 
     createNewPeer(ws: WebSocket, roomID: string, id?: string) {        
         // Check if there are any other peers in this room.
         const peersInRoom = this.rooms[roomID].peers;
-        console.log(`There are ${peersInRoom.length} peers in the room`);
 
-        // If no peers found in this room, then the current peer is the initiator.
-        const isInitiator = peersInRoom.length === 0;
+        // Check if any of the peers are initiators.
+        const initiatorsPresent = peersInRoom.find(peer => peer.initiator === true);
         
         // Check if we've seen this peer before from a previous session.
         const cachedPeer = peersInRoom.find(peer => peer.id === id);
@@ -106,19 +91,26 @@ export class SignalingServer {
         let peer: Peer;
         if (peersInRoom.length !== 0 && cachedPeer) {
             peer = cachedPeer;
+            peer.ws = ws;
         } else {
             // Create a new peer and add it to the room.
-            peer = this._createPeer(ws, roomID, isInitiator, id);
+            // If none of the peers in the room are initiators, then make the current peer the initiator.
+            peer = this._createPeer(ws, roomID, !initiatorsPresent, id);
             this.rooms[roomID].peers.push(peer);
         }
+
+        // Cache the websocket object this peer is connected over so we can disconnect properly.
+        const connection: Connection = { peer: peer, ws: ws };
+        this.connections[peer.id] = connection;
 
         // Send the peer it's metadata such as what ID we've assigned it, etc.
         const peerInfo = createPayload(PayloadType.NEW_PEER, peer, peer.id, peer.roomID);
         ws.send(peerInfo);
 
-        // If our peer was NOT the initiator, meaning more than one peer has joined the same room, then
-        // send all peers a HANDSHAKE message so they can start exchanging ICE candidates.
-        if (!isInitiator) {
+        // If there is more than one peer in the room, send all peers a HANDSHAKE message so they 
+        // can start exchanging ICE candidates. Otherwise wait until more than one person joins.
+        console.log(`There are now ${peersInRoom.length} peers in the room`);
+        if (peersInRoom.length > 1) {
             peersInRoom.forEach(peer => {
                 if (peer.ws.readyState === WebSocket.OPEN) {
                     const handshake = createPayload(PayloadType.HANDSHAKE, {});
@@ -126,32 +118,6 @@ export class SignalingServer {
                 }
             });
         }
-    }
-
-    checkStatus() {
-        // Check if any of the clients are disconnected.
-        // this.peers.forEach(peer => {
-        //     if (this.connections[peer.id].readyState === WebSocket.CLOSED) {
-        //         this.peers.splice(this.peers.indexOf(peer), 1);
-        //         delete this.connections[peer.id];
-        //     }
-        // });
-
-        // this.peers.forEach(peer => {
-        //     const key = peer.id;
-        //     const ws = this.connections[key];
-        //     if (ws.readyState === WebSocket.CLOSED) {
-        //         console.log("Client disconnected!");
-        //     }
-        // });
-        console.log("checkStatus");
-    }
-
-    removePeer(peer: WebSocket) {
-        // const key = Object.keys(this.connections).find(key => this.connections[key] === peer);
-        // delete this.connections[key];
-        // this.peers = this.peers.filter(p => p.id !== key);
-        // console.log("removePeer", peer);
     }
     
     _handleSendSignal(roomID: string, peerID: string, message: WebSocket.RawData) { 
@@ -171,12 +137,27 @@ export class SignalingServer {
     _handleMessage(message: WebSocket.RawData) {
         console.log("handleMessage", parse(message));
     }
-    
-    _handleDisconnect(roomID: string, peerID: string, message: WebSocket.RawData) {
 
+    handleClose(ws: WebSocket, message: WebSocket.RawData) {
+        // Find the peerID and roomID from the websocket instance.
+        const peerID = Object.keys(this.connections).find(key => this.connections[key].ws === ws);
+        const roomID = this.connections[peerID].peer.roomID;
 
-        // delete this.connections[key];
-        // this.peers = this.peers.filter(p => p.id !== key);
-        // console.log("handleDisconnect", parse(message));
+        const peersInRoom = this.rooms[roomID].peers;
+
+        // Delete a peer by `filter`ing instead of using `splice` with indices, since we 
+        // could run into races if multiple clients are joining and leaving at the same time.
+        this.rooms[roomID].peers = peersInRoom.filter(peer => peer.id !== peerID);
+
+        // Remove the connection.
+        delete this.connections[peerID];
+
+        // If the room has no peers anymore, delete the room too.
+        if (peersInRoom.length === 0) {
+            delete this.rooms[roomID];
+            console.log(`All peers left, room ${roomID} deleted`);
+        }
+        
+        console.log("WEBSOCKET CLOSED");
     }
 }
