@@ -1,5 +1,5 @@
 import SimplePeer from "simple-peer";
-import { parse, PayloadType, createPayload } from "./utils";
+import { load, parse, PayloadType, createPayload, save } from "./utils";
 
 class Signaler {
     private id?: string;
@@ -9,14 +9,19 @@ class Signaler {
     private peer?: SimplePeer.Instance;
 
     constructor(socket_url: string, port: number, roomID: string) {
-        // Create a new UUID for this peer, that we use in every message we send.
-        // TODO(SHALIN): Make sure this is only generated once per peer, then cached.
-        // If we close the tab and reopen, the behavior should be defined.
 
         // TODO(SHALIN): Verify that URL and PORT are valid.
         this.ws = new WebSocket(`ws://${socket_url}:${port}`);
         this.ws.onopen = (event) => {
             console.log("Websocket Connection Opened", event);
+            
+            // Check we currently have a saved peer id from a previous session.
+            // If we do, use that one so the signaling server can reconnect us.
+            const peer = load("peer");
+            if (peer.id) {
+                this.id = peer.id;
+                console.log("This peer already existed!", this.id);
+            }
 
             // As soon as the connection opens, tell the signaling server which room we'd like to join.
             const payload = createPayload(PayloadType.JOIN_ROOM, {}, this.id, roomID);
@@ -36,10 +41,14 @@ class Signaler {
                     this.roomID = peer.roomID;
                     this.initiator = peer.initiator;
                     console.log(`We just received our id ${this.id} and we are ${this.initiator ? "initiator" : "responder"}`);
+
+                    // Save this information locally.
+                    save("peer", peer);
+
                     break
                 case "HANDSHAKE":
-                    const Peer = (window as any)["SimplePeer"]; // Grab the SimplePeer class from the window object.
-                    this.peer = new Peer({
+                    const SimplePeer = (window as any)["SimplePeer"]; // Grab the SimplePeer class from the window object.
+                    this.peer = new SimplePeer({
                         initiator: this.initiator, 
                         trickle: true,
                     });
@@ -139,8 +148,8 @@ class Signaler {
     }
 
     _handleClose() {
-        const payload = createPayload(PayloadType.SIGNAL, {}, this.id, this.roomID);
-        this.peer?.send(payload)
+        const payload = createPayload(PayloadType.CLOSE, {}, this.id, this.roomID);
+        this.ws.send(payload)
         console.log("_handleClose");
     }
 }

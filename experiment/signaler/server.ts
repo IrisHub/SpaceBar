@@ -16,7 +16,6 @@ export interface Room {
 
 export class SignalingServer {
     wss: WebSocket.Server<WebSocket.WebSocket>;
-    connections = {}; // Store all the websockets.
 
     // Keep track of the peers that join.
     rooms: Room[];
@@ -39,7 +38,7 @@ export class SignalingServer {
         switch (type) {
             case "JOIN_ROOM":
                 // Pass the actual websocket to the receiver.
-                this._handleJoinRoom(ws, roomID);
+                this._handleJoinRoom(ws, roomID, id);
                 break
             case "SIGNAL":
                 this._handleSendSignal(roomID, id, data);
@@ -48,7 +47,7 @@ export class SignalingServer {
                 this._handleMessage(data);
                 break
             case "CLOSE":
-                this._handleDisconnect(data);
+                // this._handleDisconnect(data);
                 break
         }
     }
@@ -62,7 +61,7 @@ export class SignalingServer {
     }
 
     // This is the first function called. It's when a new peer first tries to join a room.
-    _handleJoinRoom(ws: WebSocket, roomID: string) {
+    _handleJoinRoom(ws: WebSocket, roomID: string, id?: string) {
         // Create a peer with a given room ID.
         console.log("We just got sent the roomID: ", roomID);
 
@@ -72,29 +71,46 @@ export class SignalingServer {
             this.rooms[roomID] = room;
         }
 
-        this.createNewPeer(ws, roomID); 
+        this.createNewPeer(ws, roomID, id); 
     }
 
     // Creates a new peer.
-    _createPeer(ws: WebSocket, roomID: string, initiator: boolean) {
-        const id = uuid().toString();
-        const peer: Peer = { roomID: roomID, id: id, initiator: initiator, ws: ws };
+    _createPeer(ws: WebSocket, roomID: string, initiator: boolean, id?: string) {
+        console.log("Peer ID we got is", id);
+
+        if (id) {
+            const peersInRoom = this.rooms[roomID].peers;
+            const currentPeer = peersInRoom.find(peer => peer.id === id);
+            if (peersInRoom.length !== 0 && currentPeer) {
+                return currentPeer;
+            }
+        }
+
+        const peer: Peer = { roomID: roomID, id: uuid().toString(), initiator: initiator, ws: ws };
         return peer
     }
 
-    createNewPeer(ws: WebSocket, roomID: string) {        
-        // Check if there are any other peers with this roomID.
+    createNewPeer(ws: WebSocket, roomID: string, id?: string) {        
+        // Check if there are any other peers in this room.
         const peersInRoom = this.rooms[roomID].peers;
         console.log(`There are ${peersInRoom.length} peers in the room`);
 
-        // If no peers found with this particular room id, then the current peer is the initiator.
-        const isInitiator = peersInRoom.length === 0;        
+        // If no peers found in this room, then the current peer is the initiator.
+        const isInitiator = peersInRoom.length === 0;
+        
+        // Check if we've seen this peer before from a previous session.
+        const cachedPeer = peersInRoom.find(peer => peer.id === id);
 
-        // Create a new peer.
-        const peer = this._createPeer(ws, roomID, isInitiator);
-
-        // Add peer to the room.
-        this.rooms[roomID].peers.push(peer);
+        // If there are one or more peers in the room, and cachedPeer exists,
+        // then use the cached peer otherwise create new metadata for the peer.
+        let peer: Peer;
+        if (peersInRoom.length !== 0 && cachedPeer) {
+            peer = cachedPeer;
+        } else {
+            // Create a new peer and add it to the room.
+            peer = this._createPeer(ws, roomID, isInitiator, id);
+            this.rooms[roomID].peers.push(peer);
+        }
 
         // Send the peer it's metadata such as what ID we've assigned it, etc.
         const peerInfo = createPayload(PayloadType.NEW_PEER, peer, peer.id, peer.roomID);
@@ -110,38 +126,6 @@ export class SignalingServer {
                 }
             });
         }
-
-        // First check if this is the first peer or not.
-        // if (this.peers.length < 1) {
-        //     // If it's the first peer, 
-        //     const peer = this._createPeer(roomID, true);
-        //     this.peers.push(peer);
-        //     this.connections[peer.id] = ws;
-
-        //     const peerInfo = createPayload(PayloadType.NEW_PEER, peer, peer.id);
-        //     console.log("First peer!", peerInfo);
-        //     ws.send(peerInfo);
-        //     // setInterval(this.checkStatus, 1000);
-        // } else {
-        //     console.log("Second peer!");
-        //     // If it's not the first peer, first send the peer the created information
-        //     const peer = this._createPeer(roomID, false);
-        //     this.peers.push(peer);
-        //     this.connections[peer.id] = ws;
-
-        //     const peerInfo = createPayload(PayloadType.NEW_PEER, peer, peer.id);
-        //     ws.send(peerInfo);
-
-        //     // Then send ALL peers a handshake message so they can start sending ICE candidates.
-        //     this.wss.clients.forEach(client => {
-        //         if (client.readyState === WebSocket.OPEN) {
-        //             console.log("sending to client")
-        //             const handshake = createPayload(PayloadType.HANDSHAKE, {});
-        //             client.send(handshake);
-        //         }
-        //     });
-        //     // setInterval(this.checkStatus, 1000);
-        // }
     }
 
     checkStatus() {
@@ -188,9 +172,9 @@ export class SignalingServer {
         console.log("handleMessage", parse(message));
     }
     
-    _handleDisconnect(message: WebSocket.RawData) {
-        // const parsedMessage = parse(message);
-        // const key = parsedMessage.id;
+    _handleDisconnect(roomID: string, peerID: string, message: WebSocket.RawData) {
+
+
         // delete this.connections[key];
         // this.peers = this.peers.filter(p => p.id !== key);
         // console.log("handleDisconnect", parse(message));

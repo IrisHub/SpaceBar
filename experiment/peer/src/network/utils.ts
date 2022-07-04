@@ -4,6 +4,7 @@ export enum PayloadType {
     CANDIDATE,
     DATA,
     NEW_PEER,
+    CLOSE
 }
 
 export interface Payload {
@@ -31,4 +32,12 @@ export interface Payload {
 
 export function parse(byteArray: any)  {
     return JSON.parse(byteArray.toString());
+}
+
+export function save(key: string, value: any) {
+    localStorage.setItem(key, JSON.stringify(value));
+}
+
+export function load(key: string) {
+    return JSON.parse(localStorage.getItem(key) ?? "{}");
 }
