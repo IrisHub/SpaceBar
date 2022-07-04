@@ -12,6 +12,7 @@ export interface Payload {
     id?: string;
     type: string;
     data: string;
+    roomID?: string;
 }
 
 /**
@@ -20,11 +21,12 @@ export interface Payload {
  * @param data The data to be sent, which can be any type since it will be serialized to JSON.
  * @returns A serialized JSON string.
  */
- export function createPayload(type: PayloadType, data: any, id?: string) {
+ export function createPayload(type: PayloadType, data: any, id?: string, roomID?: string) {
     const payload: Payload = {
         id: id,
         type: PayloadType[type],
         data: JSON.stringify(data),
+        roomID: roomID,
     };
     return JSON.stringify(payload);
 }

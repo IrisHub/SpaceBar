@@ -1,5 +1,4 @@
 import SimplePeer from "simple-peer";
-import { parseConfigFileTextToJson } from "typescript";
 import { parse, PayloadType, createPayload } from "./utils";
 
 class Signaler {
@@ -9,7 +8,7 @@ class Signaler {
     private initiator?: boolean;
     private peer?: SimplePeer.Instance;
 
-    constructor(socket_url: string, port: number) {
+    constructor(socket_url: string, port: number, roomID: string) {
         // Create a new UUID for this peer, that we use in every message we send.
         // TODO(SHALIN): Make sure this is only generated once per peer, then cached.
         // If we close the tab and reopen, the behavior should be defined.
@@ -18,8 +17,10 @@ class Signaler {
         this.ws = new WebSocket(`ws://${socket_url}:${port}`);
         this.ws.onopen = (event) => {
             console.log("Websocket Connection Opened", event);
-            // const payload = createPayload(PayloadType.NEW_PEER, {});
-            // this.ws.send(payload);
+
+            // As soon as the connection opens, tell the signaling server which room we'd like to join.
+            const payload = createPayload(PayloadType.JOIN_ROOM, {}, this.id, roomID);
+            this.ws.send(payload);
         };
 
         this.ws.onmessage = (event => { 
@@ -34,7 +35,7 @@ class Signaler {
                     this.id = peer.id;
                     this.roomID = peer.roomID;
                     this.initiator = peer.initiator;
-                    console.log(`We just received our id! ${this.id} and we are ${this.initiator ? "initiator" : "responder"}`);
+                    console.log(`We just received our id ${this.id} and we are ${this.initiator ? "initiator" : "responder"}`);
                     break
                 case "HANDSHAKE":
                     const Peer = (window as any)["SimplePeer"]; // Grab the SimplePeer class from the window object.
@@ -73,7 +74,7 @@ class Signaler {
 
     sendMessage(data: any) {
         console.log("send", data);
-        const payload = createPayload(PayloadType.DATA, data, this.id);
+        const payload = createPayload(PayloadType.DATA, data, this.id, this.roomID);
         this.ws.send(payload);
     }
 
@@ -105,15 +106,15 @@ class Signaler {
     _handlePeerSignal(data: SimplePeer.SignalData) {
         if (data.type === "answer") {
             console.log("sending answer to other peer", data);
-            const payload = createPayload(PayloadType.SIGNAL, data, this.id);
+            const payload = createPayload(PayloadType.SIGNAL, data, this.id, this.roomID);
             this.ws.send(payload);
         } else if (data.type === "offer") {
             console.log("sending offer to peer", data);
-            const payload = createPayload(PayloadType.SIGNAL, data, this.id);
+            const payload = createPayload(PayloadType.SIGNAL, data, this.id, this.roomID);
             this.ws.send(payload);
         } else if (data.type === "candidate") {
             console.log("sending candidates to peers");
-            const payload = createPayload(PayloadType.SIGNAL, data, this.id);
+            const payload = createPayload(PayloadType.SIGNAL, data, this.id, this.roomID);
             this.ws.send(payload);
         }
     }
@@ -121,7 +122,7 @@ class Signaler {
     _handlePeerConnection() {
         console.log("_handleConnection (peer) connected!");
 
-        const payload = createPayload(PayloadType.DATA, "HELLO WORLD OVER WEBRTC", this.id);
+        const payload = createPayload(PayloadType.DATA, "HELLO WORLD OVER WEBRTC", this.id, this.roomID);
         this.peer?.send(payload);
     }
 
@@ -138,7 +139,7 @@ class Signaler {
     }
 
     _handleClose() {
-        const payload = createPayload(PayloadType.SIGNAL, {}, this.id);
+        const payload = createPayload(PayloadType.SIGNAL, {}, this.id, this.roomID);
         this.peer?.send(payload)
         console.log("_handleClose");
     }

@@ -26,8 +26,8 @@ wss.on('open', (ws, request) => {
   // console.log(`ID of Client: ${wsID}`);
   // signalingServer.id = wsID;
   // signalingServer.connections[wsID] = ws;
-  signalingServer.createNewPeer(ws); // Pass the actual websocket to the receiver.
-  ws.on('message', (data) => signalingServer.handleReceive(data));
+  // signalingServer.createNewPeer(ws); // Pass the actual websocket to the receiver.
+  ws.on('message', (data) => signalingServer.handleReceive(ws, data));
 });
 
 wss.on('disconnect', (ws) => {

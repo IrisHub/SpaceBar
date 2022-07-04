@@ -14,11 +14,13 @@ class Communicator {
 
     // private peer: Peer;
     private signaler: Signaler;
+    private roomID: string;
 
-    constructor() {
+    constructor(roomID: string) {
         // this.peerID = uuid();
         // this.peer = new Peer();
-        this.signaler = new Signaler(Communicator.socket_url, Communicator.socket_port);
+        this.roomID = roomID;
+        this.signaler = new Signaler(Communicator.socket_url, Communicator.socket_port, this.roomID);
     }
 
     // Functions that handle sending messages to our connected peers.
