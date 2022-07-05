@@ -22,25 +22,8 @@ app.get('/', (req, res) => {
 // Set up a headless websocket server that prints any
 // events that come in.
 wss.on('open', (ws, request) => {
-  // var wsID: string = uuid().toString();
-  // console.log(`ID of Client: ${wsID}`);
-  // signalingServer.id = wsID;
-  // signalingServer.connections[wsID] = ws;
-  // signalingServer.createNewPeer(ws); // Pass the actual websocket to the receiver.
   ws.on('message', (data) => signalingServer.handleReceive(ws, data));
   ws.on('close', (data) => signalingServer.handleClose(ws, data));
-});
-
-wss.on('disconnect', (ws) => {
-  // Close the connection if the user explicitly closes the connection.
-  console.log(`Client disconnected: ${ws.id}`);
-  wss.clients.forEach(client => {
-    if (client === ws) {
-      signalingServer.removePeer(client);
-    }
-  });
-  // TODO(SHALIN): Gracefully remove websocket connection so next time we can open a new one.
-  console.log("connection closed");
 });
 
 // `server` is a vanilla Node.js HTTP server, so use

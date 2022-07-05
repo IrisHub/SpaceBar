@@ -1,14 +1,19 @@
-import SimplePeer from "simple-peer";
+// import SimplePeer from "simple-peer";
+// import Peer from "../Peer";
+import PeerManager from "./peer";
 import { load, parse, PayloadType, createPayload, save } from "./utils";
 
-class Signaler {
-    private id?: string;
-    private roomID?: string;
+class SignalingClient {
     private ws: WebSocket;
-    private initiator?: boolean;
-    private peer?: SimplePeer.Instance;
+    private peerManager: PeerManager;
 
     constructor(socket_url: string, port: number, roomID: string) {
+        this.peerManager = new PeerManager(
+            this._handlePeerSignal.bind(this),
+            this._handlePeerConnection.bind(this),
+            this._handlePeerData.bind(this),
+            this._handlePeerError.bind(this)
+        );
 
         // TODO(SHALIN): Verify that URL and PORT are valid.
         this.ws = new WebSocket(`ws://${socket_url}:${port}`);
@@ -18,141 +23,78 @@ class Signaler {
             // Check we currently have a saved peer id from a previous session.
             // If we do, use that one so the signaling server can reconnect us.
             const peer = load("peer");
-            if (peer.id) {
-                this.id = peer.id;
-                console.log("This peer already existed!", this.id);
+            if (peer.peerID) {
+                this.peerManager.peerID = peer.peerID;
+                console.log("This peer already existed!", this.peerManager.peerID);
             }
 
             // As soon as the connection opens, tell the signaling server which room we'd like to join.
-            const payload = createPayload(PayloadType.JOIN_ROOM, {}, this.id, roomID);
+            const payload = createPayload(PayloadType.JOIN, {}, this.peerManager.peerID, roomID);
             this.ws.send(payload);
         };
 
-        this.ws.onmessage = (event => { 
-
-            // Check if the data received was the generated ID that identifies us as the user.
-            const receivedMetadata = parse(event.data);
-            const type = receivedMetadata.type;
-
-            switch (type) {
-                case "NEW_PEER":
-                    const peer = parse(receivedMetadata.data);
-                    this.id = peer.id;
-                    this.roomID = peer.roomID;
-                    this.initiator = peer.initiator;
-                    console.log(`We just received our id ${this.id} and we are ${this.initiator ? "initiator" : "responder"}`);
-
-                    // Save this information locally.
-                    save("peer", peer);
-
-                    break
-                case "HANDSHAKE":
-                    const SimplePeer = (window as any)["SimplePeer"]; // Grab the SimplePeer class from the window object.
-                    this.peer = new SimplePeer({
-                        initiator: this.initiator, 
-                        trickle: true,
-                    });
-                    this.createPeerConnection();
-                    break
-                case "SIGNAL":
-                    this._handleMessageFromWebsocket(receivedMetadata);
-                    break
-                case "DATA":
-                    break
-            }
-        }); 
-
+        this.ws.onmessage = (event) => {
+            this._handleWebsocketReceive(event);
+        }; 
         this.ws.onclose = (event) => {
             console.log("Websocket Connection Closed", event);
         }
     }
 
-    createPeerConnection() {
-        this.peer?.on('signal', (data) => this._handlePeerSignal(data));
-        this.peer?.on('connect', () => this._handlePeerConnection());
-        this.peer?.on('error', (err) => this._handlePeerError(err));
-        this.peer?.on('stream', (stream) => this._handlePeerStream(stream));
-        this.peer?.on('data', (data) => this._handlePeerData(data));
-        // peer.on('track', (track, stream) =>
-        //   this._handleTrack(track, stream),
-        // );
-        // this.peer?.on('close', () => this._handleClose());
-    }
-
-    // Functions that handle messages from the client and send to the signaling server.
-
-    sendMessage(data: any) {
-        console.log("send", data);
-        const payload = createPayload(PayloadType.DATA, data, this.id, this.roomID);
-        this.ws.send(payload);
-    }
-
-
     // Functions that handle messages from the signaling server.
-    _handleMessageFromWebsocket(event: any) {
-        // just handle messages that we get from the websocket server.
-        const data = parse(event.data);
-        console.log(data);
-        if (data.type === 'offer') {
-            this.peer?.signal(data);
-            console.log("we got an offer!", data);
-        } else if (data.type === 'answer') {
-            console.log("we got an answer, and now can establish a connection!", data);
-            this.peer?.signal(data);
-        } else if (data.type === 'candidate') {
-            // lets try signaling the candidate
-            console.log("we got a  candidate:", data.type);
-            this.peer?.signal(data);
-        } else {
-            console.log("we got a  message other than an answer:", data.type);
+    _handleWebsocketReceive(event: any) {
+        const receivedMetadata = parse(event.data);
+        const type = receivedMetadata.type;
+
+        switch (type) {
+            case "JOIN":
+                const peer = parse(receivedMetadata.data);
+                this.peerManager.peerID = peer.peerID;
+                this.peerManager.roomID = peer.roomID;
+                this.peerManager.isInitiator = peer.initiator;
+
+                console.log(`We just received our id ${peer.peerID} and we are ${peer.isInitiator ? "initiator" : "responder"}`);
+
+                // Save this information locally.
+                save("peer", peer);
+
+                break
+            case "INITIATE":
+                this.peerManager.createPeer();
+                break
+            case "SIGNAL":
+                this._handleWebsocketSignal(receivedMetadata);
+                break
+            case "MESSAGE":
+                break
         }
     }
 
+    _handleWebsocketSignal(event: any) {
+        const data = parse(event.data);
+        this.peerManager.signal(data)
+    }
 
 
     // Functions that handle messages that come from Simple peer listeners.
 
-    _handlePeerSignal(data: SimplePeer.SignalData) {
-        if (data.type === "answer") {
-            console.log("sending answer to other peer", data);
-            const payload = createPayload(PayloadType.SIGNAL, data, this.id, this.roomID);
-            this.ws.send(payload);
-        } else if (data.type === "offer") {
-            console.log("sending offer to peer", data);
-            const payload = createPayload(PayloadType.SIGNAL, data, this.id, this.roomID);
-            this.ws.send(payload);
-        } else if (data.type === "candidate") {
-            console.log("sending candidates to peers");
-            const payload = createPayload(PayloadType.SIGNAL, data, this.id, this.roomID);
-            this.ws.send(payload);
-        }
+    _handlePeerSignal(data: any) {
+        const payload = createPayload(PayloadType.SIGNAL, data, this.peerManager.peerID, this.peerManager.roomID);
+        this.ws.send(payload);
     }
 
-    _handlePeerConnection() {
-        console.log("_handleConnection (peer) connected!");
-
-        const payload = createPayload(PayloadType.DATA, "HELLO WORLD OVER WEBRTC", this.id, this.roomID);
-        this.peer?.send(payload);
+    _handlePeerConnection(data: any) {
+        console.log("Peers are connected.");
     }
 
     _handlePeerError(err: Error) {
-        console.log("_handleError", err);
-    }
-
-    _handlePeerStream(stream: MediaStream) {
-        console.log("_handleStream", stream);
+        console.log("Error: ", err);
     }
 
     _handlePeerData(data: any) {
-        console.log("_handleData from signaling server ", parse(data));
-    }
-
-    _handleClose() {
-        const payload = createPayload(PayloadType.CLOSE, {}, this.id, this.roomID);
-        this.ws.send(payload)
-        console.log("_handleClose");
+        console.log("Data received from Peer ", parse(data));
     }
 }
 
 
-export default Signaler;
+export default SignalingClient;

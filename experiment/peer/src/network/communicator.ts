@@ -1,5 +1,5 @@
 import Peer from './peer';
-import Signaler from './signaler';
+import SignalingClient from './signaler';
 import { Payload, PayloadType, createPayload } from './utils';
 
 // This is the API layer for peer to peer connection over WebRTC, including signaling.
@@ -13,14 +13,14 @@ class Communicator {
     private static socket_port = 3400;
 
     // private peer: Peer;
-    private signaler: Signaler;
+    private signaler: SignalingClient;
     private roomID: string;
 
     constructor(roomID: string) {
         // this.peerID = uuid();
         // this.peer = new Peer();
         this.roomID = roomID;
-        this.signaler = new Signaler(Communicator.socket_url, Communicator.socket_port, this.roomID);
+        this.signaler = new SignalingClient(Communicator.socket_url, Communicator.socket_port, this.roomID);
     }
 
     // Functions that handle sending messages to our connected peers.
