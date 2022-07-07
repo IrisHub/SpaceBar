@@ -1,3 +1,7 @@
+
+export type PeerCallback = (data: any) => void;
+export type CommunicatorCallback = (data: any) => void;
+
 export enum PayloadType {
      // Sent from PEER -> SIGNALING SERVER to join a particular room. 
      // Also sent from SIGNALING SERVER -> PEER with unique peer id and other metadata.

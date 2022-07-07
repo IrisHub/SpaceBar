@@ -1,11 +1,9 @@
 import SimplePeer from 'simple-peer';
-import { PayloadType, createPayload } from "./utils";
-
-export type PeerCallback = (data: any) => void;
+import { PayloadType, createPayload, PeerCallback } from "./utils";
 
 // Abstraction over simple peer that lets us pass messages without worrying too much about the 
 // implementation details of the connection and communication process with the peer.
-class PeerManager {
+export default class PeerManager {
     private peer?: SimplePeer.Instance;
 
     isInitiator?: boolean;
@@ -15,12 +13,14 @@ class PeerManager {
     onSignal: PeerCallback;
     onConnect: PeerCallback;
     onData: PeerCallback;
+    onClose: PeerCallback;
     onError: PeerCallback;
 
-    constructor(onSignal: PeerCallback, onConnect: PeerCallback, onData: PeerCallback, onError: PeerCallback) {
+    constructor(onSignal: PeerCallback, onConnect: PeerCallback, onData: PeerCallback, onClose: PeerCallback, onError: PeerCallback) {
         this.onSignal = onSignal;
         this.onConnect = onConnect;
         this.onData = onData;
+        this.onClose = onClose;
         this.onError = onError;
     }
 
@@ -37,6 +37,7 @@ class PeerManager {
         this.peer?.on('signal', (data) => this.onSignal(data));
         this.peer?.on('connect', () => this.onConnect(null));
         this.peer?.on('data', (data) => this.onData(data));
+        this.peer?.on('close', () => this.onClose(null));
         this.peer?.on('error', (err) => this.onError(err));
     }
 
@@ -46,9 +47,7 @@ class PeerManager {
     }
 
     send(data: any) {
-        const payload = createPayload(PayloadType.MESSAGE, data, this.peerID, this.roomID);
+        const payload = createPayload(PayloadType.MESSAGE, JSON.stringify(data), this.peerID, this.roomID);
         this.peer?.send(payload);
     }
 }
-
-export default PeerManager;
