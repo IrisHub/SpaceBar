@@ -5,10 +5,12 @@
   "main": "app.ts",
   "dependencies": {
     "express": "^4.17.3",
+    "loglevel": "^1.8.0",
     "ws": "^8.5.0"
   },
   "scripts": {
     "watch": "nodemon app.ts",
+    "watch debug": "LOG_LEVEL=debug nodemon app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

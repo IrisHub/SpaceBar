@@ -28,7 +28,7 @@ export interface Payload {
  * @param type PayloadType, which gives the payload a type. 
  * @param data The data, of type `any`, to be sent.
  * @param peerID Optional string containing the unique id of the peer.
- * @param roomID Optional string containing the id of the room the peer intends to join or is a part of. 
+ * @param roomID Optional string containing the id of the room the peer is a part of or intends to join. 
  * @returns A serialized JSON string.
  */
  export function createPayload(type: PayloadType, data: any, peerID?: string, roomID?: string) {
