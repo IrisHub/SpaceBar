@@ -20,6 +20,9 @@ export enum PayloadType {
     MESSAGE,
 }
 
+/**
+ * Payload is the data structure that is sent over the WebSocket and P2P connections.
+ */
 export interface Payload {
     type: string;
     data: string;
@@ -45,6 +48,11 @@ export interface Payload {
     return JSON.stringify(payload);
 }
 
+/**
+ * Parses a payload object from a serialized JSON object.
+ * @param byteArray Byte array containing the serialized JSON object.
+ * @returns The deserialized payload object.
+ */
 export function parse(byteArray: any)  {
     return JSON.parse(byteArray.toString());
 }

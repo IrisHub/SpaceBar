@@ -29,7 +29,7 @@ function Peer() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = (event.currentTarget.elements[0] as HTMLInputElement).value;
-    if (communicator.current && communicator.current.peerConnected()) {
+    if (communicator.current && communicator.current.peerConnected) {
       communicator.current.send(data.toString(), CommunicatorChannel.SERVER);
     }
   } 

@@ -53,8 +53,11 @@ export class SignalingServer {
     handleClose(ws: WebSocket) {
         // Find the peerID and roomID from the websocket instance.
         const peerID = Object.keys(this.connections).find(key => this.connections[key].ws === ws);
-        const roomID = this.connections[peerID].peer.roomID;
 
+        // If the connection with this PeerID is not found or undefined, return early.
+        if (!this.connections[peerID]) { return; }
+
+        const roomID = this.connections[peerID].peer.roomID;
         const peersInRoom = this.rooms[roomID].peers;
 
         // Delete a peer by `filter`ing instead of using `splice` with indices, since we 
