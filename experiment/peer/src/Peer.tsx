@@ -1,32 +1,36 @@
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import { useLocation } from 'react-router-dom';
 import Communicator, { CommunicatorChannel } from './network/communicator'
 
 function Peer() {
   const location = useLocation();
-  const communicator = useRef(new Communicator(location.pathname));
+  const communicator = useRef<Communicator>();
 
-  communicator.current.on('connect', (data) => {
-    console.log("Peers are connected.");
-  });
+  useEffect(() => {
+    communicator.current = new Communicator(location.pathname);
 
-  communicator.current.on('message', (message) => {
-    console.log('message', message);
-  });
+    communicator.current.on('connect', (data) => {
+      console.log("Peers are connected.");
+    });
 
-  communicator.current.on('disconnect', (data) => {
-    console.log('disconnect');
-  });
+    communicator.current.on('message', (message) => {
+      console.log('message', message);
+    });
 
-  communicator.current.on('error', (error) => {
-    console.log('error');
-  });
+    communicator.current.on('disconnect', (data) => {
+      console.log('disconnect');
+    });
 
+    communicator.current.on('error', (error) => {
+      console.log('error');
+    });
+  }, [location.pathname]);
+  
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = (event.currentTarget.elements[0] as HTMLInputElement).value;
-    if (communicator && communicator.current.peerConnected()) {
-      communicator.current.send(data.toString());
+    if (communicator.current && communicator.current.peerConnected()) {
+      communicator.current.send(data.toString(), CommunicatorChannel.SERVER);
     }
   } 
 
