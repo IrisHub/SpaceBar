@@ -8,6 +8,7 @@ The reason for this library's creation was for use in a 3D real-time video chat 
 ## Core Features
 * Abstracts away the [signaling server](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Signaling_and_video_calling), which is a necessary component in establishing a WebRTC connection between two devices, to create a simple API for the client with a single `send` function to pass data to peers.
 * Creates "rooms" that (currently) up to two peers can join by simply passing an ID. For example, the `pathname` of a URL (`/my-room-name`). Only peers who join the same room will be able to establish a connection.
+* Persists user connections across refreshes and even closing the browser window and reopening it. So as long as you join the same room, you should be able to reliably connect to the peer(s) in the room you were in even if something awful happens to the connection.
 * Ability to route data over multiple channels, either via a P2P connection (PEER => OTHER PEER) or via the signaling server (PEER => SERVER => OTHER PEER), allowing for increased robustness through redundancy and message multihoming.
 
 ## How to Use
