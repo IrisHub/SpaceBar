@@ -3,6 +3,7 @@ import express from 'express';
 import { SignalingServer } from './server';
 import log from "loglevel";
 
+// Create an environment variable called `LOG_LEVEL` to set the log level.
 if (process.env.LOG_LEVEL != null) log.setLevel(process.env.LOG_LEVEL as log.LogLevelDesc);
 
 const app = express();
