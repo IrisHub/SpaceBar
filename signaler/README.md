@@ -75,8 +75,10 @@ function  Peer() {
 	const  communicator = useRef<Communicator>();
 
 	useEffect(() => {
+		// INITIALIZE A COMMUNICATOR BY USING THE URL PATHNAME AS THE ROOM ID
 		communicator.current = new  Communicator(location.pathname);
 
+		// SUBSCRIBE TO THE LISTENERS
 		communicator.current.on('connect', (data) => {
 			console.log("Peers are connected.");
 		});
@@ -98,6 +100,7 @@ function  Peer() {
 		event.preventDefault();
 		const  data = (event.currentTarget.elements[0] as HTMLInputElement).value;
 		if (communicator.current && communicator.current.peerConnected) {
+			// SEND FORM DATA TO THE OTHER PEER VIA THE SERVER
 			communicator.current.send(data.toString(), CommunicatorChannel.SERVER);
 		}
 	}
