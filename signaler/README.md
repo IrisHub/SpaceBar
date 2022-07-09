@@ -28,7 +28,7 @@ npm run watch debug
 ```
 This will start your node server in debug mode, which means you will get all the logs from the debug log level and below. 
 
-> Pro Tip: For running custom log levels, you can start your node server with the environment variable `LOG_LEVEL=xxxxx nodemon app.ts`
+> Pro Tip: For your convenience, this library includes a custom environment variable called `LOG_LEVEL` that lets you view logs at any level. You can just start your node server with `LOG_LEVEL=xxxxx nodemon app.ts` where `xxxxx` can be your desired log level.
 
 ### Communicator
 Once you have the signaling server up and running, integrating the `Communicator` class into your application should be relatively straightforward. You first have to initialize the class by providing a roomID, which can be any string:
