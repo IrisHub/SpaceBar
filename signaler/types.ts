@@ -1,7 +1,7 @@
-import WebSocket from "ws";
+import WebSocket from 'ws';
 
 export interface Peer {
-    roomID: string; 
+    roomID: string;
     peerID: string;
     initiator: boolean;
     ws?: WebSocket;

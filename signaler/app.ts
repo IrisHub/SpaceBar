@@ -1,15 +1,17 @@
 import ws from 'ws';
 import express from 'express';
-import { SignalingServer } from './server';
-import log from "loglevel";
+import {SignalingServer} from './server';
+import log from 'loglevel';
 
 // Create an environment variable called `LOG_LEVEL` to set the log level.
-if (process.env.LOG_LEVEL != null) log.setLevel(process.env.LOG_LEVEL as log.LogLevelDesc);
+if (process.env.LOG_LEVEL) {
+  log.setLevel(process.env.LOG_LEVEL as log.LogLevelDesc);
+}
 
 const app = express();
 const port = 3400;
 
-const wss = new ws.Server({ noServer: true });
+const wss = new ws.Server({noServer: true});
 const signalingServer: SignalingServer = new SignalingServer(wss);
 
 // Listen on the specified port.
@@ -26,7 +28,7 @@ wss.on('open', (ws, request) => {
 // the same ws upgrade process described here:
 // https://www.npmjs.com/package/ws#multiple-servers-sharing-a-single-https-server
 server.on('upgrade', (request, socket, head) => {
-  wss.handleUpgrade(request, socket, head, socket => {
+  wss.handleUpgrade(request, socket, head, (socket) => {
     wss.emit('open', socket, request);
   });
 });
