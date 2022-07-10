@@ -1,4 +1,3 @@
-import SimplePeer from 'simple-peer';
 
 import { createPayload, PayloadType, PeerCallback } from './utils';
 
@@ -8,7 +7,7 @@ import { createPayload, PayloadType, PeerCallback } from './utils';
  * peers.
  */
 export default class PeerManager {
-  private peer?: SimplePeer.Instance;
+  private peer?: any;
 
   // Peer information.
   isInitiator?: boolean;
@@ -69,11 +68,11 @@ export default class PeerManager {
      * Handle the callbacks from the SimplePeer listener functions.
      */
   _handlePeerCallbacks() {
-    this.peer?.on('signal', (data) => this.onSignal(data));
+    this.peer?.on('signal', (data: any) => this.onSignal(data));
     this.peer?.on('connect', () => this.onConnect(null));
-    this.peer?.on('data', (data) => this.onData(data));
+    this.peer?.on('data', (data: any) => this.onData(data));
     this.peer?.on('close', () => this.onClose(null));
-    this.peer?.on('error', (err) => this.onError(err));
+    this.peer?.on('error', (err: Error) => this.onError(err));
   }
 
   /**
