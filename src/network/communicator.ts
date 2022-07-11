@@ -33,7 +33,9 @@ export default class Communicator {
 
     this.roomID = roomID;
     this.signalingClient = new SignalingClient(
-      Communicator.socket_url, Communicator.socket_port, this.roomID,
+      Communicator.socket_url,
+      Communicator.socket_port,
+      this.roomID,
     );
   }
 
@@ -48,10 +50,10 @@ export default class Communicator {
   }
 
   /**
-     * Send a message to the other peer.
-     * @param {any} data The data to send to the other peer.
-     * @param {CommunicatorChannel} channel The channel to send the data over.
-     */
+   * Send a message to the other peer.
+   * @param {any} data The data to send to the other peer.
+   * @param {CommunicatorChannel} channel The channel to send the data over.
+   */
   send(data: any, channel = CommunicatorChannel.PEER) {
     switch (channel) {
       case CommunicatorChannel.PEER:
@@ -63,12 +65,12 @@ export default class Communicator {
   }
 
   /**
-     * Register a callback to be called when events are fired from either the
-     * signaling server or the peer connection.
-     * @param {string} event The event to listen for.
-     * @param {CommunicatorCallback} callback The callback to call when the
-     * event is fired.
-     */
+   * Register a callback to be called when events are fired from either the
+   * signaling server or the peer connection.
+   * @param {string} event The event to listen for.
+   * @param {CommunicatorCallback} callback The callback to call when the
+   * event is fired.
+   */
   on(event: string, callback: CommunicatorCallback) {
     this.signalingClient.setEventCallback(event, callback);
   }

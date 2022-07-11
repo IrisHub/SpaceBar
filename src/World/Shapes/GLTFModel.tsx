@@ -1,9 +1,9 @@
-import React, { useRef, useMemo } from 'react';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { useLoader } from '@react-three/fiber';
-import { Box3, Event, Object3D } from 'three';
 import { BoxProps, useBox } from '@react-three/cannon';
+import { useLoader } from '@react-three/fiber';
+import React, { useMemo, useRef } from 'react';
+import { Box3, Event, Object3D } from 'three';
 import { Vector3 } from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { SkeletonUtils } from 'three-stdlib';
 
 interface CustomGLTF extends BoxProps {

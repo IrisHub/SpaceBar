@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
 import { BoxProps, useBox } from '@react-three/cannon';
-import { Object3D, Event } from 'three';
+import React, { useRef } from 'react';
+import { Event, Object3D } from 'three';
 
 /**
  * CustomBox extends props

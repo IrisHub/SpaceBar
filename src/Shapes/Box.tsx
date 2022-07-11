@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
 import { BoxProps, useBox } from '@react-three/cannon';
+import React, { useRef } from 'react';
 import { Event, Object3D } from 'three';
 
 /**

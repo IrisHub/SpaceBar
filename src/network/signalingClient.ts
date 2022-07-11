@@ -1,4 +1,3 @@
-
 import log from 'loglevel';
 
 import PeerManager from './peerManager';
@@ -90,10 +89,10 @@ export default class SignalingClient {
   }
 
   /**
-     * Handle when the websocket connection is opened.
-     * @param {any} event The metadata sent with the open event.
-     * @param {string} roomID The room ID that we intend on joining.
-     */
+   * Handle when the websocket connection is opened.
+   * @param {any} event The metadata sent with the open event.
+   * @param {string} roomID The room ID that we intend on joining.
+   */
   _handleWebsocketOpen(event: any, roomID: string) {
     log.debug('Websocket Connection Opened', event);
     this.isSocketConnected = true;
@@ -109,20 +108,22 @@ export default class SignalingClient {
     // As soon as the connection opens, tell the signaling server which
     // room we'd like to join.
     const payload = createPayload(
-      PayloadType.JOIN, {}, this.peerManager.peerID, roomID,
+      PayloadType.JOIN,
+      {},
+      this.peerManager.peerID,
+      roomID,
     );
     this.ws.send(payload);
   }
-
 
   //
   // Signaling Server Handlers
   //
 
   /**
-     * Handle when we receive a JOIN message from the signaling server.
-     * @param {any} metadata The metadata containing peer information.
-     */
+   * Handle when we receive a JOIN message from the signaling server.
+   * @param {any} metadata The metadata containing peer information.
+   */
   _handleServerJoin(metadata: any) {
     const peer = parse(metadata.data);
     this.peerManager.peerID = peer.peerID;
@@ -139,26 +140,26 @@ export default class SignalingClient {
   }
 
   /**
-     * Handle when we receive an INITIATE message from the signaling server.
-     */
+   * Handle when we receive an INITIATE message from the signaling server.
+   */
   _handleServerInitiate() {
     this.peerManager.createPeer();
   }
 
   /**
-     * Handle a signal recevied from the other peer.
-     * @param {any} metadata The metadata containing the signal.
-     */
+   * Handle a signal recevied from the other peer.
+   * @param {any} metadata The metadata containing the signal.
+   */
   _handleServerSignal(metadata: any) {
     const signal = parse(metadata.data);
     this.peerManager.handleSignal(signal);
   }
 
   /**
-     * Handle when a peer sends data via the signaling server.
-     * @param {any} event The event metadata containing the message
-     * sent by the peer.
-     */
+   * Handle when a peer sends data via the signaling server.
+   * @param {any} event The event metadata containing the message
+   * sent by the peer.
+   */
   _handleServerMessage(event: any) {
     // We received a message from the other peer but via the signaling server.
     const data = parse(event.data);
@@ -173,11 +174,11 @@ export default class SignalingClient {
   //
 
   /**
-     * Handle when we receive a signal from the PeerManager,
-     * and send it to the signaling server
-     * to route and send to the other peers.
-     * @param {any} data The signal that was received.
-     */
+   * Handle when we receive a signal from the PeerManager,
+   * and send it to the signaling server
+   * to route and send to the other peers.
+   * @param {any} data The signal that was received.
+   */
   _handlePeerSignal(data: any) {
     // Send it to the signaling server so it can be
     // broadcasted to all relevant peers.
@@ -191,9 +192,9 @@ export default class SignalingClient {
   }
 
   /**
-     * Handle when a peer connection is established.
-     * @param {any} data The data that was sent with the connection event.
-     */
+   * Handle when a peer connection is established.
+   * @param {any} data The data that was sent with the connection event.
+   */
   _handlePeerConnection(data: any) {
     this.isPeerConnected = true;
     if (this.onConnectCallback) {
@@ -202,9 +203,9 @@ export default class SignalingClient {
   }
 
   /**
-     * Handle any errors that occur in the PeerManager.
-     * @param {any} err The error that occurred.
-     */
+   * Handle any errors that occur in the PeerManager.
+   * @param {any} err The error that occurred.
+   */
   _handlePeerError(err: Error) {
     log.debug('Error: ', err);
     if (this.onErrorCallback) {
@@ -213,9 +214,9 @@ export default class SignalingClient {
   }
 
   /**
-     * Handle when a peer connection closes.
-     * @param {any} data The data that was sent with the close event.
-     */
+   * Handle when a peer connection closes.
+   * @param {any} data The data that was sent with the close event.
+   */
   _handlePeerClose(data: any) {
     if (this.onDisconnectCallback) {
       this.onDisconnectCallback(data);
@@ -223,10 +224,10 @@ export default class SignalingClient {
   }
 
   /**
-     * Handle when we receive data from a peer.
-     * @param {any} event The event metadata containing the message
-     * sent by the peer.
-     */
+   * Handle when we receive data from a peer.
+   * @param {any} event The event metadata containing the message
+   * sent by the peer.
+   */
   _handlePeerData(event: any) {
     const data = parse(event);
     const message = parse(data.data);
@@ -240,12 +241,12 @@ export default class SignalingClient {
   //
 
   /**
-     * Set the callback functions that will be called when events are
-     * fired from either the signaling server or the peer connection.
-     * @param {string} event The event to listen for.
-     * @param {CommunicatorCallback} callback The callback to call when the
-     * event is fired.
-     */
+   * Set the callback functions that will be called when events are
+   * fired from either the signaling server or the peer connection.
+   * @param {string} event The event to listen for.
+   * @param {CommunicatorCallback} callback The callback to call when the
+   * event is fired.
+   */
   setEventCallback(event: string, callback: CommunicatorCallback) {
     switch (event) {
       case 'connect':
@@ -264,9 +265,9 @@ export default class SignalingClient {
   }
 
   /**
-     * Send a message to the other peer via direct peer connection.
-     * @param {any} data The data to send.
-     */
+   * Send a message to the other peer via direct peer connection.
+   * @param {any} data The data to send.
+   */
   sendPeer(data: any) {
     if (!this.isPeerConnected) {
       if (this.onErrorCallback) {
@@ -278,9 +279,9 @@ export default class SignalingClient {
   }
 
   /**
-     * Send a message to the other peer via the signaling server.
-     * @param {any} data The data to send.
-     */
+   * Send a message to the other peer via the signaling server.
+   * @param {any} data The data to send.
+   */
   sendWebsocket(data: any) {
     if (!this.isSocketConnected) {
       if (this.onErrorCallback) {

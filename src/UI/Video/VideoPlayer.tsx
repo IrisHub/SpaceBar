@@ -1,19 +1,19 @@
-import React, { useRef, useEffect, useState } from 'react';
 import {
-  VideoContainer,
-  Video,
-  IconContainer,
-  Icon,
-} from './VideoPlayerStyled';
-
-import {
-  faMicrophoneSlash,
   faMicrophone,
+  faMicrophoneSlash,
   faVideo,
   faVideoSlash,
 } from '@fortawesome/free-solid-svg-icons';
+import React, { useEffect, useRef, useState } from 'react';
+
 import { Colors } from '../../constants';
 import Dialog from '../Dialog/Dialog';
+import {
+  Icon,
+  IconContainer,
+  Video,
+  VideoContainer,
+} from './VideoPlayerStyled';
 
 interface VideoProps {
   height?: number;

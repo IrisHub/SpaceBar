@@ -1,5 +1,6 @@
-import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styled from 'styled-components';
+
 import { Colors, DisplayConstants } from '../../constants';
 
 export const VideoContainer = styled.div`
