@@ -2,11 +2,6 @@ import { Physics } from '@react-three/cannon';
 import { Canvas } from '@react-three/fiber';
 import React from 'react';
 
-import Player from '../Player/Player';
-import PlayerCameraControls from '../Player/PlayerCameraControls';
-import Skybox from './Skybox';
-import { Box, Cylinder, Sphere, GLTFModel } from '../Shapes';
-
 import {
   Colors,
   Mass,
@@ -15,6 +10,10 @@ import {
   Plants,
 } from '../../constants';
 import WorldBoundaries from '../../Scene/WorldBoundaries';
+import Player from '../Player/Player';
+import PlayerCameraControls from '../Player/PlayerCameraControls';
+import { Box, Cylinder, GLTFModel, Sphere } from '../Shapes';
+import Skybox from './Skybox';
 
 /**
  * A "Scene" component that gathers all elements of the scene into

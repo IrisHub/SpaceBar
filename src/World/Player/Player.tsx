@@ -6,7 +6,7 @@ import { Vector3 } from 'three';
 import { MathConstants, PlayerConstants } from '../../constants';
 import PlayerMovementControls from './PlayerMovementControls';
 import playerMovementEmitter from './playerMovementEmitter';
-import { roundEntriesInVector3, round } from './playerMovementUtils';
+import { round, roundEntriesInVector3 } from './playerMovementUtils';
 
 /**
  * Defines a custom player object (a default Cannon.js sphere) and handles player movement

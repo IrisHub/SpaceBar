@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { DisplayConstants } from '../../constants';
 import VideoPlayer from '../Video/VideoPlayer';
 

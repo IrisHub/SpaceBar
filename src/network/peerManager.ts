@@ -1,4 +1,3 @@
-
 import { createPayload, PayloadType, PeerCallback } from './utils';
 
 /**
@@ -52,8 +51,8 @@ export default class PeerManager {
   }
 
   /**
-     * Create a new SimplePeer instance and listen for the callbacks.
-     */
+   * Create a new SimplePeer instance and listen for the callbacks.
+   */
   createPeer() {
     // Grab the SimplePeer class from the window object.
     const SimplePeer = (window as any).SimplePeer;
@@ -65,8 +64,8 @@ export default class PeerManager {
   }
 
   /**
-     * Handle the callbacks from the SimplePeer listener functions.
-     */
+   * Handle the callbacks from the SimplePeer listener functions.
+   */
   _handlePeerCallbacks() {
     this.peer?.on('signal', (data: any) => this.onSignal(data));
     this.peer?.on('connect', () => this.onConnect(null));
@@ -76,20 +75,23 @@ export default class PeerManager {
   }
 
   /**
-     * Handle a signal received from the other peer.
-     * @param {any} signal The signal received from the other peer.
-     */
+   * Handle a signal received from the other peer.
+   * @param {any} signal The signal received from the other peer.
+   */
   handleSignal(signal: any) {
     this.peer?.signal(signal);
   }
 
   /**
-     * Send data to the other peer.
-     * @param {any} data The data to send to the peer.
-     */
+   * Send data to the other peer.
+   * @param {any} data The data to send to the peer.
+   */
   send(data: any) {
     const payload = createPayload(
-      PayloadType.MESSAGE, JSON.stringify(data), this.peerID, this.roomID,
+      PayloadType.MESSAGE,
+      JSON.stringify(data),
+      this.peerID,
+      this.roomID,
     );
     this.peer?.send(payload);
   }

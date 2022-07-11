@@ -44,7 +44,10 @@ export interface Payload {
  * @return {any} A serialized JSON string.
  */
 export function createPayload(
-  type: PayloadType, data: any, peerID?: string, roomID?: string,
+  type: PayloadType,
+  data: any,
+  peerID?: string,
+  roomID?: string,
 ) {
   const payload: Payload = {
     type: PayloadType[type],

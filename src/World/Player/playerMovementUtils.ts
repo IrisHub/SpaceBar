@@ -1,4 +1,5 @@
 import { Vector3 } from 'three';
+
 import { SimpleVector3 } from '../../types';
 
 /**

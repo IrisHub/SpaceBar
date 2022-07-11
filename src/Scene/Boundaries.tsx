@@ -1,7 +1,8 @@
 import React from 'react';
+
+import { WorldBoundariesProps } from '../allTypes';
 import { Boundary, Colors, Dims } from '../constants';
 import Plane from '../World/Shapes/Plane';
-import { WorldBoundariesProps } from '../allTypes';
 
 /**
  * Renders a boundary of 4 impassible Planes that define the edges of the world.

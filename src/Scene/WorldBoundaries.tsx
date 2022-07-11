@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { WorldBoundariesProps } from '../allTypes';
 import Floor from '../World/Scene/Floor';
 import Boundaries from './Boundaries';

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Plane } from '../Shapes';
+
 // import { usePlane } from '@react-three/cannon';
 import { WorldBoundariesProps } from '../../allTypes';
 import { Colors, Dims } from '../../constants';
+import { Plane } from '../Shapes';
 
 /**
  * Defines a basic floor component as a flat plane rotated 90 degrees

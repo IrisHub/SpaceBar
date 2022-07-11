@@ -1,8 +1,9 @@
-import WebSocket from 'ws';
-import {v4 as uuid} from 'uuid';
-import {PayloadType, createPayload, parse} from './utils';
-import {Peer, Room, Connection} from './types';
 import log from 'loglevel';
+import { v4 as uuid } from 'uuid';
+import WebSocket from 'ws';
+
+import { Connection, Peer, Room } from './types';
+import { createPayload, parse, PayloadType } from './utils';
 
 /**
  * SignalingServer that handles exchanging ICE candidates and connecting peers.
@@ -12,6 +13,7 @@ export class SignalingServer {
 
   // Keep track of the rooms, peers, and websocket connections made.
   rooms: Room[];
+
   connections: Connection[];
 
   /**
@@ -29,14 +31,17 @@ export class SignalingServer {
   //
 
   /**
-     * Handles incoming WebSocket messages.
-     * @param {WebSocket} ws WebSocket instance that sent the message.
-     * @param {WebSocket.RawData} message Message received from the client.
-     */
+   * Handles incoming WebSocket messages.
+   * @param {WebSocket} ws WebSocket instance that sent the message.
+   * @param {WebSocket.RawData} message Message received from the client.
+   */
   handleReceive(ws: WebSocket, message: WebSocket.RawData) {
     const parsed = parse(message);
     const [type, data, peerID, roomID] = [
-      parsed.type, parsed.data, parsed.peerID, parsed.roomID,
+      parsed.type,
+      parsed.data,
+      parsed.peerID,
+      parsed.roomID,
     ];
 
     log.debug(`Received message of type: ${parsed.type}`);
@@ -56,13 +61,13 @@ export class SignalingServer {
   }
 
   /**
-     * Handles a WebSocket disconnection.
-     * @param {WebSocket} ws WebSocket instance that disconnected.
-     */
+   * Handles a WebSocket disconnection.
+   * @param {WebSocket} ws WebSocket instance that disconnected.
+   */
   handleClose(ws: WebSocket) {
     // Find the peerID and roomID from the websocket instance.
     const peerID = Object.keys(this.connections).find(
-        (key) => this.connections[key].ws === ws,
+      (key) => this.connections[key].ws === ws,
     );
 
     // If the connection with this PeerID is not found or undefined,
@@ -78,7 +83,7 @@ export class SignalingServer {
     // indices, since we could run into races if multiple clients
     // are joining and leaving at the same time.
     this.rooms[roomID].peers = peersInRoom.filter(
-        (peer) => peer.peerID !== peerID,
+      (peer) => peer.peerID !== peerID,
     );
 
     // Remove the connection.
@@ -98,17 +103,17 @@ export class SignalingServer {
   //
 
   /**
-     * Handles a new peer joining a room.
-     * @param {WebSocket} ws WebSocket instance the peer is connecting from.
-     * @param {string} roomID ID of the room the peer intends to join.
-     * @param {string} peerID (Optional) ID of the peer.
-     */
+   * Handles a new peer joining a room.
+   * @param {WebSocket} ws WebSocket instance the peer is connecting from.
+   * @param {string} roomID ID of the room the peer intends to join.
+   * @param {string} peerID (Optional) ID of the peer.
+   */
   _handleJoin(ws: WebSocket, roomID: string, peerID?: string) {
     log.debug(`Join Request Received with Room ID: ${roomID}`);
 
     // Check if the room exists. If not, create it.
     if (!(roomID in this.rooms)) {
-      const room: Room = {peers: []};
+      const room: Room = { peers: [] };
       this.rooms[roomID] = room;
     }
 
@@ -117,11 +122,11 @@ export class SignalingServer {
   }
 
   /**
-     * Handles a signal from a peer.
-     * @param {string} roomID ID of the room the peer is in.
-     * @param {string} peerID ID of the peer that sent the signal.
-     * @param {WebSocket.RawData} signal Signal message from the peer.
-     */
+   * Handles a signal from a peer.
+   * @param {string} roomID ID of the room the peer is in.
+   * @param {string} peerID ID of the peer that sent the signal.
+   * @param {WebSocket.RawData} signal Signal message from the peer.
+   */
   _handleSignal(roomID: string, peerID: string, signal: WebSocket.RawData) {
     log.debug('Signal Received: \n', parse(signal));
     const data = createPayload(PayloadType.SIGNAL, signal);
@@ -129,11 +134,11 @@ export class SignalingServer {
   }
 
   /**
-     * Handles a message from a peer.
-     * @param {string} roomID ID of the room the peer is in.
-     * @param {string} peerID ID of the peer that sent the message.
-     * @param {WebSocket.RawData} message Message from the peer.
-     */
+   * Handles a message from a peer.
+   * @param {string} roomID ID of the room the peer is in.
+   * @param {string} peerID ID of the peer that sent the message.
+   * @param {WebSocket.RawData} message Message from the peer.
+   */
   _handleMessage(roomID: string, peerID: string, message: WebSocket.RawData) {
     log.debug('Message Received: \n', parse(message));
     const data = createPayload(PayloadType.MESSAGE, message);
@@ -145,20 +150,20 @@ export class SignalingServer {
   //
 
   /**
-     * Creates a new peer with the given room and peer ID,
-     * and adds it to the room.
-     * @param {WebSocket} ws WebSocket instance the peer is connecting from.
-     * @param {string} roomID ID of the room the peer intends to join.
-     * @param {string} peerID (Optional) ID of the peer. If not provided, a new
-     * ID will be generated.
-     */
+   * Creates a new peer with the given room and peer ID,
+   * and adds it to the room.
+   * @param {WebSocket} ws WebSocket instance the peer is connecting from.
+   * @param {string} roomID ID of the room the peer intends to join.
+   * @param {string} peerID (Optional) ID of the peer. If not provided, a new
+   * ID will be generated.
+   */
   createNewPeer(ws: WebSocket, roomID: string, peerID?: string) {
     // Grab all the peers currently in the room.
     const peersInRoom = this.rooms[roomID].peers;
 
     // Check if any of the peers are initiators.
     const initiatorsPresent = peersInRoom.find(
-        (peer) => peer.initiator === true,
+      (peer) => peer.initiator === true,
     );
 
     // Check if we've seen this peer before from a previous session.
@@ -186,12 +191,15 @@ export class SignalingServer {
 
     // Cache the websocket object this peer is connected over so we can
     // handle disconnect properly.
-    const connection: Connection = {peer: peer, ws: ws};
+    const connection: Connection = { peer: peer, ws: ws };
     this.connections[peer.peerID] = connection;
 
     // Send the peer it's metadata such as what ID we've assigned it, etc.
     const peerMetadata = createPayload(
-        PayloadType.JOIN, peer, peer.peerID, peer.roomID,
+      PayloadType.JOIN,
+      peer,
+      peer.peerID,
+      peer.roomID,
     );
     ws.send(peerMetadata);
 
@@ -200,22 +208,22 @@ export class SignalingServer {
     // until more than one person joins.
     log.debug(`There are now ${peersInRoom.length} peers in room ${roomID}.`);
     if (peersInRoom.length > 1) {
-      peersInRoom.forEach((peer) => {
-        if (peer.ws.readyState === WebSocket.OPEN) {
+      peersInRoom.forEach((p) => {
+        if (p.ws.readyState === WebSocket.OPEN) {
           const initiate = createPayload(PayloadType.INITIATE, {});
-          peer.ws.send(initiate);
+          p.ws.send(initiate);
         }
       });
     }
   }
 
   /**
-     * Send a message to all peers in a room except the one that
-     * originally sent the message.
-     * @param {string} roomID ID of the room to broadcast to.
-     * @param {string}peerID ID of the peer that originally sent the message.
-     * @param {string}message Message to send.
-     */
+   * Send a message to all peers in a room except the one that
+   * originally sent the message.
+   * @param {string} roomID ID of the room to broadcast to.
+   * @param {string}peerID ID of the peer that originally sent the message.
+   * @param {string}message Message to send.
+   */
   broadcast(roomID: string, peerID: string, message: string) {
     this.rooms[roomID].peers.forEach((peer) => {
       // Don't send to the client who originally sent the message.

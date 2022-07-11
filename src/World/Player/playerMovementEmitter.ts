@@ -1,7 +1,8 @@
 import { EventEmitter } from 'events';
-import { serialize } from './playerMovementUtils';
-import movementLog from './playerMovementLog';
+
 import { SimpleVector3 } from '../../types';
+import movementLog from './playerMovementLog';
+import { serialize } from './playerMovementUtils';
 
 /**
  * This module constructs a single eventEmitter to be used across components outside of React's lifecycle,
