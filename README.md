@@ -2,7 +2,7 @@
 
 A simple multiplayer 3D environment with spatial video/audio made with WebRTC, WebGL and Three.js.
 
-<img width="1607" alt="Screen Shot 2022-03-07 at 12 04 18" src="https://user-images.githubusercontent.com/31233283/157109499-091550d7-91ed-4022-a48f-231dc8367249.png">
+![image](https://user-images.githubusercontent.com/31911175/179121719-bb7fce7e-ca49-48c2-9525-d50d09afc91c.png)
 
 ## Branches
 
