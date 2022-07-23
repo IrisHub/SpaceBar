@@ -9,7 +9,7 @@
     "ecmaFeatures": {
       "tsx": true
     },
-    "project": ["tsconfig.json"],
+    "project": ["tsconfig.json", "signaler/tsconfig.json"],
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
