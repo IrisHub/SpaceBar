@@ -18,7 +18,7 @@ export enum PayloadType {
   SIGNAL,
 
   // Generic payload type to send messages from PEER -> ALL OTHER PEERS
-  // in the room via the signaling server instead of over a direct P2P
+  // in the room via either the signaling server or over a direct P2P
   // connection.
   MESSAGE,
 }

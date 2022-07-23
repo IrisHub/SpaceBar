@@ -7,8 +7,8 @@ import { CommunicatorCallback, createPayload, PayloadType } from './utils';
 
 /**
  * SignalingClient is the abstraction layer over the WebSocket connection,
- * managing the connection connection process between the client and the
- * signaling server, and later handling communication between peers.
+ * managing the connection process between the client and the signaling 
+ * server, and later handling communication between peers.
  */
 export default class SignalingClient {
   private ws: WebSocket;
@@ -270,7 +270,8 @@ export default class SignalingClient {
   sendPeer(data: any) {
     if (!this.isPeerConnected) {
       if (this.onErrorCallback) {
-        this.onErrorCallback(new Error('Error: Not connected to a peer.'));
+        const err = new Error('Error: Not connected to a peer.');
+        this.onErrorCallback(err);
         return;
       }
     }
@@ -284,7 +285,8 @@ export default class SignalingClient {
   sendWebsocket(data: any) {
     if (!this.isSocketConnected) {
       if (this.onErrorCallback) {
-        this.onErrorCallback(new Error('Error: Not connected to the server.'));
+        const err = new Error('Error: Not connected to the server.');
+        this.onErrorCallback(err);
         return;
       }
     }
